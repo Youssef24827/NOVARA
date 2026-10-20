@@ -737,3 +737,237 @@ a:hover {
     -webkit-backdrop-filter: blur(8px);
   }
 }
+
+/* ==========================================
+   NOVARA — PAGE MESSAGES
+   Disposition et thème violet néon
+   ========================================== */
+
+.novara-messages {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 24px 50px;
+}
+
+.novara-header {
+  margin-bottom: 28px;
+  padding: 30px;
+  border: 1px solid rgba(157, 77, 255, 0.35);
+  border-radius: 22px;
+  background:
+    radial-gradient(ellipse at 90% 0%, #8b35e833, transparent 55%),
+    rgba(17, 12, 31, 0.85);
+  box-shadow: 0 0 28px rgba(139, 53, 232, 0.10);
+}
+
+.novara-header h1 {
+  margin: 0 0 12px;
+  font-size: clamp(30px, 5vw, 48px);
+  letter-spacing: -1px;
+}
+
+.novara-header p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.novara-header a {
+  display: inline-block;
+  margin-top: 10px;
+  color: #c49aff;
+}
+
+.novara-messages > .novara-panel {
+  min-width: 0;
+  margin-bottom: 22px;
+  padding: 24px;
+  border: 1px solid rgba(157, 77, 255, 0.32);
+  border-radius: 18px;
+  background: rgba(17, 12, 31, 0.86);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.22);
+}
+
+.novara-panel h2 {
+  margin: 0 0 18px;
+  font-size: clamp(22px, 3vw, 30px);
+}
+
+.novara-panel label {
+  display: block;
+  margin: 12px 0 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.novara-panel input,
+.novara-panel textarea {
+  display: block;
+  width: 100%;
+  padding: 13px 14px;
+  color: var(--text);
+  background: #0d0a18;
+  border: 1px solid rgba(157, 77, 255, 0.32);
+  border-radius: 11px;
+  font: inherit;
+}
+
+.novara-panel input:focus,
+.novara-panel textarea:focus {
+  outline: none;
+  border-color: #bf80ff;
+  box-shadow: 0 0 0 3px rgba(157, 77, 255, 0.14);
+}
+
+.novara-panel button {
+  padding: 11px 16px;
+  color: white;
+  background: linear-gradient(135deg, #8b35e8, #5b16b8);
+  border: 1px solid rgba(191, 128, 255, 0.45);
+  border-radius: 10px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.novara-panel button:hover {
+  box-shadow: 0 0 18px rgba(157, 77, 255, 0.3);
+}
+
+#search-status,
+#chat-status,
+#call-status {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+#player-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+#player-results .player-result {
+  min-width: 0;
+  padding: 16px;
+  overflow-wrap: anywhere;
+  border: 1px solid rgba(157, 77, 255, 0.25);
+  border-radius: 13px;
+  background: rgba(30, 20, 49, 0.72);
+}
+
+#player-results .player-result strong {
+  display: block;
+  margin-bottom: 12px;
+}
+
+#player-results .player-result button {
+  max-width: 100%;
+}
+
+#message-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 180px;
+  max-height: 420px;
+  margin: 16px 0;
+  padding: 16px;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+  border: 1px solid rgba(157, 77, 255, 0.22);
+  border-radius: 14px;
+  background: rgba(8, 6, 16, 0.7);
+}
+
+#message-list .message-item {
+  max-width: 88%;
+  padding: 12px 14px;
+  border: 1px solid rgba(157, 77, 255, 0.28);
+  border-radius: 12px;
+  background: #211632;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+#message-form {
+  display: grid;
+  gap: 10px;
+}
+
+#message-form button {
+  justify-self: end;
+}
+
+.novara-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+#call-media video {
+  width: 100%;
+  max-width: 480px;
+  max-height: 300px;
+  margin: 8px 8px 8px 0;
+  background: #080610;
+  border: 1px solid rgba(157, 77, 255, 0.32);
+  border-radius: 12px;
+}
+
+#call-media video#local-video {
+  max-width: 160px;
+  max-height: 120px;
+}
+
+#incoming-call {
+  margin: 16px 0;
+  padding: 16px;
+  border: 1px solid rgba(157, 77, 255, 0.4);
+  border-radius: 12px;
+  background: rgba(91, 22, 184, 0.15);
+}
+
+#incoming-call button,
+#call-media button {
+  margin: 6px 8px 6px 0;
+}
+
+@media (min-width: 1000px) {
+  .novara-messages {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: 22px;
+  }
+
+  .novara-header {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+  }
+
+  .novara-messages > .novara-panel {
+    margin-bottom: 0;
+  }
+
+  #novara-call-panel {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 600px) {
+  .novara-messages {
+    padding: 18px 14px 35px;
+  }
+
+  .novara-header,
+  .novara-messages > .novara-panel {
+    padding: 18px;
+  }
+
+  #message-list .message-item {
+    max-width: 100%;
+  }
+}

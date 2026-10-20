@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07050d">
+  <title>Connexion | NOVARA</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 440px;
+      padding: 36px;
+      background: rgba(17, 11, 32, 0.94);
+      border: 1px solid rgba(168, 85, 255, 0.35);
+      border-radius: 22px;
+      box-shadow: 0 0 45px rgba(124, 58, 237, 0.15);
+      backdrop-filter: blur(14px);
+    }
+
+    .auth-logo {
+      margin-bottom: 8px;
+      color: #d0a0ff;
+      font-size: 2.3rem;
+      font-weight: 900;
+      letter-spacing: 5px;
+      text-align: center;
+      text-shadow: 0 0 25px rgba(168, 85, 255, 0.6);
+    }
+
+    .auth-subtitle {
+      margin-bottom: 30px;
+      color: #aaa0bb;
+      text-align: center;
+    }
+
+    .auth-card h1 {
+      margin-bottom: 10px;
+      text-align: center;
+      font-size: 1.7rem;
+    }
+
+    .auth-field {
+      margin-top: 18px;
+    }
+
+    .auth-field label {
+      display: block;
+      margin-bottom: 8px;
+      color: #e7dcf5;
+      font-weight: 600;
+    }
+
+    .auth-field input {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid #39264f;
+      border-radius: 10px;
+      background: #0b0712;
+      color: #fff;
+      font: inherit;
+      outline: none;
+      box-sizing: border-box;
+    }
+
+    .auth-field input:focus {
+      border-color: #a855ff;
+      box-shadow: 0 0 0 3px rgba(168, 85, 255, 0.15);
+    }
+
+    .auth-button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 14px;
+      border: 0;
+      border-radius: 10px;
+      background: linear-gradient(100deg, #7c3aed, #a855ff);
+      color: white;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .auth-button:hover {
+      transform: translateY(-2px);
+    }
+
+    .auth-button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+      transform: none;
+    }
+
+    .auth-message {
+      display: none;
+      margin-top: 18px;
+      padding: 12px;
+      border-radius: 9px;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .auth-message.error {
+      display: block;
+      color: #ffb4c0;
+      background: rgba(255, 70, 100, 0.1);
+      border: 1px solid rgba(255, 70, 100, 0.3);
+    }
+
+    .auth-message.success {
+      display: block;
+      color: #d5b5ff;
+      background: rgba(168, 85, 255, 0.1);
+      border: 1px solid rgba(168, 85, 255, 0.3);
+    }
+
+    .auth-links {
+      margin-top: 24px;
+      color: #aaa0bb;
+      text-align: center;
+      line-height: 1.9;
+    }
+
+    .auth-links a {
+      color: #d0a0ff;
+      text-decoration: none;
+    }
+
+    .auth-links a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      .auth-card {
+        padding: 26px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="auth-card">
+    <div class="auth-logo">NOVARA</div>
+    <p class="auth-subtitle">Ton univers gaming commence ici.</p>
+
+    <h1>Content de te revoir</h1>
+    <p class="auth-subtitle">Connecte-toi à ton compte.</p>
+
+    <form id="loginForm">
+      <div class="auth-field">
+        <label for="email">Adresse e-mail</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="toi@exemple.com"
+          autocomplete="email"
+          required
+        >
+      </div>
+
+      <div class="auth-field">
+        <label for="password">Mot de passe</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          placeholder="Ton mot de passe"
+          autocomplete="current-password"
+          required
+        >
+      </div>
+
+      <button class="auth-button" id="loginButton" type="submit">
+        Se connecter
+      </button>
+
+      <div id="message" class="auth-message" role="status" aria-live="polite"></div>
+    </form>
+
+    <div class="auth-links">
+      Pas encore de compte ?
+      <a href="inscription.html">Créer un compte</a>
+      <br>
+      <a href="index.html">← Retour à l'accueil</a>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const SUPABASE_URL = "https://smxjkgcxjzomkqwaaxlr.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX";
+
+    const client = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    const form = document.getElementById("loginForm");
+    const button = document.getElementById("loginButton");
+    const message = document.getElementById("message");
+
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = "auth-message " + type;
+    }
+
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      button.disabled = true;
+      button.textContent = "Connexion...";
+      message.className = "auth-message";
+      message.textContent = "";
+
+      try {
+        const { data, error } = await client.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if (error) {
+          throw error;
+        }
+
+        if (data.session) {
+          showMessage("Connexion réussie ! Redirection...", "success");
+
+          window.setTimeout(function () {
+            window.location.href = "profil.html";
+          }, 700);
+        } else {
+          showMessage(
+            "Connexion non terminée. Vérifie ton compte et réessaie.",
+            "error"
+          );
+          button.disabled = false;
+          button.textContent = "Se connecter";
+        }
+      } catch (error) {
+        let errorText = "Impossible de se connecter. Réessaie.";
+
+        if (
+          error.message &&
+          error.message.toLowerCase().includes("invalid login credentials")
+        ) {
+          errorText = "E-mail ou mot de passe incorrect.";
+        } else if (
+          error.message &&
+          error.message.toLowerCase().includes("email not confirmed")
+        ) {
+          errorText = "Confirme d'abord ton adresse e-mail depuis le lien reçu.";
+        } else if (!navigator.onLine) {
+          errorText = "Pas de connexion Internet. Vérifie ton réseau.";
+        }
+
+        showMessage(errorText, "error");
+        button.disabled = false;
+        button.textContent = "Se connecter";
+      }
+    });
+  </script>
+</body>
+</html>

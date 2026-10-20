@@ -83,45 +83,23 @@
       gap: 20px;
       min-height: 520px;
       margin-top: 24px;
-    .novara-messages {
-      width: min(100% - 28px, 900px);
-      margin: 30px auto;
-      color: #f5f2ff;
     }
 
     .chat-panel {
       min-width: 0;
       padding: 20px;
       border: 1px solid rgba(160, 100, 255, .22);
-    .novara-header,
-    .novara-panel {
-      background: #11101b;
-      border: 1px solid #673cff;
       border-radius: 16px;
       background: rgba(18, 15, 35, .82);
-      padding: 20px;
-      margin-bottom: 18px;
-      box-shadow: 0 0 18px #673cff18;
-    }
-
-    .novara-messages h1,
-    .novara-messages h2 {
-      color: #b9a1ff;
     }
 
     .chat-search, .chat-input {
-    .novara-messages input,
-    .novara-messages textarea {
       box-sizing: border-box;
       width: 100%;
-      margin: 8px 0;
       padding: 12px;
       border: 1px solid #40345e;
       border-radius: 10px;
       background: #100d20;
-      border: 1px solid #514078;
-      border-radius: 9px;
-      background: #090812;
       color: white;
       font: inherit;
     }
@@ -135,39 +113,22 @@
       background: #6735bd;
       color: white;
       font: inherit;
-    .novara-messages button {
       cursor: pointer;
-      border: 1px solid #9a7bff;
-      border-radius: 9px;
-      padding: 10px 15px;
-      margin: 5px 5px 5px 0;
-      background: #673cff;
-      color: white;
-      font-weight: bold;
     }
 
     .chat-button:disabled {
       opacity: .5;
       cursor: not-allowed;
-    .novara-messages button:hover {
-      background: #805eff;
     }
 
     .chat-list {
       display: grid;
-    .novara-actions {
-      display: flex;
-      flex-wrap: wrap;
       gap: 8px;
       margin-top: 12px;
     }
 
     .chat-person {
       width: 100%;
-    .player-result,
-    .message-item {
-      border: 1px solid #302644;
-      border-radius: 9px;
       padding: 12px;
       border: 1px solid #35294e;
       border-radius: 10px;
@@ -195,7 +156,6 @@
       border: 1px solid #40345e;
       border-radius: 12px;
       background: #211a36;
-      margin: 8px 0;
       overflow-wrap: anywhere;
       white-space: pre-wrap;
     }
@@ -217,11 +177,6 @@
       display: flex;
       gap: 8px;
       margin-top: 10px;
-    #remote-video {
-      width: 100%;
-      max-height: 320px;
-      background: #05040a;
-      border-radius: 10px;
     }
 
     .chat-compose .chat-input { flex: 1; min-width: 0; }
@@ -230,18 +185,11 @@
       color: #c9b9e9;
       font-size: 13px;
       overflow-wrap: anywhere;
-    #local-video {
-      width: 130px;
-      max-height: 110px;
-      background: #05040a;
-      border-radius: 10px;
     }
 
     @media (max-width: 700px) {
       .chat-layout { grid-template-columns: 1fr; }
       .chat-messages { height: 300px; }
-    .novara-messages a {
-      color: #c5b4ff;
     }
   </style>
 

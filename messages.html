@@ -1,28 +1,140 @@
 
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#090914">
-  <meta name="description" content="L'espace Appels et Messages de NOVARA.">
-  <title>NOVARA — Appels & Messages</title>
+  <title>NOVARA — Messages privés</title>
   <link rel="stylesheet" href="style.css">
-  <script src="app.js" defer></script>
-  
-<style>
-  html.auth-checking body {
-    visibility: hidden;
-  }
-</style>
-<script>
-  document.documentElement.classList.add("auth-checking");
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="auth.js"></script>
 
+  <style>
+    html.auth-checking body { visibility: hidden; }
+
+    .chat-layout {
+      display: grid;
+      grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+      gap: 20px;
+      min-height: 520px;
+      margin-top: 24px;
+    }
+
+    .chat-panel {
+      min-width: 0;
+      padding: 20px;
+      border: 1px solid rgba(160, 100, 255, .22);
+      border-radius: 16px;
+      background: rgba(18, 15, 35, .82);
+    }
+
+    .chat-search, .chat-input {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #40345e;
+      border-radius: 10px;
+      background: #100d20;
+      color: white;
+      font: inherit;
+    }
+
+    .chat-search { margin: 12px 0; }
+
+    .chat-button {
+      padding: 10px 14px;
+      border: 1px solid #8950ed;
+      border-radius: 10px;
+      background: #6735bd;
+      color: white;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .chat-button:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .chat-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .chat-person {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #35294e;
+      border-radius: 10px;
+      background: #171229;
+      color: white;
+      text-align: left;
+      cursor: pointer;
+      overflow-wrap: anywhere;
+    }
+
+    .chat-person:hover { border-color: #a16cff; }
+
+    .chat-messages {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      height: 340px;
+      overflow-y: auto;
+      padding: 12px 0;
+    }
+
+    .chat-message {
+      max-width: 82%;
+      padding: 10px 13px;
+      border: 1px solid #40345e;
+      border-radius: 12px;
+      background: #211a36;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .chat-message.mine {
+      align-self: flex-end;
+      background: #55309b;
+      border-color: #8153ce;
+    }
+
+    .chat-message small {
+      display: block;
+      margin-top: 5px;
+      opacity: .7;
+      font-size: 11px;
+    }
+
+    .chat-compose {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .chat-compose .chat-input { flex: 1; min-width: 0; }
+
+    .chat-status {
+      color: #c9b9e9;
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 700px) {
+      .chat-layout { grid-template-columns: 1fr; }
+      .chat-messages { height: 300px; }
+    }
+  </style>
+
+  <script>
+    document.documentElement.classList.add("auth-checking");
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
+  <script src="app.js" defer></script>
 </head>
+
 <body>
   <aside class="sidebar">
     <a class="logo" href="index.html">NOVA<span class="gradient">RA</span></a>
@@ -49,42 +161,348 @@
     </div>
 
     <header class="page-head">
-      <div class="eyebrow">✦ Reste connecté</div>
-      <h1>Appels <span class="gradient">& Messages.</span></h1>
-      <p>Un espace prévu pour échanger avec tes amis gaming et organiser vos prochaines parties.</p>
+      <div class="eyebrow">✦ Connecte-toi à ton équipe</div>
+      <h1>Messages <span class="gradient">privés.</span></h1>
+      <p>Recherche un joueur par son pseudo et démarre une conversation.</p>
     </header>
 
-    <section class="grid">
-      <article class="card">
-        <div class="game-icon">💬</div>
-        <h3>Messages privés</h3>
-        <p>Un futur espace pour les conversations entre utilisateurs.</p>
-        <span class="tag">Bientôt disponible</span>
-      </article>
+    <section class="chat-layout">
+      <div class="chat-panel">
+        <h2>Joueurs</h2>
+        <input id="user-search" class="chat-search" type="search"
+          placeholder="Rechercher un pseudo..." maxlength="40"
+          autocomplete="off">
+        <div id="user-status" class="chat-status" role="status">
+          Chargement des joueurs...
+        </div>
+        <div id="user-list" class="chat-list"></div>
 
-      <article class="card">
-        <div class="game-icon">🎧</div>
-        <h3>Appels audio</h3>
-        <p>Imagine pouvoir discuter avec ton équipe pendant vos sessions gaming.</p>
-        <span class="tag">Bientôt disponible</span>
-      </article>
+        <hr style="border-color:#35294e;margin:22px 0">
+        <h3>Mes conversations</h3>
+        <div id="conversation-status" class="chat-status"></div>
+        <div id="conversation-list" class="chat-list"></div>
+      </div>
 
-      <article class="card">
-        <div class="game-icon">📹</div>
-        <h3>Appels vidéo</h3>
-        <p>Un espace à développer pour les appels vidéo, avec des contrôles de confidentialité.</p>
-        <span class="tag">Bientôt disponible</span>
-      </article>
-    </section>
-
-    <section style="margin-top:28px">
-      <div class="notice">
-        <h3>Les communications ne sont pas encore activées.</h3>
-        Cette page est une maquette visuelle. Aucun message n'est envoyé et aucun appel audio ou vidéo ne peut être lancé pour le moment.
+      <div class="chat-panel">
+        <h2 id="chat-title">Ta messagerie</h2>
+        <p id="chat-empty" class="chat-status">
+          Recherche un joueur pour commencer à discuter.
+        </p>
+        <div id="chat-messages" class="chat-messages"
+          aria-live="polite"></div>
+        <form id="chat-form" class="chat-compose" hidden>
+          <input id="chat-input" class="chat-input" type="text"
+            placeholder="Écris ton message..." maxlength="4000"
+            autocomplete="off" required>
+          <button id="send-button" class="chat-button" type="submit">
+            Envoyer
+          </button>
+        </form>
+        <p id="chat-status" class="chat-status" role="status"></p>
       </div>
     </section>
 
-    <footer>© <span data-year></span> NOVARA · Connecte-toi à ton univers.</footer>
+    <footer>© <span data-year></span> NOVARA · Explore. Joue. Connecte-toi.</footer>
   </main>
+
+  <script>
+    (() => {
+      const SUPABASE_URL = "https://smxjkgcxjzomkqwaaxlr.supabase.co";
+      const SUPABASE_KEY = "sb_publishable_SaIzNOVARA_PLACEHOLDER";
+
+      // Remplace la valeur ci-dessus par ta clé publishable Supabase
+      // déjà utilisée dans auth.js.
+      const client = window.supabase.createClient(
+        SUPABASE_URL,
+        "sb_publishable_SaIzNOVARA_PLACEHOLDER"
+      );
+
+      const $ = (id) => document.getElementById(id);
+      const searchInput = $("user-search");
+      const userList = $("user-list");
+      const userStatus = $("user-status");
+      const conversationList = $("conversation-list");
+      const conversationStatus = $("conversation-status");
+      const messagesBox = $("chat-messages");
+      const chatTitle = $("chat-title");
+      const chatEmpty = $("chat-empty");
+      const chatForm = $("chat-form");
+      const messageInput = $("chat-input");
+      const sendButton = $("send-button");
+      const chatStatus = $("chat-status");
+
+      let currentUser = null;
+      let activeConversation = null;
+      let activeUsername = "";
+      let messageChannel = null;
+      let searchTimer = null;
+      let loadingMessages = false;
+
+      function showError(error, target = chatStatus) {
+        console.error(error);
+        target.textContent = error?.message
+          ? "Erreur : " + error.message
+          : "Une erreur est survenue. Réessaie.";
+      }
+
+      function makeButton(label, callback) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "chat-person";
+        button.textContent = label;
+        button.addEventListener("click", callback);
+        return button;
+      }
+
+      async function searchUsers() {
+        const term = searchInput.value.trim().replace(/^@/, "");
+        userList.replaceChildren();
+
+        if (term.length < 2) {
+          userStatus.textContent = "Saisis au moins 2 caractères.";
+          return;
+        }
+
+        userStatus.textContent = "Recherche...";
+        const { data, error } = await client
+          .from("profiles")
+          .select("id, username")
+          .ilike("username", "%" + term + "%")
+          .neq("id", currentUser.id)
+          .not("username", "is", null)
+          .limit(20);
+
+        if (error) {
+          showError(error, userStatus);
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          userStatus.textContent = "Aucun joueur trouvé.";
+          return;
+        }
+
+        userStatus.textContent = data.length + " joueur(s) trouvé(s).";
+
+        data.forEach((profile) => {
+          userList.appendChild(makeButton(
+            "👤 @" + profile.username,
+            () => openConversation(profile)
+          ));
+        });
+      }
+
+      async function loadConversations() {
+        conversationList.replaceChildren();
+        conversationStatus.textContent = "Chargement...";
+
+        const { data: memberships, error } = await client
+          .from("conversation_members")
+          .select("conversation_id")
+          .eq("user_id", currentUser.id);
+
+        if (error) {
+          showError(error, conversationStatus);
+          return;
+        }
+
+        if (!memberships || memberships.length === 0) {
+          conversationStatus.textContent = "Pas encore de conversation.";
+          return;
+        }
+
+        const ids = [...new Set(
+          memberships.map((item) => item.conversation_id)
+        )];
+
+        const { data: members, error: memberError } = await client
+          .from("conversation_members")
+          .select("conversation_id, user_id")
+          .in("conversation_id", ids)
+          .neq("user_id", currentUser.id);
+
+        if (memberError) {
+          showError(memberError, conversationStatus);
+          return;
+        }
+
+        const otherIds = [...new Set((members || []).map((m) => m.user_id))];
+        let profiles = [];
+
+        if (otherIds.length) {
+          const result = await client.from("profiles")
+            .select("id, username")
+            .in("id", otherIds);
+
+          if (result.error) {
+            showError(result.error, conversationStatus);
+            return;
+          }
+          profiles = result.data || [];
+        }
+
+        for (const member of members || []) {
+          const profile = profiles.find((p) => p.id === member.user_id);
+          if (!profile) continue;
+
+          conversationList.appendChild(makeButton(
+            "💬 @" + (profile.username || "joueur"),
+            () => openConversation(profile)
+          ));
+        }
+
+        conversationStatus.textContent = conversationList.childElementCount
+          ? "Tes discussions privées"
+          : "Pas encore de conversation.";
+      }
+
+      async function openConversation(profile) {
+        chatStatus.textContent = "";
+        sendButton.disabled = true;
+
+        try {
+          const { data: conversationId, error } = await client.rpc(
+            "create_novara_conversation",
+            { other_user_id: profile.id }
+          );
+
+          if (error) throw error;
+
+          activeConversation = conversationId;
+          activeUsername = profile.username || "joueur";
+          chatTitle.textContent = "Conversation avec @" + activeUsername;
+          chatEmpty.hidden = true;
+          chatForm.hidden = false;
+          messagesBox.replaceChildren();
+
+          if (messageChannel) {
+            await client.removeChannel(messageChannel);
+            messageChannel = null;
+          }
+
+          await loadMessages();
+
+          messageChannel = client
+            .channel("novara-messages-" + activeConversation)
+            .on("postgres_changes", {
+              event: "INSERT",
+              schema: "public",
+              table: "messages",
+              filter: "conversation_id=eq." + activeConversation
+            }, (payload) => {
+              addMessage(payload.new);
+            })
+            .subscribe();
+
+          await loadConversations();
+          sendButton.disabled = false;
+          messageInput.focus();
+        } catch (error) {
+          showError(error);
+          chatEmpty.hidden = false;
+          chatForm.hidden = true;
+        }
+      }
+
+      function addMessage(message) {
+        if (!message || messagesBox.querySelector(
+          '[data-message-id="' + message.id + '"]'
+        )) return;
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "chat-message" +
+          (message.sender_id === currentUser.id ? " mine" : "");
+        wrapper.dataset.messageId = message.id;
+
+        const content = document.createElement("div");
+        content.textContent = message.content;
+        wrapper.appendChild(content);
+
+        const time = document.createElement("small");
+        time.textContent = new Date(message.created_at).toLocaleString("fr-FR", {
+          dateStyle: "short",
+          timeStyle: "short"
+        });
+        wrapper.appendChild(time);
+
+        messagesBox.appendChild(wrapper);
+        messagesBox.scrollTop = messagesBox.scrollHeight;
+      }
+
+      async function loadMessages() {
+        if (!activeConversation || loadingMessages) return;
+        loadingMessages = true;
+
+        try {
+          const { data, error } = await client
+            .from("messages")
+            .select("id, conversation_id, sender_id, content, created_at")
+            .eq("conversation_id", activeConversation)
+            .order("created_at", { ascending: true })
+            .limit(200);
+
+          if (error) throw error;
+
+          messagesBox.replaceChildren();
+          (data || []).forEach(addMessage);
+        } catch (error) {
+          showError(error);
+        } finally {
+          loadingMessages = false;
+        }
+      }
+
+      chatForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const content = messageInput.value.trim();
+        if (!content || !activeConversation || !currentUser) return;
+
+        sendButton.disabled = true;
+        chatStatus.textContent = "Envoi...";
+
+        const { error } = await client.from("messages").insert({
+          conversation_id: activeConversation,
+          sender_id: currentUser.id,
+          content
+        });
+
+        if (error) {
+          showError(error);
+        } else {
+          messageInput.value = "";
+          chatStatus.textContent = "";
+        }
+
+        sendButton.disabled = false;
+        messageInput.focus();
+      });
+
+      searchInput.addEventListener("input", () => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(searchUsers, 350);
+      });
+
+      async function init() {
+        try {
+          const { data, error } = await client.auth.getUser();
+          if (error) throw error;
+          if (!data.user) {
+            window.location.replace("connexion.html");
+            return;
+          }
+
+          currentUser = data.user;
+          await loadConversations();
+          userStatus.textContent =
+            "Recherche un pseudo pour trouver un joueur.";
+        } catch (error) {
+          showError(error, userStatus);
+        }
+      }
+
+      init();
+    })();
+  </script>
 </body>
 </html>

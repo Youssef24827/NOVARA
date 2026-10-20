@@ -3,512 +3,105 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#090914">
-  <meta name="description" content="NOVARA : ton univers gaming.">
-  <title>NOVARA — Gaming Universe</title>
-
-  <style>
-    :root {
-      --bg: #090914;
-      --panel: #141428;
-      --purple: #a36bff;
-      --cyan: #42e8ff;
-      --text: #f7f5ff;
-      --muted: #aaa8c4;
-      --border: #ffffff18;
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      background:
-        radial-gradient(ellipse at 15% 0%, #32164b 0, transparent 38%),
-        radial-gradient(ellipse at 95% 30%, #10233e 0, transparent 35%),
-        var(--bg);
-      color: var(--text);
-      font-family: system-ui, Arial, sans-serif;
-    }
-
-    a { color: inherit; text-decoration: none; }
-    button, input { font: inherit; }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      padding: 15px 5%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-      background: #090914ed;
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .logo {
-      font-size: 25px;
-      font-weight: 950;
-      letter-spacing: 3px;
-      color: var(--cyan);
-    }
-
-    nav {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    nav a {
-      padding: 9px 10px;
-      border-radius: 9px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    nav a:hover, nav a.active {
-      color: white;
-      background: #ffffff12;
-    }
-
-    main { width: min(1150px, 90%); margin: auto; }
-
-    section { padding: 48px 0; scroll-margin-top: 90px; }
-
-    .hero {
-      min-height: 440px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 75px 0;
-    }
-
-    .eyebrow {
-      color: var(--cyan);
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    h1 {
-      margin: 18px 0;
-      font-size: clamp(46px, 8vw, 86px);
-      line-height: 1;
-      letter-spacing: -3px;
-    }
-
-    .gradient {
-      background: linear-gradient(90deg, #b58aff, #45e9ff);
-      color: transparent;
-      background-clip: text;
-    }
-
-    .hero p {
-      max-width: 600px;
-      color: var(--muted);
-      font-size: 17px;
-      line-height: 1.8;
-    }
-
-    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 12px 17px;
-      border-radius: 11px;
-      border: 1px solid var(--border);
-      color: white;
-      background: #ffffff08;
-      cursor: pointer;
-    }
-
-    .btn.primary {
-      color: #090914;
-      background: linear-gradient(100deg, #b18aff, #48e9ff);
-      border: 0;
-      font-weight: 800;
-    }
-
-    .section-heading {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-bottom: 22px;
-    }
-
-    h2 { margin: 8px 0; font-size: clamp(28px, 4vw, 40px); }
-    h3 { margin: 0 0 10px; font-size: 20px; }
-    .muted, .card p { color: var(--muted); }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .card {
-      min-width: 0;
-      padding: 22px;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      background: linear-gradient(145deg, #ffffff0c, #ffffff04);
-      transition: transform .2s, border-color .2s;
-    }
-
-    .card:hover { transform: translateY(-3px); border-color: #a36bff88; }
-
-    .game-icon {
-      display: grid;
-      place-items: center;
-      width: 54px;
-      height: 54px;
-      margin-bottom: 17px;
-      border-radius: 15px;
-      font-size: 26px;
-      background: linear-gradient(135deg, #a36bff33, #42e8ff22);
-      border: 1px solid var(--border);
-    }
-
-    .tags { display: flex; flex-wrap: wrap; gap: 7px; margin: 14px 0; }
-
-    .tag {
-      padding: 5px 9px;
-      border-radius: 30px;
-      border: 1px solid #a36bff55;
-      color: #d9caff;
-      font-size: 11px;
-    }
-
-    .game-link { display: inline-block; width: 100%; margin-top: 10px; text-align: center; }
-
-    .search {
-      width: min(350px, 100%);
-      padding: 13px 15px;
-      color: white;
-      background: #ffffff09;
-      border: 1px solid var(--border);
-      border-radius: 11px;
-      outline: none;
-    }
-
-    .search:focus { border-color: var(--cyan); }
-
-    .notice {
-      padding: 18px;
-      line-height: 1.8;
-      color: var(--muted);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      background: #ffffff08;
-    }
-
-    #gameStatus { margin: 12px 0 20px; font-size: 13px; color: var(--muted); }
-    .error { color: #ff9baf !important; }
-    footer { margin-top: 55px; padding: 30px 5%; text-align: center; border-top: 1px solid var(--border); color: var(--muted); }
-
-    @media (max-width: 800px) {
-      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .topbar { align-items: flex-start; flex-direction: column; }
-    }
-
-    @media (max-width: 550px) {
-      .grid { grid-template-columns: 1fr; }
-      h1 { letter-spacing: -2px; }
-    }
-  </style>
+  <meta name="description" content="NOVARA, ton espace gaming pour explorer des jeux et rejoindre la communauté.">
+  <title>NOVARA — Accueil</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
 </head>
-
 <body>
-  <header class="topbar">
-    <a class="logo" href="#accueil">NOVARA</a>
-    <nav aria-label="Navigation">
-      <a class="active" href="#accueil">Accueil</a>
-      <a href="#explorer">Explorer</a>
-      <a href="#communautes">Communautés</a>
-      <a href="#defis">Défis</a>
-      <a href="#jeux">Jeux</a>
-      <a href="#appels">Appels & Messages</a>
-      <a href="#profil">Profil</a>
+  <aside class="sidebar">
+    <a class="logo" href="index.html">NOVA<span class="gradient">RA</span></a>
+    <div class="nav-label">Menu principal</div>
+    <nav class="nav">
+      <a class="active" href="index.html"><span class="ico">⌂</span> Accueil</a>
+      <a href="explorer.html"><span class="ico">◈</span> Explorer</a>
+      <a href="communautes.html"><span class="ico">♧</span> Communautés</a>
+      <a href="defis.html"><span class="ico">⚡</span> Défis</a>
+      <a href="messages.html"><span class="ico">✉</span> Appels & Messages</a>
+      <a href="profil.html"><span class="ico">◎</span> Profil</a>
     </nav>
-  </header>
+    <div class="sidebar-bottom">
+      <strong>NOVARA UNIVERSE</strong><br>
+      Explore. Joue. Connecte-toi.<br>
+      <span>© <span data-year></span> NOVARA</span>
+    </div>
+  </aside>
 
-  <main>
-    <section class="hero" id="accueil">
-      <span class="eyebrow">Your next gaming universe</span>
-      <h1>Entre dans<br><span class="gradient">NOVARA.</span></h1>
+  <main class="main">
+    <div class="mobile-top">
+      <a class="logo" href="index.html">NOVARA</a>
+      <button class="hamburger" data-menu-toggle aria-label="Ouvrir le menu">☰</button>
+    </div>
+
+    <section class="hero">
+      <div class="eyebrow">✦ Le gaming nouvelle génération</div>
+      <h1>Entre dans<br>l'univers <span class="gradient">NOVARA.</span></h1>
       <p>
-        Découvre tes prochains jeux, explore des communautés et relève
-        de nouveaux défis. Ton univers gaming commence ici.
+        Découvre de nouveaux jeux, trouve des joueurs qui partagent tes passions
+        et prépare-toi à relever de nouveaux défis. Ton univers gaming commence ici.
       </p>
       <div class="actions">
-        <a class="btn primary" href="#jeux">Explorer les jeux ↗</a>
-        <a class="btn" href="#communautes">Découvrir NOVARA</a>
+        <a class="btn primary" href="explorer.html">Explorer les jeux ↗</a>
+        <a class="btn" href="communautes.html">Découvrir les communautés</a>
       </div>
     </section>
 
-    <section id="explorer">
-      <div class="section-heading">
-        <div><span class="eyebrow">Découverte</span><h2>Explore l'univers</h2></div>
-      </div>
-      <div class="grid">
-        <article class="card">
-          <div class="game-icon">🎮</div>
-          <h3>Jeux</h3>
-          <p>Explore les jeux et retrouve leurs liens officiels.</p>
-          <a class="btn" href="#jeux">Voir les jeux</a>
-        </article>
-        <article class="card">
-          <div class="game-icon">🌌</div>
-          <h3>Communautés</h3>
-          <p>Imagine des groupes autour de tes jeux préférés.</p>
-          <a class="btn" href="#communautes">Découvrir</a>
-        </article>
-        <article class="card">
-          <div class="game-icon">⚡</div>
-          <h3>Défis</h3>
-          <p>Prépare tes objectifs et tes prochaines sessions.</p>
-          <a class="btn" href="#defis">Voir les défis</a>
-        </article>
-      </div>
-    </section>
-
-    <section id="jeux">
+    <section>
       <div class="section-heading">
         <div>
-          <span class="eyebrow">Catalogue</span>
-          <h2>Bibliothèque de jeux</h2>
-          <p class="muted">Catalogue chargé depuis Supabase.</p>
+          <div class="eyebrow">Ton prochain univers</div>
+          <h2>Bienvenue sur NOVARA</h2>
         </div>
-        <input id="gameSearch" class="search" type="search"
-          placeholder="Rechercher un jeu..." aria-label="Rechercher un jeu">
       </div>
-      <p id="gameStatus" role="status" aria-live="polite">Connexion à Supabase…</p>
-      <div class="grid" id="gamesGrid"></div>
-    </section>
 
-    <section id="communautes">
-      <span class="eyebrow">Ensemble</span>
-      <h2>Communautés</h2>
-      <div class="notice">
-        Cet espace est une maquette pour le moment. Les groupes et les
-        discussions pourront être ajoutés avec des tables et des autorisations
-        adaptées dans Supabase.
-      </div>
-    </section>
-
-    <section id="defis">
-      <span class="eyebrow">Progression</span>
-      <h2>Défis</h2>
       <div class="grid">
-        <article class="card"><div class="game-icon">🎯</div><h3>Défi personnel</h3><p>Fixe ton objectif pour ta prochaine session.</p></article>
-        <article class="card"><div class="game-icon">🏆</div><h3>Objectif de la semaine</h3><p>Prépare ton prochain objectif gaming.</p></article>
-        <article class="card"><div class="game-icon">🚀</div><h3>Progression</h3><p>Les défis interactifs seront ajoutés ensuite.</p></article>
+        <a class="card" href="explorer.html">
+          <div class="game-icon">🎮</div>
+          <h3>Explorer les jeux</h3>
+          <p>Parcours le catalogue et découvre les jeux disponibles sur NOVARA.</p>
+          <span class="gradient">Découvrir →</span>
+        </a>
+
+        <a class="card" href="communautes.html">
+          <div class="game-icon">🌐</div>
+          <h3>Communautés</h3>
+          <p>Un espace pensé pour les joueurs et les passions partagées.</p>
+          <span class="gradient">Explorer →</span>
+        </a>
+
+        <a class="card" href="defis.html">
+          <div class="game-icon">⚡</div>
+          <h3>Défis gaming</h3>
+          <p>Prépare-toi à découvrir des objectifs et des défis à relever.</p>
+          <span class="gradient">Voir les défis →</span>
+        </a>
+
+        <a class="card" href="messages.html">
+          <div class="game-icon">💬</div>
+          <h3>Appels & Messages</h3>
+          <p>Retrouve l'espace prévu pour les échanges entre joueurs.</p>
+          <span class="gradient">Accéder →</span>
+        </a>
+
+        <a class="card" href="profil.html">
+          <div class="game-icon">👤</div>
+          <h3>Ton profil</h3>
+          <p>Découvre l'espace personnel prévu pour ton identité gaming.</p>
+          <span class="gradient">Mon espace →</span>
+        </a>
+
+        <div class="card">
+          <div class="game-icon">✨</div>
+          <h3>Un univers à construire</h3>
+          <p>NOVARA évoluera au fil des nouvelles fonctionnalités et de la communauté.</p>
+          <span class="gradient">La suite arrive →</span>
+        </div>
       </div>
     </section>
 
-    <section id="appels">
-      <span class="eyebrow">Communication</span>
-      <h2>Appels & Messages</h2>
-      <div class="notice">Cette section est une maquette. Les messages et appels ne sont pas encore activés.</div>
-    </section>
-
-    <section id="profil">
-      <span class="eyebrow">Espace personnel</span>
-      <h2>Profil</h2>
-      <div class="notice">Cette section est une maquette. La gestion des comptes devra être configurée avant d'y stocker des données personnelles.</div>
-    </section>
+    <footer>© <span data-year></span> NOVARA · Fait pour les passionnés de gaming.</footer>
   </main>
-
-  <footer>
-    <div class="logo">NOVARA</div>
-    <p>Explore. Connecte-toi. Joue.</p>
-    <p>© <span id="year"></span> NOVARA</p>
-  </footer>
-
-  <script>
-    // Remplace les deux valeurs par celles de TON projet Supabase.
-    const SUPABASE_URL = "https://smxjkgcxjzomkqwaaxlr.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX";
-
-    const gamesGrid = document.getElementById("gamesGrid");
-    const gameStatus = document.getElementById("gameStatus");
-    const gameSearch = document.getElementById("gameSearch");
-
-    let allGames = [];
-
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    function escapeHTML(value) {
-      return String(value ?? "").replace(/[&<>"']/g, c => ({
-        "&": "&amp;", "<": "&lt;", ">": "&gt;",
-        '"': "&quot;", "'": "&#39;"
-      })[c]);
-    }
-
-    function normalizePlatforms(value) {
-      if (Array.isArray(value)) return value.map(String);
-      if (value == null || value === "") return [];
-
-      if (typeof value === "string") {
-        try {
-          const parsed = JSON.parse(value);
-          if (Array.isArray(parsed)) return parsed.map(String);
-        } catch (_) {}
-        return value.split(",").map(v => v.trim()).filter(Boolean);
-      }
-
-      return [String(value)];
-    }
-
-    function safeURL(value) {
-      try {
-        const url = new URL(String(value || ""));
-        return ["https:", "http:"].includes(url.protocol) ? url.href : "";
-      } catch (_) {
-        return "";
-      }
-    }
-
-    function renderGames(games) {
-      if (!games.length) {
-        gamesGrid.innerHTML = "";
-        gameStatus.textContent = allGames.length
-          ? "Aucun jeu ne correspond à ta recherche."
-          : "Connexion réussie, mais aucun jeu publié n'a été trouvé.";
-        gameStatus.classList.remove("error");
-        return;
-      }
-
-      gameStatus.classList.remove("error");
-      gameStatus.textContent = `${games.length} jeu(x) affiché(s).`;
-
-      gamesGrid.innerHTML = games.map(game => {
-        const title = escapeHTML(game.title || "Jeu sans titre");
-        const genre = escapeHTML(game.genre || "Jeu vidéo");
-        const description = escapeHTML(
-          game.description || "Découvre ce jeu dans NOVARA."
-        );
-
-        const tags = [genre, ...normalizePlatforms(game.platforms)]
-          .filter(Boolean)
-          .map(value => `<span class="tag">${escapeHTML(value)}</span>`)
-          .join("");
-
-        const url = safeURL(game.official_url);
-        const link = url
-          ? `<a class="btn primary game-link" href="${escapeHTML(url)}"
-               target="_blank" rel="noopener noreferrer">Site officiel ↗</a>`
-          : `<p class="muted">Lien officiel non renseigné.</p>`;
-
-        return `<article class="card">
-          <div class="game-icon">🎮</div>
-          <h3>${title}</h3>
-          <p>${description}</p>
-          <div class="tags">${tags}</div>
-          ${link}
-        </article>`;
-      }).join("");
-    }
-
-    async function loadGames() {
-      gameStatus.classList.remove("error");
-
-      if (
-        SUPABASE_URL.startsWith("COLLE_") ||
-        SUPABASE_KEY.startsWith("COLLE_")
-      ) {
-        gameStatus.textContent =
-          "Configuration manquante : ajoute l'URL et la clé publique Supabase dans index.html.";
-        gameStatus.classList.add("error");
-        return;
-      }
-
-      let baseURL;
-
-      try {
-        baseURL = new URL(SUPABASE_URL);
-        if (!["https:", "http:"].includes(baseURL.protocol)) {
-          throw new Error("L'URL Supabase doit commencer par https://");
-        }
-      } catch (error) {
-        gameStatus.textContent = "URL Supabase invalide : " + error.message;
-        gameStatus.classList.add("error");
-        return;
-      }
-
-      const endpoint = baseURL.href.replace(/\/$/, "") +
-        "/rest/v1/games?select=id,title,genre,platforms,official_url,description,is_published&is_published=eq.true&order=title.asc";
-
-      try {
-        const response = await fetch(endpoint, {
-          method: "GET",
-          headers: {
-            apikey: SUPABASE_KEY,
-            Authorization: `Bearer ${SUPABASE_KEY}`
-          }
-        });
-
-        if (!response.ok) {
-          const body = await response.text();
-          console.error("Supabase API error:", response.status, body);
-          throw new Error(
-            `HTTP ${response.status}. ` +
-            (body.length > 300 ? body.slice(0, 300) : body)
-          );
-        }
-
-        const data = await response.json();
-
-        if (!Array.isArray(data)) {
-          throw new Error("La réponse de Supabase n'est pas une liste de jeux.");
-        }
-
-        allGames = data;
-        renderGames(allGames);
-      } catch (error) {
-        console.error("NOVARA / Supabase :", error);
-        gamesGrid.innerHTML = "";
-        gameStatus.textContent = "Erreur de chargement : " +
-          (error.message || "connexion impossible");
-        gameStatus.classList.add("error");
-      }
-    }
-
-    gameSearch.addEventListener("input", () => {
-      const query = gameSearch.value.trim().toLocaleLowerCase("fr");
-
-      const filtered = allGames.filter(game => {
-        const text = [
-          game.title, game.genre, game.description,
-          ...normalizePlatforms(game.platforms)
-        ].join(" ").toLocaleLowerCase("fr");
-
-        return text.includes(query);
-      });
-
-      renderGames(filtered);
-    });
-
-    document.querySelectorAll("nav a").forEach(link => {
-      link.addEventListener("click", () => {
-        document.querySelectorAll("nav a").forEach(item =>
-          item.classList.remove("active")
-        );
-        link.classList.add("active");
-      });
-    });
-
-    loadGames();
-  </script>
 </body>
 </html>

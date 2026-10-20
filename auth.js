@@ -1,60 +1,56 @@
 
 (function () {
-  const currentPage = window.location.pathname
+  const page = window.location.pathname
     .split("/")
     .pop()
     .toLowerCase();
 
-  // Ces pages doivent rester accessibles sans être connecté.
   const publicPages = ["connexion.html", "inscription.html"];
 
-  if (publicPages.includes(currentPage)) {
+  // La connexion et l'inscription doivent rester accessibles.
+  if (publicPages.includes(page)) {
+    document.documentElement.classList.remove("auth-checking");
     return;
   }
 
-  // Masque la page pendant la vérification de la session.
-  document.documentElement.style.visibility = "hidden";
-
   function redirectToLogin() {
-    const returnTo =
+    const destination =
       window.location.pathname +
       window.location.search +
       window.location.hash;
 
     const loginUrl = new URL("connexion.html", window.location.href);
-    loginUrl.searchParams.set("redirect", returnTo);
-
+    loginUrl.searchParams.set("redirect", destination);
     window.location.replace(loginUrl.href);
   }
 
-  // Vérifie que la bibliothèque Supabase est chargée.
   if (!window.supabase) {
-    console.error("La bibliothèque Supabase n'est pas chargée.");
-    document.documentElement.style.visibility = "visible";
+    console.error("Supabase n'est pas chargé.");
+    redirectToLogin();
     return;
   }
 
-  const supabaseClient = window.supabase.createClient(
+  const client = window.supabase.createClient(
     "https://smxjkgcxjzomkqwaaxlr.supabase.co",
     "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX"
   );
 
-  async function checkSession() {
+  async function verifySession() {
     try {
-      const { data, error } = await supabaseClient.auth.getSession();
+      const { data, error } = await client.auth.getSession();
 
       if (error || !data.session) {
         redirectToLogin();
         return;
       }
 
-      // Session présente : affiche la page.
+      document.documentElement.classList.remove("auth-checking");
       document.documentElement.style.visibility = "visible";
     } catch (error) {
-      console.error("Erreur pendant la vérification de session :", error);
+      console.error("Vérification de session impossible :", error);
       redirectToLogin();
     }
   }
 
-  checkSession();
+  verifySession();
 })();

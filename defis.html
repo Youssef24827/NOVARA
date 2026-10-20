@@ -9,6 +9,18 @@
   <title>NOVARA — Défis</title>
   <link rel="stylesheet" href="style.css">
   <script src="app.js" defer></script>
+  
+<style>
+  html.auth-checking body {
+    visibility: hidden;
+  }
+</style>
+<script>
+  document.documentElement.classList.add("auth-checking");
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+
 </head>
 <body>
   <aside class="sidebar">

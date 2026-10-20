@@ -547,5 +547,451 @@
       init();
     })();
   </script>
+  
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+
+  const audioButton = $("audio-call-button");
+  const videoButton = $("video-call-button");
+  const callStatus = $("call-status");
+  const callMedia = $("call-media");
+  const localVideo = $("local-video");
+  const remoteVideo = $("remote-video");
+  const remoteAudio = $("remote-audio");
+  const acceptButton = $("accept-call-button");
+  const hangupButton = $("hangup-button");
+
+  if (!audioButton || !videoButton) return;
+
+  let client = null;
+  let user = null;
+  let selectedProfile = null;
+  let activeCall = null;
+  let peer = null;
+  let localStream = null;
+  let signalChannel = null;
+  let callChannel = null;
+  let seenSignals = new Set();
+  let busy = false;
+
+  const rtcConfig = {
+    iceServers: [
+      { urls: "stun:stun.l.google.com:19302" }
+    ]
+  };
+
+  function status(message) {
+    callStatus.textContent = message;
+  }
+
+  function setBusy(value) {
+    busy = value;
+    audioButton.disabled = value;
+    videoButton.disabled = value;
+  }
+
+  function stopMedia() {
+    if (localStream) {
+      localStream.getTracks().forEach((track) => track.stop());
+      localStream = null;
+    }
+
+    localVideo.srcObject = null;
+    remoteVideo.srcObject = null;
+    remoteAudio.srcObject = null;
+    callMedia.hidden = true;
+  }
+
+  async function cleanup(updateStatus = true) {
+    if (peer) {
+      peer.ontrack = null;
+      peer.onicecandidate = null;
+      peer.close();
+      peer = null;
+    }
+
+    if (signalChannel) {
+      await client.removeChannel(signalChannel);
+      signalChannel = null;
+    }
+
+    if (callChannel) {
+      await client.removeChannel(callChannel);
+      callChannel = null;
+    }
+
+    if (activeCall && user) {
+      await client.from("novara_calls")
+        .update({ status: "ended", ended_at: new Date().toISOString() })
+        .eq("id", activeCall.id)
+        .in("status", ["ringing", "accepted"]);
+    }
+
+    activeCall = null;
+    seenSignals = new Set();
+    stopMedia();
+    acceptButton.hidden = true;
+    hangupButton.hidden = true;
+    setBusy(false);
+
+    if (updateStatus) status("Appel terminé.");
+  }
+
+  async function sendSignal(type, payload) {
+    const { error } = await client
+      .from("novara_call_signals")
+      .insert({
+        call_id: activeCall.id,
+        sender_id: user.id,
+        signal_type: type,
+        payload
+      });
+
+    if (error) throw error;
+  }
+
+  async function handleSignal(signal) {
+    if (!peer || !activeCall || signal.sender_id === user.id) return;
+    if (seenSignals.has(signal.id)) return;
+    seenSignals.add(signal.id);
+
+    try {
+      if (signal.signal_type === "offer") {
+        if (peer.signalingState !== "stable") return;
+
+        await peer.setRemoteDescription(signal.payload);
+        const answer = await peer.createAnswer();
+        await peer.setLocalDescription(answer);
+        await sendSignal("answer", peer.localDescription);
+      } else if (signal.signal_type === "answer") {
+        if (peer.signalingState === "have-local-offer") {
+          await peer.setRemoteDescription(signal.payload);
+        }
+      } else if (signal.signal_type === "ice") {
+        if (peer.remoteDescription) {
+          await peer.addIceCandidate(signal.payload);
+        }
+      }
+    } catch (error) {
+      console.error("Signalisation NOVARA :", error);
+      status("Erreur de connexion. Vérifie la configuration réseau.");
+    }
+  }
+
+  async function loadPreviousSignals() {
+    const { data, error } = await client
+      .from("novara_call_signals")
+      .select("id, sender_id, signal_type, payload")
+      .eq("call_id", activeCall.id)
+      .order("created_at", { ascending: true });
+
+    if (error) throw error;
+
+    for (const signal of data || []) {
+      await handleSignal(signal);
+    }
+  }
+
+  async function setupPeer(isCaller) {
+    peer = new RTCPeerConnection(rtcConfig);
+
+    peer.ontrack = (event) => {
+      callMedia.hidden = false;
+      const stream = event.streams[0];
+      if (!stream) return;
+
+      if (stream.getVideoTracks().length) {
+        remoteVideo.srcObject = stream;
+        remoteVideo.hidden = false;
+      } else {
+        remoteAudio.srcObject = stream;
+        remoteAudio.hidden = false;
+        remoteVideo.hidden = true;
+      }
+    };
+
+    peer.onicecandidate = async (event) => {
+      if (!event.candidate || !activeCall) return;
+
+      try {
+        await sendSignal("ice", event.candidate.toJSON());
+      } catch (error) {
+        console.error("Envoi ICE :", error);
+      }
+    };
+
+    localStream.getTracks().forEach((track) => {
+      peer.addTrack(track, localStream);
+    });
+
+    signalChannel = client
+      .channel("novara-call-signals-" + activeCall.id)
+      .on("postgres_changes", {
+        event: "INSERT",
+        schema: "public",
+        table: "novara_call_signals",
+        filter: "call_id=eq." + activeCall.id
+      }, async (event) => {
+        await handleSignal(event.new);
+      })
+      .subscribe();
+
+    if (isCaller) {
+      const offer = await peer.createOffer();
+      await peer.setLocalDescription(offer);
+      await sendSignal("offer", peer.localDescription);
+    }
+
+    await loadPreviousSignals();
+  }
+
+  async function startCall(type) {
+    if (busy) return;
+
+    if (!selectedProfile) {
+      status("Recherche et sélectionne d’abord un joueur.");
+      return;
+    }
+
+    setBusy(true);
+
+    try {
+      const { data: sessionData, error: sessionError } =
+        await client.auth.getUser();
+
+      if (sessionError) throw sessionError;
+      user = sessionData.user;
+
+      if (!user) throw new Error("Connecte-toi pour appeler.");
+
+      if (!navigator.mediaDevices?.getUserMedia) {
+        throw new Error(
+          "Micro/caméra indisponible. Utilise HTTPS et un navigateur compatible."
+        );
+      }
+
+      status("Demande d’accès au micro et à la caméra...");
+      localStream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: type === "video"
+      });
+
+      callMedia.hidden = false;
+      localVideo.srcObject = localStream;
+      localVideo.hidden = type !== "video";
+      remoteVideo.hidden = type !== "video";
+      remoteAudio.hidden = true;
+
+      const { data: call, error } = await client
+        .from("novara_calls")
+        .insert({
+          caller_id: user.id,
+          receiver_id: selectedProfile.id,
+          call_type: type,
+          status: "ringing"
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      activeCall = call;
+      await setupPeer(true);
+
+      status("Appel " + (type === "audio" ? "audio" : "vidéo") +
+        " envoyé à @" + selectedProfile.username +
+        ". En attente de réponse...");
+
+      hangupButton.hidden = false;
+      callChannel = client
+        .channel("novara-call-status-" + activeCall.id)
+        .on("postgres_changes", {
+          event: "UPDATE",
+          schema: "public",
+          table: "novara_calls",
+          filter: "id=eq." + activeCall.id
+        }, async (event) => {
+          if (event.new.status === "accepted") {
+            status("Appel accepté. Connexion en cours...");
+          } else if (["rejected", "missed", "ended"].includes(event.new.status)) {
+            await cleanup();
+          }
+        })
+        .subscribe();
+    } catch (error) {
+      console.error(error);
+      status(error.message || "Impossible de démarrer l’appel.");
+      if (activeCall) {
+        await cleanup(false);
+      } else {
+        stopMedia();
+        setBusy(false);
+      }
+    }
+  }
+
+  async function acceptIncomingCall(call) {
+    setBusy(true);
+
+    try {
+      activeCall = call;
+      const { data: sessionData, error: sessionError } =
+        await client.auth.getUser();
+
+      if (sessionError) throw sessionError;
+      user = sessionData.user;
+
+      const { data: updated, error } = await client
+        .from("novara_calls")
+        .update({ status: "accepted" })
+        .eq("id", call.id)
+        .eq("receiver_id", user.id)
+        .eq("status", "ringing")
+        .select()
+        .single();
+
+      if (error) throw error;
+      if (!updated) throw new Error("Cet appel n’est plus disponible.");
+
+      localStream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: call.call_type === "video"
+      });
+
+      callMedia.hidden = false;
+      localVideo.srcObject = localStream;
+      localVideo.hidden = call.call_type !== "video";
+      remoteVideo.hidden = call.call_type !== "video";
+      remoteAudio.hidden = true;
+      hangupButton.hidden = false;
+      acceptButton.hidden = true;
+
+      await setupPeer(false);
+      status("Appel accepté. Connexion en cours...");
+    } catch (error) {
+      console.error(error);
+      status(error.message || "Impossible d’accepter l’appel.");
+      await cleanup(false);
+    }
+  }
+
+  async function checkIncomingCalls() {
+    if (!user || activeCall) return;
+
+    const { data, error } = await client
+      .from("novara_calls")
+      .select("*")
+      .eq("receiver_id", user.id)
+      .eq("status", "ringing")
+      .order("created_at", { ascending: false })
+      .limit(1);
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    if (!data?.length || activeCall) return;
+
+    const call = data[0];
+    activeCall = call;
+    setBusy(true);
+    acceptButton.hidden = false;
+    hangupButton.hidden = false;
+
+    status("Appel " + call.call_type + " entrant.");
+
+    acceptButton.onclick = () => acceptIncomingCall(call);
+    hangupButton.onclick = async () => {
+      await client.from("novara_calls")
+        .update({ status: "rejected", ended_at: new Date().toISOString() })
+        .eq("id", call.id)
+        .eq("receiver_id", user.id);
+
+      await cleanup();
+    };
+  }
+
+  function findSelectedProfile() {
+    const input = $("user-search");
+    if (!input) return;
+
+    const term = input.value.trim().replace(/^@/, "").toLowerCase();
+    const buttons = $("user-list")?.querySelectorAll("button") || [];
+
+    for (const button of buttons) {
+      const username = button.textContent.trim().replace(/^👤\s*@/, "").toLowerCase();
+
+      if (username === term) {
+        status("Clique sur le joueur dans la liste pour le sélectionner.");
+        return;
+      }
+    }
+  }
+
+  audioButton.addEventListener("click", () => startCall("audio"));
+  videoButton.addEventListener("click", () => startCall("video"));
+
+  hangupButton.addEventListener("click", async () => {
+    await cleanup();
+  });
+
+  async function initCalls() {
+    if (!window.supabase) {
+      status("Supabase n’est pas chargé.");
+      return;
+    }
+
+    client = window.supabase.createClient(
+      "https://smxjkgcxjzomkqwaaxlr.supabase.co",
+      "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX"
+    );
+
+    const { data, error } = await client.auth.getUser();
+
+    if (error || !data.user) {
+      status("Connecte-toi pour utiliser les appels.");
+      return;
+    }
+
+    user = data.user;
+
+    // Le clic sur un joueur sélectionne le destinataire.
+    const originalUserList = $("user-list");
+
+    if (originalUserList) {
+      originalUserList.addEventListener("click", async (event) => {
+        const button = event.target.closest("button");
+        if (!button) return;
+
+        const username = button.textContent.trim().replace(/^👤\s*@/, "");
+
+        const { data: profiles, error: profileError } = await client
+          .from("profiles")
+          .select("id, username")
+          .eq("username", username)
+          .neq("id", user.id)
+          .limit(1);
+
+        if (profileError || !profiles?.length) {
+          status("Impossible de sélectionner ce joueur.");
+          return;
+        }
+
+        selectedProfile = profiles[0];
+        status("Joueur sélectionné : @" + selectedProfile.username);
+      });
+    }
+
+    // Vérification périodique des appels entrants.
+    setInterval(checkIncomingCalls, 4000);
+    await checkIncomingCalls();
+  }
+
+  initCalls();
+})();
+</script>
+
 </body>
 </html>

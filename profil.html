@@ -4,137 +4,266 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#080910">
-  <meta name="description" content="Personnalise ton profil gaming NOVARA.">
-  <title>NOVARA — Profil</title>
+  <meta name="theme-color" content="#07050d">
+  <title>Mon profil | NOVARA</title>
   <link rel="stylesheet" href="style.css">
-  <script src="app.js" defer></script>
+
+  <style>
+    .profile-page {
+      width: min(900px, calc(100% - 32px));
+      margin: 50px auto;
+    }
+
+    .profile-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .profile-header h1 {
+      color: #d0a0ff;
+      text-shadow: 0 0 20px rgba(168, 85, 255, 0.35);
+    }
+
+    .profile-panel {
+      padding: 30px;
+      border: 1px solid rgba(168, 85, 255, 0.3);
+      border-radius: 20px;
+      background: rgba(17, 11, 32, 0.92);
+      box-shadow: 0 0 35px rgba(124, 58, 237, 0.12);
+    }
+
+    .profile-avatar {
+      display: flex;
+      width: 110px;
+      height: 110px;
+      margin: 0 auto 18px;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 2px solid #a855ff;
+      border-radius: 50%;
+      background: #1b1030;
+      color: #d0a0ff;
+      font-size: 2.5rem;
+      font-weight: 800;
+      box-shadow: 0 0 24px rgba(168, 85, 255, 0.25);
+    }
+
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-name {
+      margin: 0;
+      text-align: center;
+      font-size: 1.8rem;
+      overflow-wrap: anywhere;
+    }
+
+    .profile-email {
+      margin: 8px 0 26px;
+      color: #aaa0bb;
+      text-align: center;
+      overflow-wrap: anywhere;
+    }
+
+    .profile-info {
+      display: grid;
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .info-item {
+      padding: 15px;
+      border: 1px solid #30203f;
+      border-radius: 12px;
+      background: rgba(7, 5, 13, 0.7);
+    }
+
+    .info-label {
+      display: block;
+      margin-bottom: 6px;
+      color: #a99ab9;
+      font-size: 0.9rem;
+    }
+
+    .info-value {
+      color: #f4edff;
+      overflow-wrap: anywhere;
+    }
+
+    .profile-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .profile-button {
+      display: inline-block;
+      padding: 12px 18px;
+      border: 1px solid #7540a5;
+      border-radius: 10px;
+      background: #211332;
+      color: #eee0ff;
+      font: inherit;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .profile-button.primary {
+      border-color: transparent;
+      background: linear-gradient(100deg, #7c3aed, #a855ff);
+      color: white;
+    }
+
+    .profile-button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .profile-message {
+      margin-top: 18px;
+      color: #d0a0ff;
+      text-align: center;
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 520px) {
+      .profile-panel {
+        padding: 22px 16px;
+      }
+
+      .profile-actions {
+        flex-direction: column;
+      }
+
+      .profile-button {
+        text-align: center;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <aside class="sidebar">
-    <a class="logo" href="index.html">NOVA<span class="gradient">RA</span></a>
-    <div class="nav-label">Menu principal</div>
-
-    <nav class="nav">
-      <a href="index.html"><span class="ico">⌂</span> Accueil</a>
-      <a href="explorer.html"><span class="ico">◈</span> Explorer</a>
-      <a href="communautes.html"><span class="ico">♧</span> Communautés</a>
-      <a href="defis.html"><span class="ico">⚡</span> Défis</a>
-      <a href="messages.html"><span class="ico">✉</span> Appels & Messages</a>
-      <a class="active" href="profil.html"><span class="ico">◎</span> Profil</a>
-    </nav>
-
-    <div class="sidebar-bottom">
-      <strong>NOVARA UNIVERSE</strong><br>
-      Explore. Joue. Connecte-toi.<br>
-      © <span data-year></span> NOVARA
-    </div>
-  </aside>
-
-  <main class="main">
-    <div class="mobile-top">
-      <a class="logo" href="index.html">NOVARA</a>
-      <button class="hamburger" data-menu-toggle aria-label="Ouvrir le menu">☰</button>
-    </div>
-
-    <header class="page-head">
-      <div class="eyebrow">✦ Ton espace personnel</div>
-      <h1>Ton <span class="gradient">profil.</span></h1>
-      <p>Personnalise ton identité gaming et choisis l'avatar qui te représente.</p>
+  <main class="profile-page">
+    <header class="profile-header">
+      <h1>Mon profil NOVARA</h1>
+      <p>Ton espace personnel dans l'univers gaming.</p>
     </header>
 
-    <section class="card profile-card">
-      <div class="profile-banner"></div>
+    <section class="profile-panel">
+      <div class="profile-avatar" id="avatar">N</div>
 
-      <div class="profile-main">
-        <div class="avatar" id="profileAvatar" aria-label="Photo de profil">
-          <span id="avatarEmoji">🎮</span>
-          <img id="avatarImage" alt="Ta photo de profil" hidden>
+      <h2 class="profile-name" id="username">Chargement...</h2>
+      <p class="profile-email" id="userEmail"></p>
+
+      <div class="profile-info">
+        <div class="info-item">
+          <span class="info-label">Pseudo</span>
+          <span class="info-value" id="pseudoValue">Chargement...</span>
         </div>
 
-        <div class="profile-info">
-          <h2>Joueur NOVARA</h2>
-          <p class="muted">Ton aventure commence ici.</p>
-          <span class="tag">Gamer</span>
+        <div class="info-item">
+          <span class="info-label">Adresse e-mail</span>
+          <span class="info-value" id="emailValue">Chargement...</span>
+        </div>
+
+        <div class="info-item">
+          <span class="info-label">Compte créé le</span>
+          <span class="info-value" id="createdAt">Chargement...</span>
         </div>
       </div>
+
+      <p class="profile-message" id="profileMessage" role="status" aria-live="polite"></p>
 
       <div class="profile-actions">
-        <button class="btn primary" id="uploadAvatarButton" type="button">
-          📷 Changer ma photo
+        <a class="profile-button primary" href="index.html">Accueil</a>
+        <a class="profile-button" href="explorer.html">Explorer les jeux</a>
+        <button class="profile-button" id="logoutButton" type="button">
+          Se déconnecter
         </button>
-
-        <button class="btn" id="resetAvatarButton" type="button">
-          Réinitialiser
-        </button>
-
-        <input
-          class="file-input"
-          id="avatarFileInput"
-          type="file"
-          accept="image/png,image/jpeg,image/webp,image/gif"
-          aria-label="Choisir une image pour la photo de profil"
-        >
-      </div>
-
-      <p class="profile-help" id="avatarStatus" role="status" aria-live="polite">
-        Choisis une image JPG, PNG, WEBP ou GIF de 2 Mo maximum.
-        Ta photo sera conservée dans ce navigateur.
-      </p>
-
-      <div style="margin-top:28px">
-        <h3>Ou choisis un avatar</h3>
-        <p class="profile-help">Sélectionne l'un de ces avatars gaming.</p>
-
-        <div class="avatar-picker" id="avatarPicker">
-          <button class="avatar-option selected" type="button" data-avatar="🎮" aria-label="Avatar manette">🎮</button>
-          <button class="avatar-option" type="button" data-avatar="👾" aria-label="Avatar alien">👾</button>
-          <button class="avatar-option" type="button" data-avatar="🐉" aria-label="Avatar dragon">🐉</button>
-          <button class="avatar-option" type="button" data-avatar="🦊" aria-label="Avatar renard">🦊</button>
-          <button class="avatar-option" type="button" data-avatar="🤖" aria-label="Avatar robot">🤖</button>
-          <button class="avatar-option" type="button" data-avatar="🌌" aria-label="Avatar galaxie">🌌</button>
-          <button class="avatar-option" type="button" data-avatar="⚡" aria-label="Avatar éclair">⚡</button>
-          <button class="avatar-option" type="button" data-avatar="🐺" aria-label="Avatar loup">🐺</button>
-        </div>
       </div>
     </section>
-
-    <section style="margin-top:32px">
-      <div class="eyebrow">Progression</div>
-      <h2>Ton univers gaming</h2>
-
-      <div class="grid">
-        <article class="card">
-          <div class="game-icon">🎮</div>
-          <h3>Jeux favoris</h3>
-          <p>Un futur espace pour retrouver tes jeux préférés.</p>
-        </article>
-
-        <article class="card">
-          <div class="game-icon">🏆</div>
-          <h3>Réussites</h3>
-          <p>Les défis et accomplissements seront ajoutés plus tard.</p>
-        </article>
-
-        <article class="card">
-          <div class="game-icon">🌟</div>
-          <h3>Activité</h3>
-          <p>Les statistiques personnelles seront disponibles dans une future version.</p>
-        </article>
-      </div>
-    </section>
-
-    <section style="margin-top:28px">
-      <div class="notice">
-        <h3>Ta photo, ton appareil</h3>
-        La photo ou l'avatar est enregistré localement dans ce navigateur.
-        Il ne sera pas automatiquement synchronisé sur tes autres appareils.
-        Pour un profil partagé entre utilisateurs, il faudra ensuite ajouter un
-        système de comptes et un stockage sécurisé.
-      </div>
-    </section>
-
-    <footer>© <span data-year></span> NOVARA · Ton univers, ton aventure.</footer>
   </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const SUPABASE_URL = "https://smxjkgcxjzomkqwaaxlr.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX";
+
+    const client = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    const message = document.getElementById("profileMessage");
+    const logoutButton = document.getElementById("logoutButton");
+
+    async function loadProfile() {
+      message.textContent = "Vérification de ta session...";
+
+      try {
+        const { data, error } = await client.auth.getUser();
+
+        if (error || !data.user) {
+          window.location.replace("connexion.html");
+          return;
+        }
+
+        const user = data.user;
+        const username =
+          user.user_metadata?.username ||
+          user.user_metadata?.pseudo ||
+          (user.email ? user.email.split("@")[0] : "Joueur NOVARA");
+
+        document.getElementById("username").textContent = username;
+        document.getElementById("pseudoValue").textContent = username;
+        document.getElementById("userEmail").textContent = user.email || "";
+        document.getElementById("emailValue").textContent = user.email || "Non renseignée";
+
+        document.getElementById("avatar").textContent =
+          username.charAt(0).toUpperCase() || "N";
+
+        document.getElementById("createdAt").textContent =
+          user.created_at
+            ? new Date(user.created_at).toLocaleDateString("fr-FR", {
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+              })
+            : "Indisponible";
+
+        message.textContent = "";
+      } catch (error) {
+        message.textContent = "Impossible de charger le profil. Réessaie.";
+      }
+    }
+
+    logoutButton.addEventListener("click", async function () {
+      logoutButton.disabled = true;
+      logoutButton.textContent = "Déconnexion...";
+
+      try {
+        const { error } = await client.auth.signOut();
+
+        if (error) {
+          throw error;
+        }
+
+        window.location.replace("connexion.html");
+      } catch (error) {
+        message.textContent = "La déconnexion a échoué. Réessaie.";
+        logoutButton.disabled = false;
+        logoutButton.textContent = "Se déconnecter";
+      }
+    });
+
+    loadProfile();
+  </script>
 </body>
 </html>

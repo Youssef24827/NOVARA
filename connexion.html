@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#07050d">
-  <title>Connexion | NOVARA</title>
+  <title>Connexion — NOVARA</title>
+
   <link rel="stylesheet" href="style.css">
 
   <style>
@@ -15,194 +15,130 @@
       align-items: center;
       justify-content: center;
       padding: 24px;
-    }
-
-    .auth-card {
-      width: 100%;
-      max-width: 440px;
-      padding: 36px;
-      background: rgba(17, 11, 32, 0.94);
-      border: 1px solid rgba(168, 85, 255, 0.35);
-      border-radius: 22px;
-      box-shadow: 0 0 45px rgba(124, 58, 237, 0.15);
-      backdrop-filter: blur(14px);
-    }
-
-    .auth-logo {
-      margin-bottom: 8px;
-      color: #d0a0ff;
-      font-size: 2.3rem;
-      font-weight: 900;
-      letter-spacing: 5px;
-      text-align: center;
-      text-shadow: 0 0 25px rgba(168, 85, 255, 0.6);
-    }
-
-    .auth-subtitle {
-      margin-bottom: 30px;
-      color: #aaa0bb;
-      text-align: center;
-    }
-
-    .auth-card h1 {
-      margin-bottom: 10px;
-      text-align: center;
-      font-size: 1.7rem;
-    }
-
-    .auth-field {
-      margin-top: 18px;
-    }
-
-    .auth-field label {
-      display: block;
-      margin-bottom: 8px;
-      color: #e7dcf5;
-      font-weight: 600;
-    }
-
-    .auth-field input {
-      width: 100%;
-      padding: 13px 14px;
-      border: 1px solid #39264f;
-      border-radius: 10px;
-      background: #0b0712;
+      background: #08060d;
       color: #fff;
-      font: inherit;
-      outline: none;
-      box-sizing: border-box;
+      font-family: Arial, sans-serif;
     }
 
-    .auth-field input:focus {
-      border-color: #a855ff;
-      box-shadow: 0 0 0 3px rgba(168, 85, 255, 0.15);
-    }
-
-    .auth-button {
+    .login-card {
       width: 100%;
-      margin-top: 24px;
+      max-width: 420px;
+      padding: 32px;
+      border: 1px solid #392052;
+      border-radius: 18px;
+      background: #120d1b;
+      box-shadow: 0 0 35px #8b35ff22;
+    }
+
+    .login-card h1 {
+      margin: 0 0 8px;
+      text-align: center;
+      color: #b66cff;
+    }
+
+    .subtitle {
+      margin-bottom: 28px;
+      text-align: center;
+      color: #b8afc5;
+    }
+
+    .login-card label {
+      display: block;
+      margin: 16px 0 8px;
+    }
+
+    .login-card input {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #49335e;
+      border-radius: 9px;
+      background: #09070e;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    .login-card button {
+      width: 100%;
+      margin-top: 22px;
       padding: 14px;
       border: 0;
-      border-radius: 10px;
-      background: linear-gradient(100deg, #7c3aed, #a855ff);
-      color: white;
-      font: inherit;
-      font-weight: 800;
+      border-radius: 9px;
+      background: #9b4dff;
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
       cursor: pointer;
-      transition: transform 0.2s, opacity 0.2s;
     }
 
-    .auth-button:hover {
-      transform: translateY(-2px);
-    }
-
-    .auth-button:disabled {
+    .login-card button:disabled {
       opacity: 0.6;
       cursor: wait;
-      transform: none;
     }
 
-    .auth-message {
-      display: none;
-      margin-top: 18px;
-      padding: 12px;
-      border-radius: 9px;
-      font-size: 0.92rem;
-      line-height: 1.5;
+    #message {
+      margin-top: 16px;
+      color: #e3caff;
       overflow-wrap: anywhere;
     }
 
-    .auth-message.error {
-      display: block;
-      color: #ffb4c0;
-      background: rgba(255, 70, 100, 0.1);
-      border: 1px solid rgba(255, 70, 100, 0.3);
-    }
-
-    .auth-message.success {
-      display: block;
-      color: #d5b5ff;
-      background: rgba(168, 85, 255, 0.1);
-      border: 1px solid rgba(168, 85, 255, 0.3);
-    }
-
-    .auth-links {
-      margin-top: 24px;
-      color: #aaa0bb;
+    .signup-link {
+      margin-top: 22px;
       text-align: center;
-      line-height: 1.9;
+      color: #c9bfd5;
     }
 
-    .auth-links a {
-      color: #d0a0ff;
-      text-decoration: none;
-    }
-
-    .auth-links a:hover {
-      text-decoration: underline;
-    }
-
-    @media (max-width: 480px) {
-      .auth-card {
-        padding: 26px 20px;
-      }
+    .signup-link a {
+      color: #c28aff;
     }
   </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
-  <main class="auth-card">
-    <div class="auth-logo">NOVARA</div>
-    <p class="auth-subtitle">Ton univers gaming commence ici.</p>
-
-    <h1>Content de te revoir</h1>
-    <p class="auth-subtitle">Connecte-toi à ton compte.</p>
+  <main class="login-card">
+    <h1>NOVARA</h1>
+    <p class="subtitle">Connecte-toi à ton univers gaming.</p>
 
     <form id="loginForm">
-      <div class="auth-field">
-        <label for="email">Adresse e-mail</label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="toi@exemple.com"
-          autocomplete="email"
-          required
-        >
-      </div>
+      <label for="email">Adresse e-mail</label>
+      <input
+        id="email"
+        type="email"
+        autocomplete="email"
+        required
+        placeholder="ton@email.com"
+      >
 
-      <div class="auth-field">
-        <label for="password">Mot de passe</label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          placeholder="Ton mot de passe"
-          autocomplete="current-password"
-          required
-        >
-      </div>
+      <label for="password">Mot de passe</label>
+      <input
+        id="password"
+        type="password"
+        autocomplete="current-password"
+        required
+        placeholder="Ton mot de passe"
+      >
 
-      <button class="auth-button" id="loginButton" type="submit">
+      <button id="loginButton" type="submit">
         Se connecter
       </button>
 
-      <div id="message" class="auth-message" role="status" aria-live="polite"></div>
+      <p id="message" role="status" aria-live="polite"></p>
     </form>
 
-    <div class="auth-links">
+    <p class="signup-link">
       Pas encore de compte ?
       <a href="inscription.html">Créer un compte</a>
-      <br>
-      <a href="index.html">← Retour à l'accueil</a>
-    </div>
+    </p>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <script>
-    const SUPABASE_URL = "https://smxjkgcxjzomkqwaaxlr.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX";
+    const SUPABASE_URL =
+      "https://smxjkgcxjzomkqwaaxlr.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX";
 
     const client = window.supabase.createClient(
       SUPABASE_URL,
@@ -213,84 +149,66 @@
     const button = document.getElementById("loginButton");
     const message = document.getElementById("message");
 
-    function showMessage(text, type) {
-      message.textContent = text;
-      message.className = "auth-message " + type;
-    }
-
     form.addEventListener("submit", async function (event) {
       event.preventDefault();
+
+      button.disabled = true;
+      message.textContent = "Connexion en cours…";
 
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
 
-      button.disabled = true;
-      button.textContent = "Connexion...";
-      message.className = "auth-message";
-      message.textContent = "";
-
       try {
-        const { data, error } = await client.auth.signInWithPassword({
-          email,
-          password
-        });
+        const { data, error } =
+          await client.auth.signInWithPassword({
+            email,
+            password
+          });
 
         if (error) {
-          throw error;
+          message.textContent =
+            "Connexion impossible. Vérifie ton e-mail et ton mot de passe.";
+          console.error(error);
+          return;
         }
 
-        if (data.session) {
-          showMessage("Connexion réussie ! Redirection...", "success");
-
-          window.setTimeout(function () {
-           const params = new URLSearchParams(window.location.search);
-const destination = params.get("redirect");
-
-const pagesAutorisees = [
-  "index.html",
-  "explorer.html",
-  "communautes.html",
-  "defis.html",
-  "messages.html",
-  "profil.html"
-];
-
-const pageDemandee = destination
-  ? destination.split("?")[0].split("#")[0].split("/").pop()
-  : "index.html";
-
-window.location.href = pagesAutorisees.includes(pageDemandee)
-  ? destination
-  : "index.html";
-          }, 700);
-        } else {
-          showMessage(
-            "Connexion non terminée. Vérifie ton compte et réessaie.",
-            "error"
-          );
-          button.disabled = false;
-          button.textContent = "Se connecter";
+        if (!data.session) {
+          message.textContent =
+            "Aucune session active. Vérifie ton compte e-mail si nécessaire.";
+          return;
         }
+
+        const params = new URLSearchParams(window.location.search);
+        const destination = params.get("redirect");
+
+        const pagesAutorisees = [
+          "index.html",
+          "explorer.html",
+          "communautes.html",
+          "defis.html",
+          "messages.html",
+          "profil.html"
+        ];
+
+        const pageDemandee = destination
+          ? destination.split("?")[0].split("#")[0].split("/").pop()
+          : "";
+
+        const destinationSure =
+          destination &&
+          !destination.startsWith("//") &&
+          pagesAutorisees.includes(pageDemandee)
+            ? destination
+            : "index.html";
+
+        window.location.replace(destinationSure);
+
       } catch (error) {
-        let errorText = "Impossible de se connecter. Réessaie.";
-
-        if (
-          error.message &&
-          error.message.toLowerCase().includes("invalid login credentials")
-        ) {
-          errorText = "E-mail ou mot de passe incorrect.";
-        } else if (
-          error.message &&
-          error.message.toLowerCase().includes("email not confirmed")
-        ) {
-          errorText = "Confirme d'abord ton adresse e-mail depuis le lien reçu.";
-        } else if (!navigator.onLine) {
-          errorText = "Pas de connexion Internet. Vérifie ton réseau.";
-        }
-
-        showMessage(errorText, "error");
+        console.error(error);
+        message.textContent =
+          "Erreur inattendue. Réessaie dans un instant.";
+      } finally {
         button.disabled = false;
-        button.textContent = "Se connecter";
       }
     });
   </script>

@@ -3,81 +3,71 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#090914">
-  <meta name="description" content="NOVARA — découvre des jeux, des communautés et des défis.">
+  <meta name="description" content="NOVARA : ton univers gaming.">
   <title>NOVARA — Gaming Universe</title>
 
   <style>
     :root {
       --bg: #090914;
-      --panel: #111122;
-      --panel2: #17172c;
-      --purple: #9b5cff;
-      --cyan: #40e7ff;
-      --text: #f5f4ff;
-      --muted: #aaa8c5;
-      --border: rgba(255,255,255,.10);
+      --panel: #141428;
+      --purple: #a36bff;
+      --cyan: #42e8ff;
+      --text: #f7f5ff;
+      --muted: #aaa8c4;
+      --border: #ffffff18;
     }
 
     * { box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
-      color: var(--text);
       background:
-        radial-gradient(ellipse at 15% 0%, #261344 0, transparent 38%),
-        radial-gradient(ellipse at 100% 30%, #10213d 0, transparent 32%),
+        radial-gradient(ellipse at 15% 0%, #32164b 0, transparent 38%),
+        radial-gradient(ellipse at 95% 30%, #10233e 0, transparent 35%),
         var(--bg);
-      font-family: Inter, system-ui, -apple-system, sans-serif;
-      min-height: 100vh;
+      color: var(--text);
+      font-family: system-ui, Arial, sans-serif;
     }
 
-    button, input { font: inherit; }
-
-    button, a { -webkit-tap-highlight-color: transparent; }
-
     a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
 
     .topbar {
       position: sticky;
       top: 0;
       z-index: 10;
+      padding: 15px 5%;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 18px;
-      padding: 16px 5%;
-      background: rgba(9,9,20,.88);
+      flex-wrap: wrap;
+      gap: 16px;
+      background: #090914ed;
+      backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(18px);
     }
 
     .logo {
       font-size: 25px;
       font-weight: 950;
       letter-spacing: 3px;
-      background: linear-gradient(90deg, var(--purple), var(--cyan));
-      color: transparent;
-      background-clip: text;
-      white-space: nowrap;
+      color: var(--cyan);
     }
 
     nav {
       display: flex;
+      gap: 6px;
       flex-wrap: wrap;
-      gap: 8px;
-      justify-content: flex-end;
     }
 
     nav a {
+      padding: 9px 10px;
+      border-radius: 9px;
       color: var(--muted);
-      padding: 9px 11px;
-      border-radius: 10px;
       font-size: 13px;
-      transition: .2s;
     }
 
     nav a:hover, nav a.active {
@@ -85,18 +75,17 @@
       background: #ffffff12;
     }
 
-    main {
-      width: min(1180px, 90%);
-      margin: auto;
-    }
+    main { width: min(1150px, 90%); margin: auto; }
+
+    section { padding: 48px 0; scroll-margin-top: 90px; }
 
     .hero {
-      padding: 100px 0 80px;
       min-height: 440px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: flex-start;
+      padding: 75px 0;
     }
 
     .eyebrow {
@@ -109,8 +98,8 @@
 
     h1 {
       margin: 18px 0;
-      font-size: clamp(44px, 8vw, 86px);
-      line-height: .98;
+      font-size: clamp(46px, 8vw, 86px);
+      line-height: 1;
       letter-spacing: -3px;
     }
 
@@ -123,63 +112,43 @@
     .hero p {
       max-width: 600px;
       color: var(--muted);
-      line-height: 1.8;
       font-size: 17px;
+      line-height: 1.8;
     }
 
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 20px;
-    }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
 
     .btn {
       display: inline-flex;
-      justify-content: center;
       align-items: center;
-      padding: 13px 19px;
+      justify-content: center;
+      padding: 12px 17px;
+      border-radius: 11px;
       border: 1px solid var(--border);
-      border-radius: 12px;
-      background: #ffffff08;
       color: white;
+      background: #ffffff08;
       cursor: pointer;
-      transition: transform .2s, border-color .2s;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-      border-color: var(--cyan);
     }
 
     .btn.primary {
-      border: 0;
       color: #090914;
-      font-weight: 800;
       background: linear-gradient(100deg, #b18aff, #48e9ff);
-    }
-
-    section {
-      padding: 45px 0;
-      scroll-margin-top: 90px;
+      border: 0;
+      font-weight: 800;
     }
 
     .section-heading {
       display: flex;
-      justify-content: space-between;
       align-items: flex-end;
-      flex-wrap: wrap;
+      justify-content: space-between;
       gap: 16px;
-      margin-bottom: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
     }
 
-    h2 {
-      font-size: clamp(27px, 4vw, 39px);
-      margin: 8px 0;
-      letter-spacing: -1px;
-    }
-
-    .muted { color: var(--muted); }
+    h2 { margin: 8px 0; font-size: clamp(28px, 4vw, 40px); }
+    h3 { margin: 0 0 10px; font-size: 20px; }
+    .muted, .card p { color: var(--muted); }
 
     .grid {
       display: grid;
@@ -189,108 +158,80 @@
 
     .card {
       min-width: 0;
-      padding: 23px;
+      padding: 22px;
       border: 1px solid var(--border);
-      border-radius: 19px;
-      background: linear-gradient(145deg, #ffffff0b, #ffffff04);
+      border-radius: 18px;
+      background: linear-gradient(145deg, #ffffff0c, #ffffff04);
       transition: transform .2s, border-color .2s;
     }
 
-    .card:hover {
-      transform: translateY(-4px);
-      border-color: #9b5cff88;
-    }
+    .card:hover { transform: translateY(-3px); border-color: #a36bff88; }
 
     .game-icon {
       display: grid;
       place-items: center;
-      width: 55px;
-      height: 55px;
-      margin-bottom: 18px;
+      width: 54px;
+      height: 54px;
+      margin-bottom: 17px;
       border-radius: 15px;
       font-size: 26px;
-      background: linear-gradient(135deg, #9b5cff33, #40e7ff22);
+      background: linear-gradient(135deg, #a36bff33, #42e8ff22);
       border: 1px solid var(--border);
     }
 
-    .card h3 { margin: 0 0 9px; font-size: 20px; }
-
-    .card p {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.7;
-    }
-
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin: 15px 0;
-    }
+    .tags { display: flex; flex-wrap: wrap; gap: 7px; margin: 14px 0; }
 
     .tag {
-      color: #d9caff;
-      border: 1px solid #9b5cff40;
-      background: #9b5cff12;
       padding: 5px 9px;
-      border-radius: 99px;
+      border-radius: 30px;
+      border: 1px solid #a36bff55;
+      color: #d9caff;
       font-size: 11px;
     }
 
-    .card .btn { margin-top: 8px; width: 100%; }
+    .game-link { display: inline-block; width: 100%; margin-top: 10px; text-align: center; }
 
     .search {
-      width: min(360px, 100%);
-      padding: 12px 15px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      outline: none;
+      width: min(350px, 100%);
+      padding: 13px 15px;
       color: white;
-      background: #ffffff08;
+      background: #ffffff09;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      outline: none;
     }
 
     .search:focus { border-color: var(--cyan); }
 
     .notice {
-      padding: 17px;
-      border-radius: 12px;
-      background: #ffffff08;
+      padding: 18px;
+      line-height: 1.8;
+      color: var(--muted);
       border: 1px solid var(--border);
-      color: var(--muted);
-      line-height: 1.7;
+      border-radius: 14px;
+      background: #ffffff08;
     }
 
-    .status { font-size: 12px; color: var(--muted); }
+    #gameStatus { margin: 12px 0 20px; font-size: 13px; color: var(--muted); }
+    .error { color: #ff9baf !important; }
+    footer { margin-top: 55px; padding: 30px 5%; text-align: center; border-top: 1px solid var(--border); color: var(--muted); }
 
-    footer {
-      margin-top: 60px;
-      padding: 30px 5%;
-      text-align: center;
-      color: var(--muted);
-      border-top: 1px solid var(--border);
-      font-size: 13px;
-    }
-
-    @media (max-width: 850px) {
+    @media (max-width: 800px) {
       .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .topbar { align-items: flex-start; flex-direction: column; }
-      nav { justify-content: flex-start; }
     }
 
-    @media (max-width: 560px) {
+    @media (max-width: 550px) {
       .grid { grid-template-columns: 1fr; }
-      .hero { padding: 65px 0; }
       h1 { letter-spacing: -2px; }
-      nav a { padding: 8px; }
     }
   </style>
 </head>
 
 <body>
   <header class="topbar">
-    <a class="logo" href="#accueil" aria-label="NOVARA accueil">NOVARA</a>
-
-    <nav aria-label="Navigation principale">
+    <a class="logo" href="#accueil">NOVARA</a>
+    <nav aria-label="Navigation">
       <a class="active" href="#accueil">Accueil</a>
       <a href="#explorer">Explorer</a>
       <a href="#communautes">Communautés</a>
@@ -306,8 +247,8 @@
       <span class="eyebrow">Your next gaming universe</span>
       <h1>Entre dans<br><span class="gradient">NOVARA.</span></h1>
       <p>
-        Découvre tes prochains jeux, explore des communautés et prépare-toi
-        à relever de nouveaux défis. Ton univers gaming commence ici.
+        Découvre tes prochains jeux, explore des communautés et relève
+        de nouveaux défis. Ton univers gaming commence ici.
       </p>
       <div class="actions">
         <a class="btn primary" href="#jeux">Explorer les jeux ↗</a>
@@ -317,28 +258,25 @@
 
     <section id="explorer">
       <div class="section-heading">
-        <div>
-          <span class="eyebrow">Découverte</span>
-          <h2>Explore l'univers</h2>
-        </div>
+        <div><span class="eyebrow">Découverte</span><h2>Explore l'univers</h2></div>
       </div>
       <div class="grid">
         <article class="card">
           <div class="game-icon">🎮</div>
           <h3>Jeux</h3>
-          <p>Découvre des jeux et retrouve leurs liens officiels.</p>
-          <a class="btn" href="#jeux">Explorer les jeux</a>
+          <p>Explore les jeux et retrouve leurs liens officiels.</p>
+          <a class="btn" href="#jeux">Voir les jeux</a>
         </article>
         <article class="card">
           <div class="game-icon">🌌</div>
           <h3>Communautés</h3>
-          <p>Un espace pour imaginer des groupes autour de tes jeux favoris.</p>
+          <p>Imagine des groupes autour de tes jeux préférés.</p>
           <a class="btn" href="#communautes">Découvrir</a>
         </article>
         <article class="card">
           <div class="game-icon">⚡</div>
           <h3>Défis</h3>
-          <p>Prépare tes objectifs et tes prochaines sessions de jeu.</p>
+          <p>Prépare tes objectifs et tes prochaines sessions.</p>
           <a class="btn" href="#defis">Voir les défis</a>
         </article>
       </div>
@@ -349,85 +287,45 @@
         <div>
           <span class="eyebrow">Catalogue</span>
           <h2>Bibliothèque de jeux</h2>
-          <p class="muted">Les jeux publiés dans Supabase apparaîtront ici.</p>
+          <p class="muted">Catalogue chargé depuis Supabase.</p>
         </div>
-        <input
-          class="search"
-          id="gameSearch"
-          type="search"
-          placeholder="Rechercher un jeu..."
-          aria-label="Rechercher un jeu"
-        >
+        <input id="gameSearch" class="search" type="search"
+          placeholder="Rechercher un jeu..." aria-label="Rechercher un jeu">
       </div>
-
-      <p class="status" id="gameStatus" role="status">Chargement du catalogue…</p>
+      <p id="gameStatus" role="status" aria-live="polite">Connexion à Supabase…</p>
       <div class="grid" id="gamesGrid"></div>
     </section>
 
     <section id="communautes">
-      <div class="section-heading">
-        <div>
-          <span class="eyebrow">Ensemble</span>
-          <h2>Communautés</h2>
-        </div>
-      </div>
+      <span class="eyebrow">Ensemble</span>
+      <h2>Communautés</h2>
       <div class="notice">
-        L'espace communautés est prêt à être développé. Les groupes, les
-        membres et les discussions nécessiteront ensuite des tables et des
-        règles d'accès dédiées dans Supabase.
+        Cet espace est une maquette pour le moment. Les groupes et les
+        discussions pourront être ajoutés avec des tables et des autorisations
+        adaptées dans Supabase.
       </div>
     </section>
 
     <section id="defis">
-      <div class="section-heading">
-        <div>
-          <span class="eyebrow">Progression</span>
-          <h2>Défis</h2>
-        </div>
-      </div>
+      <span class="eyebrow">Progression</span>
+      <h2>Défis</h2>
       <div class="grid">
-        <article class="card">
-          <div class="game-icon">🎯</div>
-          <h3>Défi personnel</h3>
-          <p>Fixe-toi un objectif pour ta prochaine session.</p>
-        </article>
-        <article class="card">
-          <div class="game-icon">🏆</div>
-          <h3>Objectif de la semaine</h3>
-          <p>Prépare un objectif et suis ta progression.</p>
-        </article>
-        <article class="card">
-          <div class="game-icon">🚀</div>
-          <h3>Prochaine étape</h3>
-          <p>Les défis interactifs pourront être ajoutés plus tard.</p>
-        </article>
+        <article class="card"><div class="game-icon">🎯</div><h3>Défi personnel</h3><p>Fixe ton objectif pour ta prochaine session.</p></article>
+        <article class="card"><div class="game-icon">🏆</div><h3>Objectif de la semaine</h3><p>Prépare ton prochain objectif gaming.</p></article>
+        <article class="card"><div class="game-icon">🚀</div><h3>Progression</h3><p>Les défis interactifs seront ajoutés ensuite.</p></article>
       </div>
     </section>
 
     <section id="appels">
-      <div class="section-heading">
-        <div>
-          <span class="eyebrow">Communication</span>
-          <h2>Appels & Messages</h2>
-        </div>
-      </div>
-      <div class="notice">
-        Cette section est une maquette visuelle. Les vrais messages privés
-        et appels ne sont pas encore activés.
-      </div>
+      <span class="eyebrow">Communication</span>
+      <h2>Appels & Messages</h2>
+      <div class="notice">Cette section est une maquette. Les messages et appels ne sont pas encore activés.</div>
     </section>
 
     <section id="profil">
-      <div class="section-heading">
-        <div>
-          <span class="eyebrow">Espace personnel</span>
-          <h2>Profil</h2>
-        </div>
-      </div>
-      <div class="notice">
-        Le profil est actuellement une maquette. Pour gérer des comptes,
-        il faudra configurer Supabase Auth et protéger les données des utilisateurs.
-      </div>
+      <span class="eyebrow">Espace personnel</span>
+      <h2>Profil</h2>
+      <div class="notice">Cette section est une maquette. La gestion des comptes devra être configurée avant d'y stocker des données personnelles.</div>
     </section>
   </main>
 
@@ -438,7 +336,7 @@
   </footer>
 
   <script>
-    // 1. Remplace ces deux valeurs avec les informations de TON projet Supabase.
+    // Remplace les deux valeurs par celles de TON projet Supabase.
     const SUPABASE_URL = "https://smxjkgcxjzomkqwaaxlr.supabase.co/rest/v1/";
     const SUPABASE_KEY = "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX";
 
@@ -450,18 +348,13 @@
 
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Protège le HTML créé à partir des données de la base.
     function escapeHTML(value) {
-      return String(value ?? "").replace(/[&<>"']/g, char => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
-      })[char]);
+      return String(value ?? "").replace(/[&<>"']/g, c => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;",
+        '"': "&quot;", "'": "&#39;"
+      })[c]);
     }
 
-    // Accepte platforms sous forme de tableau, de texte ou de JSON.
     function normalizePlatforms(value) {
       if (Array.isArray(value)) return value.map(String);
       if (value == null || value === "") return [];
@@ -470,107 +363,124 @@
         try {
           const parsed = JSON.parse(value);
           if (Array.isArray(parsed)) return parsed.map(String);
-        } catch (_) {
-          // Un simple texte est également accepté.
-        }
-        return value.split(",").map(item => item.trim()).filter(Boolean);
+        } catch (_) {}
+        return value.split(",").map(v => v.trim()).filter(Boolean);
       }
 
       return [String(value)];
     }
 
-    function officialLink(value) {
+    function safeURL(value) {
       try {
         const url = new URL(String(value || ""));
-        if (url.protocol === "https:" || url.protocol === "http:") {
-          return url.href;
-        }
-      } catch (_) {}
-      return "";
+        return ["https:", "http:"].includes(url.protocol) ? url.href : "";
+      } catch (_) {
+        return "";
+      }
     }
 
     function renderGames(games) {
-      if (games.length === 0) {
+      if (!games.length) {
         gamesGrid.innerHTML = "";
         gameStatus.textContent = allGames.length
           ? "Aucun jeu ne correspond à ta recherche."
-          : "Aucun jeu publié pour le moment. Vérifie la table games dans Supabase.";
+          : "Connexion réussie, mais aucun jeu publié n'a été trouvé.";
+        gameStatus.classList.remove("error");
         return;
       }
 
+      gameStatus.classList.remove("error");
       gameStatus.textContent = `${games.length} jeu(x) affiché(s).`;
 
       gamesGrid.innerHTML = games.map(game => {
         const title = escapeHTML(game.title || "Jeu sans titre");
         const genre = escapeHTML(game.genre || "Jeu vidéo");
         const description = escapeHTML(
-          game.description || "Découvre ce jeu dans le catalogue NOVARA."
+          game.description || "Découvre ce jeu dans NOVARA."
         );
-        const platforms = normalizePlatforms(game.platforms);
-        const tags = [genre, ...platforms]
+
+        const tags = [genre, ...normalizePlatforms(game.platforms)]
           .filter(Boolean)
-          .map(tag => `<span class="tag">${escapeHTML(tag)}</span>`)
+          .map(value => `<span class="tag">${escapeHTML(value)}</span>`)
           .join("");
 
-        const link = officialLink(game.official_url);
-        const linkHTML = link
-          ? `<a class="btn primary" href="${escapeHTML(link)}"
-                target="_blank" rel="noopener noreferrer">Site officiel ↗</a>`
-          : `<span class="status">Lien officiel non renseigné</span>`;
+        const url = safeURL(game.official_url);
+        const link = url
+          ? `<a class="btn primary game-link" href="${escapeHTML(url)}"
+               target="_blank" rel="noopener noreferrer">Site officiel ↗</a>`
+          : `<p class="muted">Lien officiel non renseigné.</p>`;
 
-        return `
-          <article class="card game">
-            <div class="game-icon">🎮</div>
-            <h3>${title}</h3>
-            <p>${description}</p>
-            <div class="tags">${tags}</div>
-            ${linkHTML}
-          </article>
-        `;
+        return `<article class="card">
+          <div class="game-icon">🎮</div>
+          <h3>${title}</h3>
+          <p>${description}</p>
+          <div class="tags">${tags}</div>
+          ${link}
+        </article>`;
       }).join("");
     }
 
     async function loadGames() {
+      gameStatus.classList.remove("error");
+
       if (
         SUPABASE_URL.startsWith("COLLE_") ||
         SUPABASE_KEY.startsWith("COLLE_")
       ) {
         gameStatus.textContent =
-          "Connexion à Supabase à configurer dans le code.";
+          "Configuration manquante : ajoute l'URL et la clé publique Supabase dans index.html.";
+        gameStatus.classList.add("error");
         return;
       }
 
-      try {
-        const endpoint =
-          `${SUPABASE_URL.replace(/\/$/, "")}/rest/v1/games` +
-          "?select=id,title,genre,platforms,official_url,description,is_published" +
-          "&is_published=eq.true&order=title.asc";
+      let baseURL;
 
+      try {
+        baseURL = new URL(SUPABASE_URL);
+        if (!["https:", "http:"].includes(baseURL.protocol)) {
+          throw new Error("L'URL Supabase doit commencer par https://");
+        }
+      } catch (error) {
+        gameStatus.textContent = "URL Supabase invalide : " + error.message;
+        gameStatus.classList.add("error");
+        return;
+      }
+
+      const endpoint = baseURL.href.replace(/\/$/, "") +
+        "/rest/v1/games?select=id,title,genre,platforms,official_url,description,is_published&is_published=eq.true&order=title.asc";
+
+      try {
         const response = await fetch(endpoint, {
           method: "GET",
           headers: {
-            "apikey": SUPABASE_KEY,
-            "Authorization": `Bearer ${SUPABASE_KEY}`
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${SUPABASE_KEY}`
           }
         });
 
         if (!response.ok) {
-          throw new Error(`Erreur API (${response.status})`);
+          const body = await response.text();
+          console.error("Supabase API error:", response.status, body);
+          throw new Error(
+            `HTTP ${response.status}. ` +
+            (body.length > 300 ? body.slice(0, 300) : body)
+          );
         }
 
         const data = await response.json();
 
         if (!Array.isArray(data)) {
-          throw new Error("Réponse inattendue de Supabase");
+          throw new Error("La réponse de Supabase n'est pas une liste de jeux.");
         }
 
         allGames = data;
         renderGames(allGames);
       } catch (error) {
         console.error("NOVARA / Supabase :", error);
-        gameStatus.textContent =
-          "Impossible de charger les jeux. Vérifie l'URL, la clé publique, " +
-          "les autorisations de la table et la politique RLS.";
+        gamesGrid.innerHTML = "";
+        gameStatus.textContent = "Erreur de chargement : " +
+          (error.message || "connexion impossible");
+        gameStatus.classList.add("error");
       }
     }
 
@@ -578,25 +488,22 @@
       const query = gameSearch.value.trim().toLocaleLowerCase("fr");
 
       const filtered = allGames.filter(game => {
-        const searchable = [
-          game.title,
-          game.genre,
-          game.description,
+        const text = [
+          game.title, game.genre, game.description,
           ...normalizePlatforms(game.platforms)
         ].join(" ").toLocaleLowerCase("fr");
 
-        return searchable.includes(query);
+        return text.includes(query);
       });
 
       renderGames(filtered);
     });
 
-    // Navigation : met en évidence la section sélectionnée.
     document.querySelectorAll("nav a").forEach(link => {
       link.addEventListener("click", () => {
-        document.querySelectorAll("nav a").forEach(item => {
-          item.classList.remove("active");
-        });
+        document.querySelectorAll("nav a").forEach(item =>
+          item.classList.remove("active")
+        );
         link.classList.add("active");
       });
     });

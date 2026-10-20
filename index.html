@@ -1,0 +1,446 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090912">
+  <title>NOVARA — Play Beyond</title>
+  <style>
+    :root {
+      --bg: #090912;
+      --panel: #12121f;
+      --border: #28263d;
+      --purple: #a78bfa;
+      --cyan: #67e8f9;
+      --muted: #a4a3b8;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: #f7f5ff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button, a { font: inherit; }
+    a { color: inherit; text-decoration: none; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    aside {
+      padding: 30px 18px;
+      border-right: 1px solid var(--border);
+      background: #0d0c17;
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 4px;
+      background: linear-gradient(90deg, var(--purple), var(--cyan));
+      color: transparent;
+      background-clip: text;
+    }
+
+    .tagline {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 2px;
+      margin: 7px 0 35px;
+    }
+
+    .nav-label {
+      color: #77748f;
+      font-size: 10px;
+      letter-spacing: 2px;
+      margin: 25px 10px 12px;
+    }
+
+    nav { display: grid; gap: 7px; }
+
+    nav a {
+      padding: 12px;
+      border-radius: 10px;
+      color: #c2bfd6;
+      font-size: 14px;
+    }
+
+    nav a:hover, nav a.active {
+      background: #211b37;
+      color: var(--cyan);
+    }
+
+    main { padding: 32px; min-width: 0; }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 35px;
+    }
+
+    .eyebrow {
+      color: var(--cyan);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .search {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: white;
+      padding: 12px 15px;
+      border-radius: 12px;
+      width: min(280px, 55%);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(25px, 5vw, 58px);
+      border: 1px solid #40305f;
+      border-radius: 24px;
+      background:
+        radial-gradient(ellipse at 85% 15%, #49307888, transparent 45%),
+        radial-gradient(ellipse at 100% 100%, #15516a66, transparent 40%),
+        linear-gradient(125deg, #1a152b, #10101d 70%);
+    }
+
+    .hero h1 {
+      font-size: clamp(38px, 6vw, 68px);
+      line-height: 1.04;
+      margin: 16px 0;
+      letter-spacing: -2px;
+    }
+
+    .gradient {
+      background: linear-gradient(90deg, var(--purple), var(--cyan));
+      color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      max-width: 500px;
+      color: #c2bfd6;
+      line-height: 1.7;
+    }
+
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 25px; }
+
+    .btn {
+      display: inline-flex;
+      justify-content: center;
+      padding: 12px 17px;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: #1a1929;
+      color: white;
+      cursor: pointer;
+    }
+
+    .btn.primary {
+      background: linear-gradient(100deg, #9b7af1, #67cfe8);
+      color: #10101b;
+      border: 0;
+      font-weight: 750;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin: 35px 0 18px;
+    }
+
+    h2 { font-size: 21px; margin: 0; }
+    .muted { color: var(--muted); font-size: 13px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      padding: 21px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 17px;
+      min-width: 0;
+    }
+
+    .card-icon {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: #29213e;
+      font-size: 23px;
+      margin-bottom: 18px;
+    }
+
+    .card h3 { margin: 0 0 9px; font-size: 17px; }
+    .card p { color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+    .game {
+      background: linear-gradient(145deg, #211a39, #131322 65%);
+    }
+
+    .game .card-icon { background: #373052; }
+
+    .card a {
+      display: inline-block;
+      margin-top: 9px;
+      color: var(--cyan);
+      font-size: 13px;
+    }
+
+    .notice {
+      margin-top: 25px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    footer {
+      color: #77748f;
+      font-size: 12px;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 850px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { padding: 18px; border-right: 0; border-bottom: 1px solid var(--border); }
+      .tagline { margin-bottom: 18px; }
+      nav { display: flex; overflow-x: auto; }
+      nav a { white-space: nowrap; }
+      .nav-label { display: none; }
+      main { padding: 22px 16px; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 520px) {
+      .grid { grid-template-columns: 1fr; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .search { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <a href="#accueil" class="logo" data-page="accueil">NOVARA</a>
+      <div class="tagline">PLAY BEYOND LIMITS</div>
+
+      <div class="nav-label">ESPACE PRINCIPAL</div>
+      <nav>
+        <a href="#accueil" class="active" data-page="accueil">⌂ &nbsp; Accueil</a>
+        <a href="#explorer" data-page="explorer">⌕ &nbsp; Explorer</a>
+        <a href="#communautes" data-page="communautes">◉ &nbsp; Communautés</a>
+        <a href="#defis" data-page="defis">◇ &nbsp; Défis</a>
+        <a href="#jeux" data-page="jeux">🎮 &nbsp; Jeux</a>
+        <a href="#appels" data-page="appels">▤ &nbsp; Appels & Messages</a>
+        <a href="#profil" data-page="profil">♙ &nbsp; Profil</a>
+      </nav>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div>
+          <div class="eyebrow">TON UNIVERS GAMING</div>
+          <div class="muted" style="margin-top:6px">Bienvenue dans NOVARA.</div>
+        </div>
+        <input class="search" id="search" placeholder="Rechercher un jeu..." aria-label="Rechercher">
+      </div>
+
+      <section class="page active" id="accueil">
+        <div class="hero">
+          <div class="eyebrow">UNE NOUVELLE ÈRE COMMENCE</div>
+          <h1>Play beyond<br><span class="gradient">limits.</span></h1>
+          <p>Découvre des jeux, rencontre ta communauté et construis ton propre univers gaming. Tout commence ici.</p>
+          <div class="actions">
+            <button class="btn primary" data-go="jeux">Découvrir les jeux ↗</button>
+            <button class="btn" data-go="communautes">Explorer NOVARA</button>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <h2>Ton espace, tes possibilités.</h2>
+          <span class="muted">01 — NOVARA</span>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <div class="card-icon">⌕</div>
+            <h3>Explorer</h3>
+            <p>Découvre les univers et les expériences qui correspondent à tes envies.</p>
+            <a href="#explorer" data-page="explorer">Explorer →</a>
+          </article>
+          <article class="card">
+            <div class="card-icon">◉</div>
+            <h3>Communautés</h3>
+            <p>Un espace pour réunir les joueurs autour de leurs passions.</p>
+            <a href="#communautes" data-page="communautes">Découvrir →</a>
+          </article>
+          <article class="card">
+            <div class="card-icon">◇</div>
+            <h3>Défis</h3>
+            <p>Un espace pensé pour les objectifs et les défis communautaires.</p>
+            <a href="#defis" data-page="defis">Voir les défis →</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="page" id="explorer">
+        <div class="eyebrow">DÉCOUVERTE</div>
+        <h1>Explorer <span class="gradient">NOVARA</span></h1>
+        <p class="muted">Trouve de nouveaux univers et des communautés à découvrir.</p>
+        <div class="grid">
+          <article class="card"><div class="card-icon">🎮</div><h3>Univers gaming</h3><p>Découvre les jeux et leurs plateformes.</p><a href="#jeux" data-page="jeux">Voir les jeux →</a></article>
+          <article class="card"><div class="card-icon">🌌</div><h3>Nouveaux univers</h3><p>La découverte de nouveaux jeux commence ici.</p><a href="#jeux" data-page="jeux">Explorer →</a></article>
+          <article class="card"><div class="card-icon">👥</div><h3>Joueurs</h3><p>Les fonctions communautaires seront développées ensuite.</p><a href="#communautes" data-page="communautes">Communautés →</a></article>
+        </div>
+      </section>
+
+      <section class="page" id="communautes">
+        <div class="eyebrow">ENSEMBLE</div>
+        <h1>Les <span class="gradient">communautés</span></h1>
+        <p class="muted">Le point de départ pour rassembler les joueurs autour de leurs jeux préférés.</p>
+        <div class="grid">
+          <article class="card"><div class="card-icon">🌐</div><h3>Groupes de joueurs</h3><p>La création et l'adhésion aux groupes seront ajoutées avec la base de données.</p></article>
+          <article class="card"><div class="card-icon">💬</div><h3>Discussions</h3><p>Les conversations nécessiteront des comptes et des données sécurisées.</p></article>
+        </div>
+      </section>
+
+      <section class="page" id="defis">
+        <div class="eyebrow">PROGRESSION</div>
+        <h1>Les <span class="gradient">défis</span></h1>
+        <p class="muted">Un futur espace pour les objectifs et les événements communautaires.</p>
+        <div class="grid">
+          <article class="card"><div class="card-icon">◇</div><h3>Défis communautaires</h3><p>Cette fonctionnalité sera ajoutée dans une prochaine étape.</p></article>
+          <article class="card"><div class="card-icon">🏆</div><h3>Progression</h3><p>Les objectifs et récompenses pourront être enregistrés plus tard.</p></article>
+        </div>
+      </section>
+
+      <section class="page" id="jeux">
+        <div class="eyebrow">CATALOGUE GAMING</div>
+        <h1>Découvre tes <span class="gradient">prochains jeux.</span></h1>
+        <p class="muted">Choisis un jeu, vérifie ta plateforme et accède à sa page officielle.</p>
+        <div class="grid" id="games">
+          <article class="card game" data-search="fortnite battle royale pc playstation xbox switch">
+            <div class="card-icon">⚡</div><h3>Fortnite</h3>
+            <p>Battle royale · Action · Gratuit</p>
+            <label for="platform-fortnite" class="muted">Ta plateforme</label>
+            <select id="platform-fortnite" class="search" style="width:100%;margin-top:8px">
+              <option value="https://www.fortnite.com/download">PC</option>
+              <option value="https://www.fortnite.com/download">PlayStation</option>
+              <option value="https://www.fortnite.com/download">Xbox</option>
+              <option value="https://www.fortnite.com/download">Nintendo Switch</option>
+            </select>
+            <a href="https://www.fortnite.com/download" target="_blank" rel="noopener noreferrer" data-store="platform-fortnite">Site officiel / télécharger ↗</a>
+          </article>
+          <article class="card game" data-search="valorant tactical shooter pc playstation xbox">
+            <div class="card-icon">🎯</div><h3>VALORANT</h3>
+            <p>Tir tactique · Compétitif</p>
+            <label for="platform-valorant" class="muted">Ta plateforme</label>
+            <select id="platform-valorant" class="search" style="width:100%;margin-top:8px">
+              <option value="https://playvalorant.com/fr-fr/platform-selection/">PC</option>
+              <option value="https://playvalorant.com/fr-fr/platform-selection/">PlayStation 5</option>
+              <option value="https://playvalorant.com/fr-fr/platform-selection/">Xbox Series X|S</option>
+            </select>
+            <a href="https://playvalorant.com/fr-fr/platform-selection/" target="_blank" rel="noopener noreferrer" data-store="platform-valorant">Site officiel / plateformes ↗</a>
+          </article>
+          <article class="card game" data-search="marvel spider-man remastered action aventure pc playstation">
+            <div class="card-icon">🕸️</div><h3>Marvel's Spider-Man Remastered</h3>
+            <p>Action · Aventure solo</p>
+            <label for="platform-spiderman" class="muted">Ta plateforme</label>
+            <select id="platform-spiderman" class="search" style="width:100%;margin-top:8px">
+              <option value="https://www.playstation.com/fr-fr/games/marvels-spider-man-remastered/">PC</option>
+              <option value="https://www.playstation.com/fr-fr/games/marvels-spider-man-remastered/">PlayStation 5</option>
+            </select>
+            <a href="https://www.playstation.com/fr-fr/games/marvels-spider-man-remastered/" target="_blank" rel="noopener noreferrer" data-store="platform-spiderman">Page officielle ↗</a>
+          </article>
+        </div>
+        <div class="notice">NOVARA ne stocke ni ne distribue de fichiers de jeux. Les liens renvoient vers les pages officielles. La disponibilité dépend de l'édition, de la plateforme et de la région.</div>
+      </section>
+
+      <section class="page" id="appels">
+        <div class="eyebrow">RESTER CONNECTÉ</div>
+        <h1>Appels <span class="gradient">& messages</span></h1>
+        <p class="muted">Cette partie sera construite plus tard avec une base de données et des comptes sécurisés.</p>
+        <div class="grid">
+          <article class="card"><div class="card-icon">💬</div><h3>Messages</h3><p>Une future messagerie entre membres.</p></article>
+          <article class="card"><div class="card-icon">🎙️</div><h3>Appels</h3><p>Un espace de communication à développer.</p></article>
+        </div>
+      </section>
+
+      <section class="page" id="profil">
+        <div class="eyebrow">ESPACE PERSONNEL</div>
+        <h1>Ton <span class="gradient">profil</span></h1>
+        <p class="muted">Les profils et préférences seront sauvegardés quand Supabase sera configuré.</p>
+        <div class="card"><div class="card-icon">♙</div><h3>Bienvenue sur NOVARA</h3><p>La création de compte n'est pas encore activée. Aucune donnée personnelle n'est enregistrée pour le moment.</p></div>
+      </section>
+
+      <footer>© NOVARA · Play beyond limits · Première version</footer>
+    </main>
+  </div>
+
+  <script>
+    const links = document.querySelectorAll("[data-page]");
+    const pages = document.querySelectorAll(".page");
+
+    function showPage(id) {
+      if (!document.getElementById(id)) id = "accueil";
+      pages.forEach(page => page.classList.toggle("active", page.id === id));
+      links.forEach(link => link.classList.toggle("active", link.dataset.page === id));
+      if (location.hash !== "#" + id) history.replaceState(null, "", "#" + id);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    links.forEach(link => link.addEventListener("click", event => {
+      event.preventDefault();
+      showPage(link.dataset.page);
+    }));
+
+    document.querySelectorAll("[data-go]").forEach(button => {
+      button.addEventListener("click", () => showPage(button.dataset.go));
+    });
+
+    document.querySelectorAll("[data-store]").forEach(link => {
+      link.addEventListener("click", () => {
+        const select = document.getElementById(link.dataset.store);
+        link.href = select.value;
+      });
+    });
+
+    document.getElementById("search").addEventListener("input", event => {
+      const query = event.target.value.trim().toLowerCase();
+      if (query) showPage("jeux");
+      document.querySelectorAll("#games .game").forEach(game => {
+        game.style.display = game.dataset.search.includes(query) ? "" : "none";
+      });
+    });
+
+    showPage(location.hash.slice(1) || "accueil");
+  </script>
+</body>
+</html>

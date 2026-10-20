@@ -1,0 +1,458 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080510">
+  <title>Créer un compte — NOVARA</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background:
+        radial-gradient(ellipse at 15% 15%, #7b2ac544, transparent 40%),
+        radial-gradient(ellipse at 85% 80%, #5515a844, transparent 40%),
+        #080510;
+      color: #f7f1ff;
+      font-family: system-ui, Arial, sans-serif;
+    }
+
+    .signup-container {
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .brand a {
+      color: #d3a5ff;
+      font-size: 35px;
+      font-weight: 950;
+      letter-spacing: 5px;
+      text-decoration: none;
+      text-shadow: 0 0 25px #a855ff77;
+    }
+
+    .brand p {
+      color: #b9a9ce;
+      font-size: 13px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .signup-card {
+      padding: 30px;
+      border: 1px solid #a855ff55;
+      border-radius: 22px;
+      background: rgba(17, 10, 30, 0.94);
+      box-shadow:
+        0 20px 70px #0008,
+        0 0 35px #8d35df18;
+      backdrop-filter: blur(16px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      letter-spacing: -1px;
+    }
+
+    .subtitle {
+      margin: 0 0 25px;
+      color: #b9a9ce;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .field {
+      margin-bottom: 17px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #e8dcff;
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .field input {
+      width: 100%;
+      min-height: 47px;
+      padding: 12px 14px;
+      border: 1px solid #ffffff20;
+      border-radius: 11px;
+      outline: none;
+      background: #090611;
+      color: #fff;
+      font-size: 14px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .field input:focus {
+      border-color: #b56bff;
+      box-shadow: 0 0 0 3px #a855ff20;
+    }
+
+    .field input::placeholder {
+      color: #766783;
+    }
+
+    .hint {
+      display: block;
+      margin-top: 6px;
+      color: #9786aa;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .submit-button {
+      width: 100%;
+      min-height: 49px;
+      margin-top: 7px;
+      border: 1px solid #c18aff55;
+      border-radius: 12px;
+      background: linear-gradient(110deg, #a64dff, #7024c7);
+      color: white;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 0 22px #8d35df30;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .submit-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 28px #a855ff55;
+    }
+
+    .submit-button:disabled {
+      opacity: 0.65;
+      cursor: wait;
+      transform: none;
+    }
+
+    .message {
+      display: none;
+      margin: 16px 0 0;
+      padding: 12px;
+      border: 1px solid #a855ff44;
+      border-radius: 10px;
+      color: #e5d0ff;
+      background: #a855ff12;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .message.visible {
+      display: block;
+    }
+
+    .message.error {
+      color: #ffb4c3;
+      border-color: #ff7b9c55;
+      background: #ff7b9c0d;
+    }
+
+    .footer-links {
+      margin-top: 22px;
+      text-align: center;
+      color: #b9a9ce;
+      font-size: 13px;
+      line-height: 2;
+    }
+
+    .footer-links a {
+      color: #d0a0ff;
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 15px;
+      color: #b9a9ce;
+      font-size: 13px;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      color: #d0a0ff;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 16px;
+      }
+
+      .signup-card {
+        padding: 23px 19px;
+      }
+
+      h1 {
+        font-size: 27px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="signup-container">
+    <header class="brand">
+      <a href="index.html">NOVARA</a>
+      <p>Enter a new universe</p>
+    </header>
+
+    <section class="signup-card">
+      <h1>Créer ton compte</h1>
+      <p class="subtitle">
+        Rejoins la communauté NOVARA et entre dans le jeu.
+      </p>
+
+      <form id="signupForm">
+        <div class="field">
+          <label for="username">Pseudo</label>
+          <input
+            id="username"
+            name="username"
+            type="text"
+            placeholder="Ton pseudo de gamer"
+            minlength="3"
+            maxlength="24"
+            pattern="[A-Za-z0-9_-]+"
+            autocomplete="nickname"
+            required
+          >
+          <span class="hint">
+            3 à 24 caractères : lettres, chiffres, _ ou -.
+          </span>
+        </div>
+
+        <div class="field">
+          <label for="email">Adresse e-mail</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="toi@exemple.com"
+            maxlength="254"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="password">Mot de passe</label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="8 caractères minimum"
+            minlength="8"
+            maxlength="72"
+            autocomplete="new-password"
+            required
+          >
+          <span class="hint">
+            Choisis un mot de passe long et difficile à deviner.
+          </span>
+        </div>
+
+        <div class="field">
+          <label for="confirmPassword">Confirmer le mot de passe</label>
+          <input
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            placeholder="Retape ton mot de passe"
+            minlength="8"
+            maxlength="72"
+            autocomplete="new-password"
+            required
+          >
+        </div>
+
+        <button class="submit-button" id="signupButton" type="submit">
+          Créer mon compte
+        </button>
+
+        <div
+          class="message"
+          id="signupMessage"
+          role="status"
+          aria-live="polite"
+        ></div>
+      </form>
+
+      <div class="footer-links">
+        Déjà membre ?
+        <a href="connexion.html">Connecte-toi</a>
+        <br>
+        <a href="index.html" class="back-link">← Retour à l'accueil</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Client Supabase officiel -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    /*
+      Configuration publique du projet NOVARA.
+      Ne jamais placer une clé service_role ou secrète dans le navigateur.
+    */
+    const SUPABASE_URL =
+      "https://smxjkgcxjzomkqwaaxlr.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX";
+
+    const form = document.getElementById("signupForm");
+    const usernameInput = document.getElementById("username");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const confirmInput = document.getElementById("confirmPassword");
+    const submitButton = document.getElementById("signupButton");
+    const messageBox = document.getElementById("signupMessage");
+
+    function showMessage(message, isError = false) {
+      messageBox.textContent = message;
+      messageBox.classList.add("visible");
+      messageBox.classList.toggle("error", isError);
+    }
+
+    function setLoading(isLoading) {
+      submitButton.disabled = isLoading;
+      submitButton.textContent = isLoading
+        ? "Création du compte..."
+        : "Créer mon compte";
+    }
+
+    if (!window.supabase) {
+      showMessage(
+        "Impossible de charger le service de connexion. Vérifie ta connexion Internet et recharge la page.",
+        true
+      );
+      submitButton.disabled = true;
+    } else {
+      const client = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        messageBox.classList.remove("visible", "error");
+
+        const username = usernameInput.value.trim();
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+        const confirmation = confirmInput.value;
+
+        if (!/^[A-Za-z0-9_-]{3,24}$/.test(username)) {
+          showMessage(
+            "Ton pseudo doit contenir entre 3 et 24 lettres, chiffres, tirets ou underscores.",
+            true
+          );
+          return;
+        }
+
+        if (password.length < 8) {
+          showMessage(
+            "Ton mot de passe doit contenir au moins 8 caractères.",
+            true
+          );
+          return;
+        }
+
+        if (password !== confirmation) {
+          showMessage(
+            "Les deux mots de passe ne correspondent pas.",
+            true
+          );
+          confirmInput.focus();
+          return;
+        }
+
+        setLoading(true);
+
+        try {
+          const { data, error } = await client.auth.signUp({
+            email,
+            password,
+            options: {
+              data: {
+                username: username
+              },
+              emailRedirectTo: new URL(
+                "index.html",
+                window.location.href
+              ).href
+            }
+          });
+
+          if (error) {
+            const knownMessages = {
+              "User already registered":
+                "Un compte existe déjà avec cette adresse e-mail.",
+              "Password should be at least 6 characters":
+                "Choisis un mot de passe plus long."
+            };
+
+            showMessage(
+              knownMessages[error.message] ||
+              "Inscription impossible : " + error.message,
+              true
+            );
+            return;
+          }
+
+          if (data.user && !data.session) {
+            showMessage(
+              "Ton inscription a été enregistrée ! Consulte ta boîte e-mail pour confirmer ton adresse avant de te connecter."
+            );
+          } else if (data.session) {
+            showMessage(
+              "Ton compte a été créé ! Tu peux maintenant accéder à NOVARA."
+            );
+
+            window.setTimeout(() => {
+              window.location.href = "profil.html";
+            }, 1200);
+          } else {
+            showMessage(
+              "La demande a été traitée. Vérifie tes e-mails pour connaître la prochaine étape."
+            );
+          }
+        } catch (error) {
+          showMessage(
+            "Une erreur inattendue est survenue. Réessaie dans quelques instants.",
+            true
+          );
+        } finally {
+          setLoading(false);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

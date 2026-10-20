@@ -184,6 +184,49 @@
       </div>
 
       <div class="chat-panel">
+        
+<!-- NOVARA : interface des appels -->
+<section class="chat-panel" id="novara-call-panel"
+  style="margin-bottom:20px">
+
+  <h2>🎧 Appels NOVARA</h2>
+  <p class="chat-status">
+    Choisis un joueur dans la recherche pour préparer un appel audio ou vidéo.
+  </p>
+
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin:16px 0">
+    <button class="chat-button" id="audio-call-button" type="button">
+      🎧 Appel audio
+    </button>
+    <button class="chat-button" id="video-call-button" type="button">
+      📹 Appel vidéo
+    </button>
+  </div>
+
+  <p id="call-status" class="chat-status" role="status">
+    Aucun appel en cours.
+  </p>
+
+  <div id="call-media" hidden>
+    <video id="remote-video" autoplay playsinline
+      style="width:100%;max-height:300px;background:#090914;border-radius:12px">
+    </video>
+    <video id="local-video" autoplay muted playsinline
+      style="width:120px;max-height:100px;background:#090914;border-radius:12px">
+    </video>
+    <audio id="remote-audio" autoplay></audio>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+      <button class="chat-button" id="accept-call-button" type="button" hidden>
+        Accepter
+      </button>
+      <button class="chat-button" id="hangup-button" type="button" hidden>
+        Terminer l’appel
+      </button>
+    </div>
+  </div>
+</section>
+<!-- Fin de l’interface des appels -->
+
         <h2 id="chat-title">Ta messagerie</h2>
         <p id="chat-empty" class="chat-status">
           Recherche un joueur pour commencer à discuter.

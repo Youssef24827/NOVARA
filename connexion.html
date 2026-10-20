@@ -243,7 +243,25 @@
           showMessage("Connexion réussie ! Redirection...", "success");
 
           window.setTimeout(function () {
-            window.location.href = "profil.html";
+           const params = new URLSearchParams(window.location.search);
+const destination = params.get("redirect");
+
+const pagesAutorisees = [
+  "index.html",
+  "explorer.html",
+  "communautes.html",
+  "defis.html",
+  "messages.html",
+  "profil.html"
+];
+
+const pageDemandee = destination
+  ? destination.split("?")[0].split("#")[0].split("/").pop()
+  : "index.html";
+
+window.location.href = pagesAutorisees.includes(pageDemandee)
+  ? destination
+  : "index.html";
           }, 700);
         } else {
           showMessage(

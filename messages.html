@@ -4,994 +4,704 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#090914">
-  <title>NOVARA — Messages privés</title>
+  <title>Messages | NOVARA</title>
   <link rel="stylesheet" href="style.css">
-
-  <style>
-    html.auth-checking body { visibility: hidden; }
-
-    .chat-layout {
-      display: grid;
-      grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
-      gap: 20px;
-      min-height: 520px;
-      margin-top: 24px;
-    }
-
-    .chat-panel {
-      min-width: 0;
-      padding: 20px;
-      border: 1px solid rgba(160, 100, 255, .22);
-      border-radius: 16px;
-      background: rgba(18, 15, 35, .82);
-    }
-
-    .chat-search, .chat-input {
-      box-sizing: border-box;
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #40345e;
-      border-radius: 10px;
-      background: #100d20;
-      color: white;
-      font: inherit;
-    }
-
-    .chat-search { margin: 12px 0; }
-
-    .chat-button {
-      padding: 10px 14px;
-      border: 1px solid #8950ed;
-      border-radius: 10px;
-      background: #6735bd;
-      color: white;
-      font: inherit;
-      cursor: pointer;
-    }
-
-    .chat-button:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-    }
-
-    .chat-list {
-      display: grid;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .chat-person {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #35294e;
-      border-radius: 10px;
-      background: #171229;
-      color: white;
-      text-align: left;
-      cursor: pointer;
-      overflow-wrap: anywhere;
-    }
-
-    .chat-person:hover { border-color: #a16cff; }
-
-    .chat-messages {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      height: 340px;
-      overflow-y: auto;
-      padding: 12px 0;
-    }
-
-    .chat-message {
-      max-width: 82%;
-      padding: 10px 13px;
-      border: 1px solid #40345e;
-      border-radius: 12px;
-      background: #211a36;
-      overflow-wrap: anywhere;
-      white-space: pre-wrap;
-    }
-
-    .chat-message.mine {
-      align-self: flex-end;
-      background: #55309b;
-      border-color: #8153ce;
-    }
-
-    .chat-message small {
-      display: block;
-      margin-top: 5px;
-      opacity: .7;
-      font-size: 11px;
-    }
-
-    .chat-compose {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .chat-compose .chat-input { flex: 1; min-width: 0; }
-
-    .chat-status {
-      color: #c9b9e9;
-      font-size: 13px;
-      overflow-wrap: anywhere;
-    }
-
-    @media (max-width: 700px) {
-      .chat-layout { grid-template-columns: 1fr; }
-      .chat-messages { height: 300px; }
-    }
-  </style>
-
   <script>
     document.documentElement.classList.add("auth-checking");
   </script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth.js"></script>
-  <script src="app.js" defer></script>
 </head>
-
 <body>
-  <aside class="sidebar">
-    <a class="logo" href="index.html">NOVA<span class="gradient">RA</span></a>
-    <div class="nav-label">Menu principal</div>
-    <nav class="nav">
-      <a href="index.html"><span class="ico">⌂</span> Accueil</a>
-      <a href="explorer.html"><span class="ico">◈</span> Explorer</a>
-      <a href="communautes.html"><span class="ico">♧</span> Communautés</a>
-      <a href="defis.html"><span class="ico">⚡</span> Défis</a>
-      <a class="active" href="messages.html"><span class="ico">✉</span> Appels & Messages</a>
-      <a href="profil.html"><span class="ico">◎</span> Profil</a>
-    </nav>
-    <div class="sidebar-bottom">
-      <strong>NOVARA UNIVERSE</strong><br>
-      Explore. Joue. Connecte-toi.<br>
-      © <span data-year></span> NOVARA
-    </div>
-  </aside>
-
-  <main class="main">
-    <div class="mobile-top">
-      <a class="logo" href="index.html">NOVARA</a>
-      <button class="hamburger" data-menu-toggle aria-label="Ouvrir le menu">☰</button>
-    </div>
-
-    <header class="page-head">
-      <div class="eyebrow">✦ Connecte-toi à ton équipe</div>
-      <h1>Messages <span class="gradient">privés.</span></h1>
-      <p>Recherche un joueur par son pseudo et démarre une conversation.</p>
+  <main class="novara-messages">
+    <header class="novara-header">
+      <h1>💜 NOVARA Messages</h1>
+      <p>Discute et retrouve la communauté.</p>
+      <a href="index.html">← Retour à l’accueil</a>
     </header>
 
-    <section class="chat-layout">
-      <div class="chat-panel">
-        <h2>Joueurs</h2>
-        <input id="user-search" class="chat-search" type="search"
-          placeholder="Rechercher un pseudo..." maxlength="40"
-          autocomplete="off">
-        <div id="user-status" class="chat-status" role="status">
-          Chargement des joueurs...
-        </div>
-        <div id="user-list" class="chat-list"></div>
-
-        <hr style="border-color:#35294e;margin:22px 0">
-        <h3>Mes conversations</h3>
-        <div id="conversation-status" class="chat-status"></div>
-        <div id="conversation-list" class="chat-list"></div>
-      </div>
-
-      <div class="chat-panel">
-        
-<!-- NOVARA : interface des appels -->
-<section class="chat-panel" id="novara-call-panel"
-  style="margin-bottom:20px">
-
-  <h2>🎧 Appels NOVARA</h2>
-  <p class="chat-status">
-    Choisis un joueur dans la recherche pour préparer un appel audio ou vidéo.
-  </p>
-
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin:16px 0">
-    <button class="chat-button" id="audio-call-button" type="button">
-      🎧 Appel audio
-    </button>
-    <button class="chat-button" id="video-call-button" type="button">
-      📹 Appel vidéo
-    </button>
-  </div>
-
-  <p id="call-status" class="chat-status" role="status">
-    Aucun appel en cours.
-  </p>
-
-  <div id="call-media" hidden>
-    <video id="remote-video" autoplay playsinline
-      style="width:100%;max-height:300px;background:#090914;border-radius:12px">
-    </video>
-    <video id="local-video" autoplay muted playsinline
-      style="width:120px;max-height:100px;background:#090914;border-radius:12px">
-    </video>
-    <audio id="remote-audio" autoplay></audio>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
-      <button class="chat-button" id="accept-call-button" type="button" hidden>
-        Accepter
-      </button>
-      <button class="chat-button" id="hangup-button" type="button" hidden>
-        Terminer l’appel
-      </button>
-    </div>
-  </div>
-</section>
-<!-- Fin de l’interface des appels -->
-
-        <h2 id="chat-title">Ta messagerie</h2>
-        <p id="chat-empty" class="chat-status">
-          Recherche un joueur pour commencer à discuter.
-        </p>
-        <div id="chat-messages" class="chat-messages"
-          aria-live="polite"></div>
-        <form id="chat-form" class="chat-compose" hidden>
-          <input id="chat-input" class="chat-input" type="text"
-            placeholder="Écris ton message..." maxlength="4000"
-            autocomplete="off" required>
-          <button id="send-button" class="chat-button" type="submit">
-            Envoyer
-          </button>
-        </form>
-        <p id="chat-status" class="chat-status" role="status"></p>
-      </div>
+    <section class="novara-panel">
+      <h2>🔎 Trouver un joueur</h2>
+      <label for="player-search">Nom d’utilisateur</label>
+      <input
+        id="player-search"
+        type="search"
+        placeholder="Rechercher un joueur..."
+        autocomplete="off"
+      >
+      <p id="search-status" role="status">Chargement des profils...</p>
+      <div id="player-results"></div>
     </section>
 
-    <footer>© <span data-year></span> NOVARA · Explore. Joue. Connecte-toi.</footer>
+    <section class="novara-panel">
+      <h2>💬 Ma messagerie</h2>
+      <p id="chat-status" role="status">Sélectionne un joueur pour commencer.</p>
+      <div id="message-list" aria-live="polite"></div>
+      <form id="message-form">
+        <label for="message-input">Ton message</label>
+        <textarea
+          id="message-input"
+          rows="3"
+          maxlength="2000"
+          placeholder="Écris ton message..."
+          required
+        ></textarea>
+        <button type="submit">Envoyer</button>
+      </form>
+    </section>
+
+    <section class="novara-panel" id="novara-call-panel">
+      <h2>🎧 Appels NOVARA</h2>
+      <p>Choisis un joueur dans la recherche avant de lancer un appel.</p>
+      <div class="novara-actions">
+        <button id="audio-call-button" type="button">🎧 Appel audio</button>
+        <button id="video-call-button" type="button">📹 Appel vidéo</button>
+      </div>
+      <p id="call-status" role="status">Aucun appel en cours.</p>
+
+      <div id="incoming-call" hidden>
+        <p id="incoming-call-text">Appel entrant</p>
+        <button id="accept-call-button" type="button">Accepter</button>
+        <button id="reject-call-button" type="button">Refuser</button>
+      </div>
+
+      <div id="call-media" hidden>
+        <video id="remote-video" autoplay playsinline></video>
+        <video id="local-video" autoplay muted playsinline></video>
+        <audio id="remote-audio" autoplay></audio>
+        <button id="hangup-button" type="button">Terminer l’appel</button>
+      </div>
+    </section>
   </main>
+
+  <style>
+    .novara-messages {
+      width: min(100% - 28px, 900px);
+      margin: 30px auto;
+      color: #f5f2ff;
+    }
+
+    .novara-header,
+    .novara-panel {
+      background: #11101b;
+      border: 1px solid #673cff;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 0 18px #673cff18;
+    }
+
+    .novara-messages h1,
+    .novara-messages h2 {
+      color: #b9a1ff;
+    }
+
+    .novara-messages input,
+    .novara-messages textarea {
+      box-sizing: border-box;
+      width: 100%;
+      margin: 8px 0;
+      padding: 12px;
+      border: 1px solid #514078;
+      border-radius: 9px;
+      background: #090812;
+      color: white;
+    }
+
+    .novara-messages button {
+      cursor: pointer;
+      border: 1px solid #9a7bff;
+      border-radius: 9px;
+      padding: 10px 15px;
+      margin: 5px 5px 5px 0;
+      background: #673cff;
+      color: white;
+      font-weight: bold;
+    }
+
+    .novara-messages button:hover {
+      background: #805eff;
+    }
+
+    .novara-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .player-result,
+    .message-item {
+      border: 1px solid #302644;
+      border-radius: 9px;
+      padding: 12px;
+      margin: 8px 0;
+      overflow-wrap: anywhere;
+    }
+
+    #remote-video {
+      width: 100%;
+      max-height: 320px;
+      background: #05040a;
+      border-radius: 10px;
+    }
+
+    #local-video {
+      width: 130px;
+      max-height: 110px;
+      background: #05040a;
+      border-radius: 10px;
+    }
+
+    .novara-messages a {
+      color: #c5b4ff;
+    }
+  </style>
 
   <script>
     (() => {
-      const SUPABASE_URL = "https://smxjkgcxjzomkqwaaxlr.supabase.co";
-      const SUPABASE_KEY = "sb_publishable_SaIzNOVARA_PLACEHOLDER";
+      "use strict";
 
-      // Remplace la valeur ci-dessus par ta clé publishable Supabase
-      // déjà utilisée dans auth.js.
+      const SUPABASE_URL =
+        "https://smxjkgcxjzomkqwaaxlr.supabase.co";
+
+      // Utilise ici la même clé publishable que dans auth.js.
+      const SUPABASE_KEY =
+        "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX";
+
       const client = window.supabase.createClient(
         SUPABASE_URL,
-        "sb_publishable_SaIzNOVARA_PLACEHOLDER"
+        SUPABASE_KEY
       );
 
       const $ = (id) => document.getElementById(id);
-      const searchInput = $("user-search");
-      const userList = $("user-list");
-      const userStatus = $("user-status");
-      const conversationList = $("conversation-list");
-      const conversationStatus = $("conversation-status");
-      const messagesBox = $("chat-messages");
-      const chatTitle = $("chat-title");
-      const chatEmpty = $("chat-empty");
-      const chatForm = $("chat-form");
-      const messageInput = $("chat-input");
-      const sendButton = $("send-button");
-      const chatStatus = $("chat-status");
 
       let currentUser = null;
+      let selectedProfile = null;
       let activeConversation = null;
-      let activeUsername = "";
       let messageChannel = null;
-      let searchTimer = null;
-      let loadingMessages = false;
+      let callsChannel = null;
+      let activeCall = null;
+      let peer = null;
+      let localStream = null;
+      let remoteStream = null;
+      let pendingIce = [];
 
-      function showError(error, target = chatStatus) {
-        console.error(error);
-        target.textContent = error?.message
-          ? "Erreur : " + error.message
-          : "Une erreur est survenue. Réessaie.";
+      const rtcConfig = {
+        iceServers: [
+          { urls: "stun:stun.l.google.com:19302" }
+        ]
+      };
+
+      function status(id, message) {
+        $(id).textContent = message;
       }
 
-      function makeButton(label, callback) {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "chat-person";
-        button.textContent = label;
-        button.addEventListener("click", callback);
-        return button;
+      function escapeText(value) {
+        return String(value ?? "");
       }
 
-      async function searchUsers() {
-        const term = searchInput.value.trim().replace(/^@/, "");
-        userList.replaceChildren();
+      async function getCurrentUser() {
+        const { data, error } = await client.auth.getUser();
 
-        if (term.length < 2) {
-          userStatus.textContent = "Saisis au moins 2 caractères.";
-          return;
+        if (error || !data.user) {
+          status("search-status", "Connecte-toi pour utiliser NOVARA.");
+          return null;
         }
 
-        userStatus.textContent = "Recherche...";
-        const { data, error } = await client
+        return data.user;
+      }
+
+      async function searchProfiles() {
+        if (!currentUser) return;
+
+        const term = $("player-search").value.trim();
+
+        let query = client
           .from("profiles")
           .select("id, username")
-          .ilike("username", "%" + term + "%")
           .neq("id", currentUser.id)
-          .not("username", "is", null)
+          .order("username", { ascending: true })
           .limit(20);
 
+        if (term) {
+          query = query.ilike("username", `%${term}%`);
+        }
+
+        status("search-status", "Recherche en cours...");
+
+        const { data, error } = await query;
+
         if (error) {
-          showError(error, userStatus);
+          console.error("Erreur profils:", error);
+          status(
+            "search-status",
+            "Impossible de charger les joueurs. Vérifie les politiques RLS."
+          );
           return;
         }
+
+        const results = $("player-results");
+        results.replaceChildren();
 
         if (!data || data.length === 0) {
-          userStatus.textContent = "Aucun joueur trouvé.";
+          status("search-status", "Aucun autre joueur trouvé.");
           return;
         }
 
-        userStatus.textContent = data.length + " joueur(s) trouvé(s).";
+        status("search-status", `${data.length} joueur(s) trouvé(s).`);
 
-        data.forEach((profile) => {
-          userList.appendChild(makeButton(
-            "👤 @" + profile.username,
-            () => openConversation(profile)
-          ));
-        });
-      }
+        for (const profile of data) {
+          const item = document.createElement("div");
+          item.className = "player-result";
 
-      async function loadConversations() {
-        conversationList.replaceChildren();
-        conversationStatus.textContent = "Chargement...";
+          const name = document.createElement("strong");
+          name.textContent = profile.username || "Joueur NOVARA";
 
-        const { data: memberships, error } = await client
-          .from("conversation_members")
-          .select("conversation_id")
-          .eq("user_id", currentUser.id);
+          const button = document.createElement("button");
+          button.type = "button";
+          button.textContent = "Ouvrir la conversation";
 
-        if (error) {
-          showError(error, conversationStatus);
-          return;
+          button.addEventListener("click", async () => {
+            selectedProfile = profile;
+            await openConversation(profile);
+          });
+
+          item.append(name, document.createElement("br"), button);
+          results.appendChild(item);
         }
-
-        if (!memberships || memberships.length === 0) {
-          conversationStatus.textContent = "Pas encore de conversation.";
-          return;
-        }
-
-        const ids = [...new Set(
-          memberships.map((item) => item.conversation_id)
-        )];
-
-        const { data: members, error: memberError } = await client
-          .from("conversation_members")
-          .select("conversation_id, user_id")
-          .in("conversation_id", ids)
-          .neq("user_id", currentUser.id);
-
-        if (memberError) {
-          showError(memberError, conversationStatus);
-          return;
-        }
-
-        const otherIds = [...new Set((members || []).map((m) => m.user_id))];
-        let profiles = [];
-
-        if (otherIds.length) {
-          const result = await client.from("profiles")
-            .select("id, username")
-            .in("id", otherIds);
-
-          if (result.error) {
-            showError(result.error, conversationStatus);
-            return;
-          }
-          profiles = result.data || [];
-        }
-
-        for (const member of members || []) {
-          const profile = profiles.find((p) => p.id === member.user_id);
-          if (!profile) continue;
-
-          conversationList.appendChild(makeButton(
-            "💬 @" + (profile.username || "joueur"),
-            () => openConversation(profile)
-          ));
-        }
-
-        conversationStatus.textContent = conversationList.childElementCount
-          ? "Tes discussions privées"
-          : "Pas encore de conversation.";
       }
 
       async function openConversation(profile) {
-        chatStatus.textContent = "";
-        sendButton.disabled = true;
+        status("chat-status", "Ouverture de la conversation...");
 
-        try {
-          const { data: conversationId, error } = await client.rpc(
-            "create_novara_conversation",
-            { other_user_id: profile.id }
+        const { data, error } = await client.rpc(
+          "create_novara_conversation",
+          { other_user_id: profile.id }
+        );
+
+        if (error) {
+          console.error("Conversation:", error);
+          status(
+            "chat-status",
+            "Impossible d’ouvrir la conversation. Vérifie la fonction SQL."
           );
+          return;
+        }
 
-          if (error) throw error;
+        activeConversation = data;
+        await loadMessages();
+        subscribeMessages();
+        status(
+          "chat-status",
+          `Conversation avec ${profile.username || "ce joueur"}`
+        );
+      }
 
-          activeConversation = conversationId;
-          activeUsername = profile.username || "joueur";
-          chatTitle.textContent = "Conversation avec @" + activeUsername;
-          chatEmpty.hidden = true;
-          chatForm.hidden = false;
-          messagesBox.replaceChildren();
+      async function loadMessages() {
+        if (!activeConversation) return;
 
-          if (messageChannel) {
-            await client.removeChannel(messageChannel);
-            messageChannel = null;
-          }
+        const { data, error } = await client
+          .from("messages")
+          .select("*")
+          .eq("conversation_id", activeConversation)
+          .order("created_at", { ascending: true })
+          .limit(100);
 
-          await loadMessages();
+        if (error) {
+          console.error("Messages:", error);
+          status("chat-status", "Impossible de charger les messages.");
+          return;
+        }
 
-          messageChannel = client
-            .channel("novara-messages-" + activeConversation)
-            .on("postgres_changes", {
+        const list = $("message-list");
+        list.replaceChildren();
+
+        for (const message of data || []) {
+          const item = document.createElement("div");
+          item.className = "message-item";
+
+          const author = document.createElement("strong");
+          author.textContent =
+            message.sender_id === currentUser.id ? "Moi : " : "Joueur : ";
+
+          const content = document.createElement("span");
+          content.textContent = escapeText(message.content);
+
+          item.append(author, content);
+          list.appendChild(item);
+        }
+
+        list.scrollTop = list.scrollHeight;
+      }
+
+      function subscribeMessages() {
+        if (messageChannel) {
+          client.removeChannel(messageChannel);
+        }
+
+        messageChannel = client
+          .channel("novara-messages-" + activeConversation)
+          .on(
+            "postgres_changes",
+            {
               event: "INSERT",
               schema: "public",
               table: "messages",
               filter: "conversation_id=eq." + activeConversation
-            }, (payload) => {
-              addMessage(payload.new);
-            })
-            .subscribe();
-
-          await loadConversations();
-          sendButton.disabled = false;
-          messageInput.focus();
-        } catch (error) {
-          showError(error);
-          chatEmpty.hidden = false;
-          chatForm.hidden = true;
-        }
+            },
+            () => loadMessages()
+          )
+          .subscribe();
       }
 
-      function addMessage(message) {
-        if (!message || messagesBox.querySelector(
-          '[data-message-id="' + message.id + '"]'
-        )) return;
-
-        const wrapper = document.createElement("div");
-        wrapper.className = "chat-message" +
-          (message.sender_id === currentUser.id ? " mine" : "");
-        wrapper.dataset.messageId = message.id;
-
-        const content = document.createElement("div");
-        content.textContent = message.content;
-        wrapper.appendChild(content);
-
-        const time = document.createElement("small");
-        time.textContent = new Date(message.created_at).toLocaleString("fr-FR", {
-          dateStyle: "short",
-          timeStyle: "short"
-        });
-        wrapper.appendChild(time);
-
-        messagesBox.appendChild(wrapper);
-        messagesBox.scrollTop = messagesBox.scrollHeight;
-      }
-
-      async function loadMessages() {
-        if (!activeConversation || loadingMessages) return;
-        loadingMessages = true;
-
-        try {
-          const { data, error } = await client
-            .from("messages")
-            .select("id, conversation_id, sender_id, content, created_at")
-            .eq("conversation_id", activeConversation)
-            .order("created_at", { ascending: true })
-            .limit(200);
-
-          if (error) throw error;
-
-          messagesBox.replaceChildren();
-          (data || []).forEach(addMessage);
-        } catch (error) {
-          showError(error);
-        } finally {
-          loadingMessages = false;
-        }
-      }
-
-      chatForm.addEventListener("submit", async (event) => {
+      $("message-form").addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        const content = messageInput.value.trim();
-        if (!content || !activeConversation || !currentUser) return;
+        if (!currentUser || !activeConversation) {
+          status("chat-status", "Sélectionne d’abord un joueur.");
+          return;
+        }
 
-        sendButton.disabled = true;
-        chatStatus.textContent = "Envoi...";
+        const content = $("message-input").value.trim();
+        if (!content) return;
 
-        const { error } = await client.from("messages").insert({
-          conversation_id: activeConversation,
-          sender_id: currentUser.id,
-          content
-        });
+        const { error } = await client
+          .from("messages")
+          .insert({
+            conversation_id: activeConversation,
+            sender_id: currentUser.id,
+            content
+          });
 
         if (error) {
-          showError(error);
-        } else {
-          messageInput.value = "";
-          chatStatus.textContent = "";
+          console.error("Envoi:", error);
+          status("chat-status", "Envoi impossible. Vérifie les politiques RLS.");
+          return;
         }
 
-        sendButton.disabled = false;
-        messageInput.focus();
+        $("message-input").value = "";
+        await loadMessages();
       });
 
-      searchInput.addEventListener("input", () => {
-        clearTimeout(searchTimer);
-        searchTimer = setTimeout(searchUsers, 350);
-      });
+      async function createPeer() {
+        peer = new RTCPeerConnection(rtcConfig);
+        remoteStream = new MediaStream();
 
-      async function init() {
+        $("remote-video").srcObject = remoteStream;
+        $("remote-audio").srcObject = remoteStream;
+
+        peer.ontrack = (event) => {
+          for (const track of event.streams[0]?.getTracks() || []) {
+            if (!remoteStream.getTracks().some(t => t.id === track.id)) {
+              remoteStream.addTrack(track);
+            }
+          }
+        };
+
+        peer.onicecandidate = async (event) => {
+          if (!event.candidate || !activeCall) return;
+
+          const { error } = await client
+            .from("novara_call_signals")
+            .insert({
+              call_id: activeCall.id,
+              sender_id: currentUser.id,
+              signal_type: "ice",
+              payload: event.candidate.toJSON()
+            });
+
+          if (error) console.error("ICE:", error);
+        };
+
+        peer.onconnectionstatechange = () => {
+          status("call-status", "Connexion : " + peer.connectionState);
+        };
+
+        for (const track of localStream.getTracks()) {
+          peer.addTrack(track, localStream);
+        }
+
+        return peer;
+      }
+
+      async function addPendingIce() {
+        if (!peer || !peer.remoteDescription) return;
+
+        const queue = pendingIce.splice(0);
+
+        for (const candidate of queue) {
+          try {
+            await peer.addIceCandidate(candidate);
+          } catch (error) {
+            console.error("ICE candidate:", error);
+          }
+        }
+      }
+
+      async function handleSignal(signal) {
+        if (!activeCall || !peer) return;
+        if (signal.sender_id === currentUser.id) return;
+        if (signal.call_id !== activeCall.id) return;
+
         try {
-          const { data, error } = await client.auth.getUser();
-          if (error) throw error;
-          if (!data.user) {
-            window.location.replace("connexion.html");
-            return;
+          if (signal.signal_type === "offer") {
+            await peer.setRemoteDescription(signal.payload);
+            await addPendingIce();
+
+            const answer = await peer.createAnswer();
+            await peer.setLocalDescription(answer);
+
+            const { error } = await client
+              .from("novara_call_signals")
+              .insert({
+                call_id: activeCall.id,
+                sender_id: currentUser.id,
+                signal_type: "answer",
+                payload: answer
+              });
+
+            if (error) console.error("Réponse:", error);
           }
 
-          currentUser = data.user;
-          await loadConversations();
-          userStatus.textContent =
-            "Recherche un pseudo pour trouver un joueur.";
+          if (signal.signal_type === "answer") {
+            await peer.setRemoteDescription(signal.payload);
+            await addPendingIce();
+          }
+
+          if (signal.signal_type === "ice") {
+            if (!peer.remoteDescription) {
+              pendingIce.push(signal.payload);
+            } else {
+              await peer.addIceCandidate(signal.payload);
+            }
+          }
         } catch (error) {
-          showError(error, userStatus);
+          console.error("Signal:", error);
+          status("call-status", "Erreur de connexion de l’appel.");
         }
+      }
+
+      async function subscribeSignals(callId) {
+        if (callsChannel) client.removeChannel(callsChannel);
+
+        callsChannel = client
+          .channel("novara-signals-" + callId)
+          .on(
+            "postgres_changes",
+            {
+              event: "INSERT",
+              schema: "public",
+              table: "novara_call_signals",
+              filter: "call_id=eq." + callId
+            },
+            (event) => handleSignal(event.new)
+          )
+          .subscribe();
+
+        const { data, error } = await client
+          .from("novara_call_signals")
+          .select("*")
+          .eq("call_id", callId)
+          .order("created_at", { ascending: true });
+
+        if (error) {
+          console.error("Chargement signaux:", error);
+          return;
+        }
+
+        for (const signal of data || []) {
+          await handleSignal(signal);
+        }
+      }
+
+      async function startCall(type) {
+        if (!selectedProfile) {
+          status("call-status", "Recherche et sélectionne d’abord un joueur.");
+          return;
+        }
+
+        if (activeCall) {
+          status("call-status", "Un appel est déjà en cours.");
+          return;
+        }
+
+        try {
+          localStream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: type === "video"
+          });
+
+          $("local-video").srcObject = localStream;
+          $("call-media").hidden = false;
+
+          const { data: call, error } = await client
+            .from("novara_calls")
+            .insert({
+              caller_id: currentUser.id,
+              receiver_id: selectedProfile.id,
+              call_type: type,
+              status: "ringing"
+            })
+            .select()
+            .single();
+
+          if (error) throw error;
+
+          activeCall = call;
+          pendingIce = [];
+
+          await createPeer();
+          await subscribeSignals(call.id);
+
+          const offer = await peer.createOffer();
+          await peer.setLocalDescription(offer);
+
+          const { error: signalError } = await client
+            .from("novara_call_signals")
+            .insert({
+              call_id: call.id,
+              sender_id: currentUser.id,
+              signal_type: "offer",
+              payload: offer
+            });
+
+          if (signalError) throw signalError;
+
+          $("hangup-button").hidden = false;
+          status("call-status", "Appel lancé. En attente du joueur...");
+        } catch (error) {
+          console.error("Appel:", error);
+          status(
+            "call-status",
+            "Appel impossible. Vérifie les permissions du navigateur et Supabase."
+          );
+          await cleanup(false);
+        }
+      }
+
+      async function checkIncomingCalls() {
+        if (!currentUser || activeCall) return;
+
+        const { data, error } = await client
+          .from("novara_calls")
+          .select("*")
+          .eq("receiver_id", currentUser.id)
+          .eq("status", "ringing")
+          .order("created_at", { ascending: false })
+          .limit(1);
+
+        if (error || !data?.length) return;
+
+        activeCall = data[0];
+        $("incoming-call").hidden = false;
+        $("incoming-call-text").textContent =
+          "Appel entrant : " + activeCall.call_type;
+        $("accept-call-button").hidden = false;
+        $("reject-call-button").hidden = false;
+        status("call-status", "Un joueur t’appelle.");
+      }
+
+      async function acceptCall() {
+        if (!activeCall) return;
+
+        try {
+          localStream = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+            video: activeCall.call_type === "video"
+          });
+
+          $("local-video").srcObject = localStream;
+          $("call-media").hidden = false;
+
+          const { error } = await client
+            .from("novara_calls")
+            .update({ status: "accepted" })
+            .eq("id", activeCall.id);
+
+          if (error) throw error;
+
+          pendingIce = [];
+          await createPeer();
+          await subscribeSignals(activeCall.id);
+
+          $("incoming-call").hidden = true;
+          $("hangup-button").hidden = false;
+          status("call-status", "Appel accepté. Connexion en cours...");
+        } catch (error) {
+          console.error("Acceptation:", error);
+          status("call-status", "Impossible d’accepter cet appel.");
+          await cleanup(false);
+        }
+      }
+
+      async function rejectCall() {
+        if (!activeCall) return;
+
+        await client
+          .from("novara_calls")
+          .update({ status: "rejected", ended_at: new Date().toISOString() })
+          .eq("id", activeCall.id);
+
+        await cleanup(false);
+        status("call-status", "Appel refusé.");
+      }
+
+      async function cleanup(updateStatus = true) {
+        const callId = activeCall?.id;
+
+        if (updateStatus && callId) {
+          await client
+            .from("novara_calls")
+            .update({
+              status: "ended",
+              ended_at: new Date().toISOString()
+            })
+            .eq("id", callId);
+        }
+
+        if (peer) peer.close();
+        peer = null;
+
+        if (localStream) {
+          localStream.getTracks().forEach(track => track.stop());
+        }
+
+        localStream = null;
+        remoteStream = null;
+        pendingIce = [];
+
+        $("local-video").srcObject = null;
+        $("remote-video").srcObject = null;
+        $("remote-audio").srcObject = null;
+        $("call-media").hidden = true;
+        $("incoming-call").hidden = true;
+        $("hangup-button").hidden = true;
+
+        if (callsChannel) client.removeChannel(callsChannel);
+        callsChannel = null;
+        activeCall = null;
+      }
+
+      $("player-search").addEventListener("input", searchProfiles);
+      $("audio-call-button").addEventListener("click", () => startCall("audio"));
+      $("video-call-button").addEventListener("click", () => startCall("video"));
+      $("accept-call-button").addEventListener("click", acceptCall);
+      $("reject-call-button").addEventListener("click", rejectCall);
+      $("hangup-button").addEventListener("click", () => cleanup(true));
+
+      async function init() {
+        currentUser = await getCurrentUser();
+
+        if (!currentUser) return;
+
+        await searchProfiles();
+        await checkIncomingCalls();
+
+        setInterval(checkIncomingCalls, 4000);
       }
 
       init();
     })();
   </script>
-  
-<script>
-(() => {
-  const $ = (id) => document.getElementById(id);
-
-  const audioButton = $("audio-call-button");
-  const videoButton = $("video-call-button");
-  const callStatus = $("call-status");
-  const callMedia = $("call-media");
-  const localVideo = $("local-video");
-  const remoteVideo = $("remote-video");
-  const remoteAudio = $("remote-audio");
-  const acceptButton = $("accept-call-button");
-  const hangupButton = $("hangup-button");
-
-  if (!audioButton || !videoButton) return;
-
-  let client = null;
-  let user = null;
-  let selectedProfile = null;
-  let activeCall = null;
-  let peer = null;
-  let localStream = null;
-  let signalChannel = null;
-  let callChannel = null;
-  let seenSignals = new Set();
-  let busy = false;
-
-  const rtcConfig = {
-    iceServers: [
-      { urls: "stun:stun.l.google.com:19302" }
-    ]
-  };
-
-  function status(message) {
-    callStatus.textContent = message;
-  }
-
-  function setBusy(value) {
-    busy = value;
-    audioButton.disabled = value;
-    videoButton.disabled = value;
-  }
-
-  function stopMedia() {
-    if (localStream) {
-      localStream.getTracks().forEach((track) => track.stop());
-      localStream = null;
-    }
-
-    localVideo.srcObject = null;
-    remoteVideo.srcObject = null;
-    remoteAudio.srcObject = null;
-    callMedia.hidden = true;
-  }
-
-  async function cleanup(updateStatus = true) {
-    if (peer) {
-      peer.ontrack = null;
-      peer.onicecandidate = null;
-      peer.close();
-      peer = null;
-    }
-
-    if (signalChannel) {
-      await client.removeChannel(signalChannel);
-      signalChannel = null;
-    }
-
-    if (callChannel) {
-      await client.removeChannel(callChannel);
-      callChannel = null;
-    }
-
-    if (activeCall && user) {
-      await client.from("novara_calls")
-        .update({ status: "ended", ended_at: new Date().toISOString() })
-        .eq("id", activeCall.id)
-        .in("status", ["ringing", "accepted"]);
-    }
-
-    activeCall = null;
-    seenSignals = new Set();
-    stopMedia();
-    acceptButton.hidden = true;
-    hangupButton.hidden = true;
-    setBusy(false);
-
-    if (updateStatus) status("Appel terminé.");
-  }
-
-  async function sendSignal(type, payload) {
-    const { error } = await client
-      .from("novara_call_signals")
-      .insert({
-        call_id: activeCall.id,
-        sender_id: user.id,
-        signal_type: type,
-        payload
-      });
-
-    if (error) throw error;
-  }
-
-  async function handleSignal(signal) {
-    if (!peer || !activeCall || signal.sender_id === user.id) return;
-    if (seenSignals.has(signal.id)) return;
-    seenSignals.add(signal.id);
-
-    try {
-      if (signal.signal_type === "offer") {
-        if (peer.signalingState !== "stable") return;
-
-        await peer.setRemoteDescription(signal.payload);
-        const answer = await peer.createAnswer();
-        await peer.setLocalDescription(answer);
-        await sendSignal("answer", peer.localDescription);
-      } else if (signal.signal_type === "answer") {
-        if (peer.signalingState === "have-local-offer") {
-          await peer.setRemoteDescription(signal.payload);
-        }
-      } else if (signal.signal_type === "ice") {
-        if (peer.remoteDescription) {
-          await peer.addIceCandidate(signal.payload);
-        }
-      }
-    } catch (error) {
-      console.error("Signalisation NOVARA :", error);
-      status("Erreur de connexion. Vérifie la configuration réseau.");
-    }
-  }
-
-  async function loadPreviousSignals() {
-    const { data, error } = await client
-      .from("novara_call_signals")
-      .select("id, sender_id, signal_type, payload")
-      .eq("call_id", activeCall.id)
-      .order("created_at", { ascending: true });
-
-    if (error) throw error;
-
-    for (const signal of data || []) {
-      await handleSignal(signal);
-    }
-  }
-
-  async function setupPeer(isCaller) {
-    peer = new RTCPeerConnection(rtcConfig);
-
-    peer.ontrack = (event) => {
-      callMedia.hidden = false;
-      const stream = event.streams[0];
-      if (!stream) return;
-
-      if (stream.getVideoTracks().length) {
-        remoteVideo.srcObject = stream;
-        remoteVideo.hidden = false;
-      } else {
-        remoteAudio.srcObject = stream;
-        remoteAudio.hidden = false;
-        remoteVideo.hidden = true;
-      }
-    };
-
-    peer.onicecandidate = async (event) => {
-      if (!event.candidate || !activeCall) return;
-
-      try {
-        await sendSignal("ice", event.candidate.toJSON());
-      } catch (error) {
-        console.error("Envoi ICE :", error);
-      }
-    };
-
-    localStream.getTracks().forEach((track) => {
-      peer.addTrack(track, localStream);
-    });
-
-    signalChannel = client
-      .channel("novara-call-signals-" + activeCall.id)
-      .on("postgres_changes", {
-        event: "INSERT",
-        schema: "public",
-        table: "novara_call_signals",
-        filter: "call_id=eq." + activeCall.id
-      }, async (event) => {
-        await handleSignal(event.new);
-      })
-      .subscribe();
-
-    if (isCaller) {
-      const offer = await peer.createOffer();
-      await peer.setLocalDescription(offer);
-      await sendSignal("offer", peer.localDescription);
-    }
-
-    await loadPreviousSignals();
-  }
-
-  async function startCall(type) {
-    if (busy) return;
-
-    if (!selectedProfile) {
-      status("Recherche et sélectionne d’abord un joueur.");
-      return;
-    }
-
-    setBusy(true);
-
-    try {
-      const { data: sessionData, error: sessionError } =
-        await client.auth.getUser();
-
-      if (sessionError) throw sessionError;
-      user = sessionData.user;
-
-      if (!user) throw new Error("Connecte-toi pour appeler.");
-
-      if (!navigator.mediaDevices?.getUserMedia) {
-        throw new Error(
-          "Micro/caméra indisponible. Utilise HTTPS et un navigateur compatible."
-        );
-      }
-
-      status("Demande d’accès au micro et à la caméra...");
-      localStream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: type === "video"
-      });
-
-      callMedia.hidden = false;
-      localVideo.srcObject = localStream;
-      localVideo.hidden = type !== "video";
-      remoteVideo.hidden = type !== "video";
-      remoteAudio.hidden = true;
-
-      const { data: call, error } = await client
-        .from("novara_calls")
-        .insert({
-          caller_id: user.id,
-          receiver_id: selectedProfile.id,
-          call_type: type,
-          status: "ringing"
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      activeCall = call;
-      await setupPeer(true);
-
-      status("Appel " + (type === "audio" ? "audio" : "vidéo") +
-        " envoyé à @" + selectedProfile.username +
-        ". En attente de réponse...");
-
-      hangupButton.hidden = false;
-      callChannel = client
-        .channel("novara-call-status-" + activeCall.id)
-        .on("postgres_changes", {
-          event: "UPDATE",
-          schema: "public",
-          table: "novara_calls",
-          filter: "id=eq." + activeCall.id
-        }, async (event) => {
-          if (event.new.status === "accepted") {
-            status("Appel accepté. Connexion en cours...");
-          } else if (["rejected", "missed", "ended"].includes(event.new.status)) {
-            await cleanup();
-          }
-        })
-        .subscribe();
-    } catch (error) {
-      console.error(error);
-      status(error.message || "Impossible de démarrer l’appel.");
-      if (activeCall) {
-        await cleanup(false);
-      } else {
-        stopMedia();
-        setBusy(false);
-      }
-    }
-  }
-
-  async function acceptIncomingCall(call) {
-    setBusy(true);
-
-    try {
-      activeCall = call;
-      const { data: sessionData, error: sessionError } =
-        await client.auth.getUser();
-
-      if (sessionError) throw sessionError;
-      user = sessionData.user;
-
-      const { data: updated, error } = await client
-        .from("novara_calls")
-        .update({ status: "accepted" })
-        .eq("id", call.id)
-        .eq("receiver_id", user.id)
-        .eq("status", "ringing")
-        .select()
-        .single();
-
-      if (error) throw error;
-      if (!updated) throw new Error("Cet appel n’est plus disponible.");
-
-      localStream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: call.call_type === "video"
-      });
-
-      callMedia.hidden = false;
-      localVideo.srcObject = localStream;
-      localVideo.hidden = call.call_type !== "video";
-      remoteVideo.hidden = call.call_type !== "video";
-      remoteAudio.hidden = true;
-      hangupButton.hidden = false;
-      acceptButton.hidden = true;
-
-      await setupPeer(false);
-      status("Appel accepté. Connexion en cours...");
-    } catch (error) {
-      console.error(error);
-      status(error.message || "Impossible d’accepter l’appel.");
-      await cleanup(false);
-    }
-  }
-
-  async function checkIncomingCalls() {
-    if (!user || activeCall) return;
-
-    const { data, error } = await client
-      .from("novara_calls")
-      .select("*")
-      .eq("receiver_id", user.id)
-      .eq("status", "ringing")
-      .order("created_at", { ascending: false })
-      .limit(1);
-
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    if (!data?.length || activeCall) return;
-
-    const call = data[0];
-    activeCall = call;
-    setBusy(true);
-    acceptButton.hidden = false;
-    hangupButton.hidden = false;
-
-    status("Appel " + call.call_type + " entrant.");
-
-    acceptButton.onclick = () => acceptIncomingCall(call);
-    hangupButton.onclick = async () => {
-      await client.from("novara_calls")
-        .update({ status: "rejected", ended_at: new Date().toISOString() })
-        .eq("id", call.id)
-        .eq("receiver_id", user.id);
-
-      await cleanup();
-    };
-  }
-
-  function findSelectedProfile() {
-    const input = $("user-search");
-    if (!input) return;
-
-    const term = input.value.trim().replace(/^@/, "").toLowerCase();
-    const buttons = $("user-list")?.querySelectorAll("button") || [];
-
-    for (const button of buttons) {
-      const username = button.textContent.trim().replace(/^👤\s*@/, "").toLowerCase();
-
-      if (username === term) {
-        status("Clique sur le joueur dans la liste pour le sélectionner.");
-        return;
-      }
-    }
-  }
-
-  audioButton.addEventListener("click", () => startCall("audio"));
-  videoButton.addEventListener("click", () => startCall("video"));
-
-  hangupButton.addEventListener("click", async () => {
-    await cleanup();
-  });
-
-  async function initCalls() {
-    if (!window.supabase) {
-      status("Supabase n’est pas chargé.");
-      return;
-    }
-
-    client = window.supabase.createClient(
-      "https://smxjkgcxjzomkqwaaxlr.supabase.co",
-      "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX"
-    );
-
-    const { data, error } = await client.auth.getUser();
-
-    if (error || !data.user) {
-      status("Connecte-toi pour utiliser les appels.");
-      return;
-    }
-
-    user = data.user;
-
-    // Le clic sur un joueur sélectionne le destinataire.
-    const originalUserList = $("user-list");
-
-    if (originalUserList) {
-      originalUserList.addEventListener("click", async (event) => {
-        const button = event.target.closest("button");
-        if (!button) return;
-
-        const username = button.textContent.trim().replace(/^👤\s*@/, "");
-
-        const { data: profiles, error: profileError } = await client
-          .from("profiles")
-          .select("id, username")
-          .eq("username", username)
-          .neq("id", user.id)
-          .limit(1);
-
-        if (profileError || !profiles?.length) {
-          status("Impossible de sélectionner ce joueur.");
-          return;
-        }
-
-        selectedProfile = profiles[0];
-        status("Joueur sélectionné : @" + selectedProfile.username);
-      });
-    }
-
-    // Vérification périodique des appels entrants.
-    setInterval(checkIncomingCalls, 4000);
-    await checkIncomingCalls();
-  }
-
-  initCalls();
-})();
-</script>
-
 </body>
 </html>

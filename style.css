@@ -517,3 +517,224 @@ footer {
     padding-top: 32px;
   }
 }
+
+/* ==========================================
+   NOVARA — ELECTRIC VIOLET GAMING THEME
+   Fond global pour toutes les pages
+   ========================================== */
+
+:root {
+  color-scheme: dark;
+  --novara-bg: #07060d;
+  --novara-panel: rgba(17, 12, 31, 0.82);
+  --novara-panel-hover: rgba(35, 18, 59, 0.92);
+  --novara-purple: #9d4dff;
+  --novara-purple-bright: #bf80ff;
+  --novara-purple-dark: #5b16b8;
+  --novara-border: rgba(157, 77, 255, 0.32);
+  --novara-glow: rgba(139, 55, 255, 0.25);
+  --novara-text: #f5efff;
+  --novara-muted: #b9accd;
+}
+
+/* Fond sombre avec plusieurs halos violets */
+html {
+  min-height: 100%;
+  background: var(--novara-bg);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--novara-text);
+  background-color: var(--novara-bg);
+  background-image:
+    radial-gradient(
+      ellipse at 12% 12%,
+      rgba(110, 35, 190, 0.32) 0%,
+      transparent 38%
+    ),
+    radial-gradient(
+      ellipse at 88% 28%,
+      rgba(76, 30, 155, 0.25) 0%,
+      transparent 36%
+    ),
+    radial-gradient(
+      ellipse at 50% 100%,
+      rgba(132, 39, 255, 0.19) 0%,
+      transparent 45%
+    ),
+    linear-gradient(
+      135deg,
+      #07060d 0%,
+      #10091c 48%,
+      #080610 100%
+    );
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+/* Sélection de texte violette */
+::selection {
+  color: #ffffff;
+  background: rgba(157, 77, 255, 0.65);
+}
+
+/* Barres de défilement */
+* {
+  scrollbar-color: #7133b8 #0b0812;
+  scrollbar-width: thin;
+}
+
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #0b0812;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    #bd76ff,
+    #6724b5
+  );
+  border: 2px solid #0b0812;
+  border-radius: 12px;
+}
+
+/* Panneaux et cartes : effet verre sombre */
+.card,
+.panel,
+.content-card,
+.game-card,
+.community-card,
+.challenge-card,
+.message-card,
+.profile-card {
+  background-color: var(--novara-panel);
+  border: 1px solid var(--novara-border);
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.24),
+    0 0 20px rgba(118, 45, 220, 0.07);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+}
+
+/* Lueur au survol des cartes */
+.card:hover,
+.panel:hover,
+.content-card:hover,
+.game-card:hover,
+.community-card:hover,
+.challenge-card:hover,
+.message-card:hover,
+.profile-card:hover {
+  border-color: rgba(184, 116, 255, 0.65);
+  box-shadow:
+    0 10px 35px rgba(0, 0, 0, 0.32),
+    0 0 22px var(--novara-glow);
+}
+
+/* Boutons violets */
+button,
+.button,
+.btn,
+.btn-primary,
+.primary-button {
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.btn-primary,
+.primary-button {
+  color: #ffffff;
+  background: linear-gradient(
+    135deg,
+    #8b35e8,
+    #6420bd
+  );
+  border: 1px solid rgba(201, 155, 255, 0.48);
+  box-shadow: 0 0 16px rgba(139, 53, 232, 0.2);
+}
+
+.btn-primary:hover,
+.primary-button:hover {
+  background: linear-gradient(
+    135deg,
+    #a64dff,
+    #7830d6
+  );
+  box-shadow: 0 0 24px rgba(157, 77, 255, 0.42);
+}
+
+/* Champs de formulaire */
+input,
+textarea,
+select {
+  color: var(--novara-text);
+  accent-color: var(--novara-purple);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--novara-purple-bright);
+  box-shadow: 0 0 0 3px rgba(157, 77, 255, 0.16);
+}
+
+/* Liens */
+a {
+  transition: color 180ms ease;
+}
+
+a:hover {
+  color: var(--novara-purple-bright);
+}
+
+/* Images et avatars */
+.avatar,
+.profile-avatar {
+  border-color: var(--novara-border);
+}
+
+/* Accessibilité : respecte les préférences de mouvement */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* Téléphones et petits écrans */
+@media (max-width: 600px) {
+  body {
+    background-attachment: scroll;
+  }
+
+  .card,
+  .panel,
+  .content-card,
+  .game-card,
+  .community-card,
+  .challenge-card,
+  .message-card,
+  .profile-card {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+}

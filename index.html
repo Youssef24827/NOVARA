@@ -8,16 +8,27 @@
   <meta name="description" content="NOVARA, ton espace gaming pour explorer des jeux et rejoindre la communauté.">
   <title>NOVARA — Accueil</title>
   <link rel="stylesheet" href="style.css">
-  <script src="app.js" defer></script>
-  
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="auth.js"></script>
 
+  <style>
+    html.auth-checking body {
+      visibility: hidden;
+    }
+  </style>
+
+  <script>
+    document.documentElement.classList.add("auth-checking");
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
+  <script src="app.js" defer></script>
 </head>
+
 <body>
   <aside class="sidebar">
     <a class="logo" href="index.html">NOVA<span class="gradient">RA</span></a>
     <div class="nav-label">Menu principal</div>
+
     <nav class="nav">
       <a class="active" href="index.html"><span class="ico">⌂</span> Accueil</a>
       <a href="explorer.html"><span class="ico">◈</span> Explorer</a>
@@ -26,6 +37,7 @@
       <a href="messages.html"><span class="ico">✉</span> Appels & Messages</a>
       <a href="profil.html"><span class="ico">◎</span> Profil</a>
     </nav>
+
     <div class="sidebar-bottom">
       <strong>NOVARA UNIVERSE</strong><br>
       Explore. Joue. Connecte-toi.<br>

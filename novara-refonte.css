@@ -2014,3 +2014,249 @@ body.page-profil .profile-heading {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+```css
+/* ==========================================
+   NOVARA — CORRECTION DE LA PAGE MESSAGES
+   ========================================== */
+
+html,
+body.page-messages {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+body.page-messages .app-layout {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+body.page-messages .sidebar {
+  position: sticky;
+  top: 0;
+  flex: 0 0 250px;
+  width: 250px;
+  height: 100vh;
+  min-height: 100vh;
+}
+
+body.page-messages .main-content.novara-messages {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 30px clamp(18px, 3vw, 42px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+body.page-messages .page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+body.page-messages .messages-layout {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.5fr);
+  align-items: stretch;
+  gap: 22px;
+  width: 100%;
+  max-width: 1400px;
+  min-width: 0;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+body.page-messages .messages-people-panel,
+body.page-messages .messages-chat-panel {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body.page-messages .messages-people-panel {
+  min-height: 420px;
+}
+
+body.page-messages .messages-chat-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 560px;
+}
+
+body.page-messages .panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-width: 0;
+}
+
+body.page-messages .panel-heading > * {
+  min-width: 0;
+}
+
+body.page-messages #player-search,
+body.page-messages #message-input {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+body.page-messages .player-results {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+body.page-messages .message-list {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 280px;
+  max-width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overflow-wrap: anywhere;
+  box-sizing: border-box;
+}
+
+body.page-messages .message-composer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+body.page-messages .message-composer input {
+  flex: 1 1 auto;
+}
+
+body.page-messages .message-composer button {
+  flex: 0 0 auto;
+}
+
+body.page-messages .call-panel,
+body.page-messages .call-media-panel {
+  width: 100%;
+  max-width: 1400px;
+  min-width: 0;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+body.page-messages .call-video-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+}
+
+body.page-messages .video-tile {
+  position: relative;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+body.page-messages .video-tile video {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+body.page-messages [hidden] {
+  display: none !important;
+}
+
+/* Tablettes */
+@media (max-width: 1000px) {
+  body.page-messages .sidebar {
+    flex-basis: 210px;
+    width: 210px;
+  }
+
+  body.page-messages .messages-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  body.page-messages .messages-people-panel {
+    min-height: 0;
+  }
+
+  body.page-messages .messages-chat-panel {
+    min-height: 500px;
+  }
+}
+
+/* Mobiles */
+@media (max-width: 700px) {
+  body.page-messages .app-layout {
+    display: block;
+  }
+
+  body.page-messages .sidebar {
+    display: none;
+  }
+
+  body.page-messages .main-content.novara-messages {
+    width: 100%;
+    padding: 22px 14px 100px;
+    gap: 18px;
+  }
+
+  body.page-messages .page-header {
+    align-items: flex-start;
+  }
+
+  body.page-messages .messages-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  body.page-messages .messages-chat-panel {
+    min-height: 440px;
+  }
+
+  body.page-messages .message-composer {
+    flex-wrap: wrap;
+  }
+
+  body.page-messages .message-composer input {
+    flex-basis: 100%;
+  }
+
+  body.page-messages .message-composer button {
+    margin-left: auto;
+  }
+
+  body.page-messages .call-video-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

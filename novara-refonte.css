@@ -1795,3 +1795,146 @@ body.page-explorer select {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+/* NOVARA — PROFIL RESPONSIVE */
+
+body.page-profil .app-layout {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+body.page-profil .main-content {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: clamp(18px, 3vw, 42px);
+}
+
+body.page-profil .page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+body.page-profil .profile-card,
+body.page-profil .profile-info-card {
+  width: 100%;
+  max-width: 900px;
+  min-width: 0;
+  margin: 0 0 24px;
+  overflow: hidden;
+}
+
+body.page-profil .profile-cover {
+  min-height: 150px;
+  background:
+    radial-gradient(ellipse at 80% 20%, #67e8f944, transparent 40%),
+    linear-gradient(120deg, #32165c, #101b38, #151025);
+  border-bottom: 1px solid var(--nv-border);
+}
+
+body.page-profil .profile-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
+  padding: 24px;
+}
+
+body.page-profil .profile-avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 88px;
+  width: 88px;
+  height: 88px;
+  border: 2px solid var(--nv-border);
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8b5cf6, #67e8f9);
+  color: white;
+  font-size: 34px;
+  font-weight: 800;
+}
+
+body.page-profil .profile-heading {
+  flex: 1 1 200px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+body.page-profil .profile-heading h2 {
+  overflow-wrap: anywhere;
+}
+
+body.page-profil .profile-details {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  padding: 0 24px 24px;
+}
+
+body.page-profil .profile-detail {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--nv-border);
+  border-radius: 12px;
+  background: rgba(139, 92, 246, .07);
+}
+
+body.page-profil .profile-detail strong {
+  display: block;
+  margin-top: 8px;
+  overflow-wrap: anywhere;
+}
+
+body.page-profil .detail-label {
+  color: var(--nv-muted);
+  font-size: .85rem;
+}
+
+body.page-profil #profileMessage:empty {
+  display: none;
+}
+
+body.page-profil #profileMessage {
+  margin: 0 24px 20px;
+  overflow-wrap: anywhere;
+}
+
+body.page-profil .profile-actions,
+body.page-profil .profile-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 0 24px 24px;
+}
+
+@media (max-width: 760px) {
+  body.page-profil .main-content {
+    width: 100%;
+    padding: 20px 14px 100px;
+  }
+
+  body.page-profil .profile-details {
+    grid-template-columns: minmax(0, 1fr);
+    padding-inline: 16px;
+  }
+
+  body.page-profil .profile-content {
+    padding: 18px 16px;
+  }
+
+  body.page-profil #profileMessage {
+    margin-inline: 16px;
+  }
+
+  body.page-profil .profile-actions,
+  body.page-profil .profile-links {
+    padding-inline: 16px;
+  }
+}

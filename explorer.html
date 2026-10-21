@@ -1,83 +1,135 @@
 
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#090914">
-  <meta name="description" content="Explore les jeux vidéo sur NOVARA.">
-  <title>NOVARA — Explorer</title>
+  <meta name="theme-color" content="#080914">
+  <title>Explorer les jeux | NOVARA</title>
+
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="novara-refonte.css">
-  <script src="app.js" defer></script>
-  
-<style>
-  html.auth-checking body {
-    visibility: hidden;
-  }
-</style>
-<script>
-  document.documentElement.classList.add("auth-checking");
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="auth.js"></script>
-
 </head>
+
 <body class="page-explorer">
-  <aside class="sidebar">
-    <a class="logo" href="index.html">NOVA<span class="gradient">RA</span></a>
-    <div class="nav-label">Menu principal</div>
-    <nav class="nav">
-      <a href="index.html"><span class="ico">⌂</span> Accueil</a>
-      <a class="active" href="explorer.html"><span class="ico">◈</span> Explorer</a>
-      <a href="communautes.html"><span class="ico">♧</span> Communautés</a>
-      <a href="defis.html"><span class="ico">⚡</span> Défis</a>
-      <a href="messages.html"><span class="ico">✉</span> Appels & Messages</a>
-      <a href="profil.html"><span class="ico">◎</span> Profil</a>
-    </nav>
-    <div class="sidebar-bottom">
-      <strong>NOVARA UNIVERSE</strong><br>
-      Explore. Joue. Connecte-toi.<br>
-      © <span data-year></span> NOVARA
-    </div>
-  </aside>
 
-  <main class="main">
-    <div class="mobile-top">
-      <a class="logo" href="index.html">NOVARA</a>
-      <button class="hamburger" data-menu-toggle aria-label="Ouvrir le menu">☰</button>
-    </div>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <a class="logo" href="index.html" aria-label="NOVARA - Accueil">
+        NOVARA<span>.</span>
+      </a>
 
-    <header class="page-head">
-      <div class="eyebrow">✦ Catalogue gaming</div>
-      <h1>Explore <span class="gradient">les jeux.</span></h1>
-      <p>Recherche des jeux, découvre leurs plateformes et retrouve leurs sites officiels.</p>
-    </header>
+      <nav class="sidebar-nav" aria-label="Navigation principale">
+        <a href="index.html"><span>⌂</span> Accueil</a>
+        <a href="explorer.html" class="active" aria-current="page">
+          <span>◈</span> Explorer
+        </a>
+        <a href="communautes.html"><span>♧</span> Communautés</a>
+        <a href="defis.html"><span>⚡</span> Défis</a>
+        <a href="messages.html"><span>✉</span> Messages</a>
+        <a href="profil.html"><span>◎</span> Mon profil</a>
+      </nav>
 
-    <section>
-      <div class="section-heading">
-        <div>
-          <h2>Le catalogue</h2>
-          <p class="muted">Les jeux publiés sont chargés depuis Supabase.</p>
-        </div>
-        <input
-          class="search"
-          id="gameSearch"
-          type="search"
-          placeholder="Rechercher un jeu..."
-          aria-label="Rechercher un jeu"
-        >
+      <div class="sidebar-bottom">
+        <p>Joue. Explore. Connecte-toi.</p>
+        <span>NOVARA © 2026</span>
       </div>
+    </aside>
 
-      <p id="gameStatus" class="status" role="status" aria-live="polite">
-        Préparation du catalogue…
-      </p>
+    <main class="main-content">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">TON PROCHAIN UNIVERS</p>
+          <h1>Explorer les jeux</h1>
+          <p class="page-description">
+            Découvre des jeux, trouve ton prochain favori et rejoins la communauté.
+          </p>
+        </div>
+      </header>
 
-      <div id="gamesGrid" class="grid"></div>
-    </section>
+      <section class="explorer-hero card">
+        <div class="explorer-hero-content">
+          <p class="eyebrow">BIENVENUE DANS NOVARA</p>
+          <h2>Une nouvelle aventure commence ici.</h2>
+          <p>
+            Recherche ton jeu préféré ou explore les possibilités.
+          </p>
+          <a href="#gamesGrid" class="btn btn-primary">
+            Découvrir les jeux <span aria-hidden="true">↘</span>
+          </a>
+        </div>
+        <div class="explorer-hero-symbol" aria-hidden="true">✦</div>
+      </section>
 
-    <footer>© <span data-year></span> NOVARA · Catalogue gaming.</footer>
-  </main>
+      <section class="explorer-controls" aria-label="Recherche de jeux">
+        <div class="explorer-search-wrap">
+          <label for="gameSearch">Trouver un jeu</label>
+          <div class="explorer-search">
+            <span aria-hidden="true">⌕</span>
+            <input
+              id="gameSearch"
+              type="search"
+              placeholder="Rechercher un jeu…"
+              autocomplete="off"
+            >
+          </div>
+        </div>
+
+        <div class="explorer-status-wrap">
+          <label for="gameStatus">Disponibilité</label>
+          <select id="gameStatus">
+            <option value="all">Tous les jeux</option>
+            <option value="available">Disponibles</option>
+            <option value="unavailable">Indisponibles</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">CATALOGUE</p>
+            <h2>Découvre ton prochain jeu</h2>
+          </div>
+        </div>
+
+        <!-- L'application peut remplir cette grille avec app.js. -->
+        <div id="gamesGrid" class="grid games-grid">
+          <div class="explorer-placeholder card">
+            <div class="loading-symbol" aria-hidden="true">✦</div>
+            <h3>Chargement des jeux…</h3>
+            <p>Le catalogue NOVARA est en cours de préparation.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="explorer-bottom card">
+        <div>
+          <p class="eyebrow">VA PLUS LOIN</p>
+          <h2>Le jeu est encore meilleur ensemble.</h2>
+          <p>
+            Retrouve des joueurs et découvre les communautés NOVARA.
+          </p>
+        </div>
+        <a href="communautes.html" class="btn btn-primary">
+          Voir les communautés
+        </a>
+      </section>
+    </main>
+  </div>
+
+  <nav class="mobile-nav" aria-label="Navigation mobile">
+    <a href="index.html">Accueil</a>
+    <a href="explorer.html" aria-current="page">Explorer</a>
+    <a href="communautes.html">Communautés</a>
+    <a href="defis.html">Défis</a>
+    <a href="messages.html">Messages</a>
+    <a href="profil.html">Profil</a>
+  </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
+  <script src="app.js"></script>
+
 </body>
 </html>

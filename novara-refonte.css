@@ -2941,3 +2941,66 @@ body.page-messages .message-list {
     min-height: 420px;
   }
 }
+
+/* NOVARA — cartes de résultats Explorer */
+
+.page-explorer .games-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.page-explorer .game-result {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.page-explorer .game-cover {
+  display: block;
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 18px;
+  background: #171528;
+}
+
+.page-explorer .game-release,
+.page-explorer .game-rating {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.page-explorer .game-link {
+  display: inline-flex;
+  margin-top: 16px;
+}
+
+.page-explorer .game-official-link {
+  display: inline-block;
+  margin-top: 12px;
+}
+
+.page-explorer .explorer-status {
+  margin: 16px 0;
+  color: #c9b9e9;
+}
+
+.page-explorer .explorer-status.error {
+  color: #ff929c;
+}
+
+@media (max-width: 1000px) {
+  .page-explorer .games-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 650px) {
+  .page-explorer .games-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-explorer .game-cover {
+    height: 220px;
+  }
+}

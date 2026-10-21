@@ -1616,3 +1616,78 @@ body {
     justify-content: flex-start;
   }
 }
+
+/* NOVARA — Correction page trop étirée */
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.app-layout {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.main-content {
+  flex: 1 1 0%;
+  width: 0;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.main-content > *,
+.content-section,
+.section-heading,
+.explorer-hero,
+.explorer-controls,
+.explorer-bottom {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.explorer-hero-content {
+  flex: 1 1 0%;
+  min-width: 0;
+}
+
+.explorer-hero-symbol {
+  max-width: 25%;
+}
+
+.games-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  min-width: 0;
+}
+
+.games-grid > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.games-grid img,
+.games-grid video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 1050px) {
+  .games-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .games-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .explorer-hero-symbol {
+    display: none;
+  }
+}

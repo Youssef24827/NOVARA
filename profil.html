@@ -1,10 +1,11 @@
-
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#080914">
+
   <title>Mon profil | NOVARA</title>
 
   <link rel="stylesheet" href="style.css">
@@ -15,27 +16,18 @@
 
   <div class="app-layout">
 
+    <!-- BARRE LATÉRALE -->
     <aside class="sidebar">
       <a class="logo" href="index.html" aria-label="NOVARA - Accueil">
         NOVARA<span>.</span>
       </a>
 
       <nav class="sidebar-nav" aria-label="Navigation principale">
-        <a href="index.html">
-          <span>⌂</span> Accueil
-        </a>
-        <a href="explorer.html">
-          <span>◈</span> Explorer
-        </a>
-        <a href="communautes.html">
-          <span>♧</span> Communautés
-        </a>
-        <a href="defis.html">
-          <span>⚡</span> Défis
-        </a>
-        <a href="messages.html">
-          <span>✉</span> Messages
-        </a>
+        <a href="index.html"><span>⌂</span> Accueil</a>
+        <a href="explorer.html"><span>◈</span> Explorer</a>
+        <a href="communautes.html"><span>♧</span> Communautés</a>
+        <a href="defis.html"><span>⚡</span> Défis</a>
+        <a href="messages.html"><span>✉</span> Messages</a>
         <a href="profil.html" class="active" aria-current="page">
           <span>◎</span> Mon profil
         </a>
@@ -47,7 +39,9 @@
       </div>
     </aside>
 
+    <!-- CONTENU PRINCIPAL -->
     <main class="main-content">
+
       <header class="page-header">
         <div>
           <p class="eyebrow">ESPACE PERSONNEL</p>
@@ -62,7 +56,9 @@
         </a>
       </header>
 
+      <!-- CARTE DU PROFIL -->
       <section class="profile-card card">
+
         <div class="profile-cover"></div>
 
         <div class="profile-content">
@@ -78,6 +74,7 @@
         </div>
 
         <div class="profile-details">
+
           <div class="profile-detail">
             <span class="detail-label">Pseudo</span>
             <strong id="pseudoValue">—</strong>
@@ -92,6 +89,7 @@
             <span class="detail-label">Compte créé le</span>
             <strong id="createdAt">—</strong>
           </div>
+
         </div>
 
         <p
@@ -110,11 +108,15 @@
             Se déconnecter
           </button>
         </div>
+
       </section>
 
+      <!-- CARTE DE BIENVENUE -->
       <section class="card profile-info-card">
         <p class="eyebrow">BIENVENUE DANS LA COMMUNAUTÉ</p>
+
         <h2>Prêt pour la prochaine partie ?</h2>
+
         <p>
           Explore les jeux, découvre les communautés et relève de nouveaux défis.
         </p>
@@ -123,14 +125,17 @@
           <a class="btn btn-secondary" href="explorer.html">
             Explorer les jeux
           </a>
+
           <a class="btn btn-secondary" href="defis.html">
             Voir les défis
           </a>
         </div>
       </section>
+
     </main>
   </div>
 
+  <!-- NAVIGATION MOBILE -->
   <nav class="mobile-nav" aria-label="Navigation mobile">
     <a href="index.html">Accueil</a>
     <a href="explorer.html">Explorer</a>
@@ -140,118 +145,134 @@
     <a href="profil.html" aria-current="page">Profil</a>
   </nav>
 
-  <!-- Supabase doit être chargé avant le script du profil. -->
-  <!-- Conserve ici la même version de Supabase que dans ton projet. -->
+  <!-- SUPABASE : CHARGER AVANT auth.js -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+  <!-- VÉRIFICATION DE LA SESSION ET CLIENT PARTAGÉ -->
+  <script src="auth.js"></script>
+
+  <!-- LOGIQUE DU PROFIL -->
   <script>
-    const SUPABASE_URL = "https://smxjkgcxjzomkqwaaxlr.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX";
+    (() => {
+      const profileMessage = document.getElementById("profileMessage");
+      const logoutButton = document.getElementById("logoutButton");
 
-    const profileMessage = document.getElementById("profileMessage");
-    const logoutButton = document.getElementById("logoutButton");
-
-    function showProfileMessage(message) {
-      profileMessage.textContent = message;
-    }
-
-    function formatCreationDate(dateString) {
-      if (!dateString) return "Non disponible";
-
-      const date = new Date(dateString);
-
-      if (Number.isNaN(date.getTime())) {
-        return "Non disponible";
+      function showProfileMessage(message) {
+        profileMessage.textContent = message;
       }
 
-      return new Intl.DateTimeFormat("fr-FR", {
-        day: "numeric",
-        month: "long",
-        year: "numeric"
-      }).format(date);
-    }
+      function formatCreationDate(dateString) {
+        if (!dateString) return "Non disponible";
 
-    async function initializeProfile() {
-      if (
-        SUPABASE_URL === "https://smxjkgcxjzomkqwaaxlr.supabase.co" ||
-        SUPABASE_ANON_KEY === "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX"
-      ) {
-        showProfileMessage(
-          "Configure les identifiants Supabase avec ceux de ton projet pour afficher ton profil."
-        );
-        return;
+        const date = new Date(dateString);
+
+        if (Number.isNaN(date.getTime())) {
+          return "Non disponible";
+        }
+
+        return new Intl.DateTimeFormat("fr-FR", {
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        }).format(date);
       }
 
-      if (!window.supabase) {
-        showProfileMessage(
-          "Impossible de charger Supabase. Vérifie ta connexion et recharge la page."
-        );
-        return;
-      }
+      async function initializeProfile() {
+        const client = window.novaraSupabase;
 
-      const client = window.novaraSupabase;
-
-if (!client) {
-  showProfileMessage(
-    "Le service de connexion n'est pas prêt. Recharge la page."
-  );
-  return;
-}
-
-      try {
-        const { data, error } = await client.auth.getUser();
-
-        if (error || !data.user) {
-          window.location.href = "connexion.html";
+        if (!client) {
+          showProfileMessage(
+            "Impossible de connecter NOVARA à Supabase. Vérifie auth.js et recharge la page."
+          );
           return;
         }
 
-        const user = data.user;
-        const metadata = user.user_metadata || {};
-        const pseudo =
-          metadata.username ||
-          metadata.pseudo ||
-          metadata.full_name ||
-          (user.email ? user.email.split("@")[0] : "Joueur NOVARA");
+        try {
+          const { data, error } = await client.auth.getUser();
 
-        document.getElementById("username").textContent = pseudo;
-        document.getElementById("userEmail").textContent =
-          user.email || "Adresse e-mail non disponible";
-        document.getElementById("pseudoValue").textContent = pseudo;
-        document.getElementById("emailValue").textContent =
-          user.email || "Non disponible";
-        document.getElementById("createdAt").textContent =
-          formatCreationDate(user.created_at);
-        document.getElementById("avatar").textContent =
-          pseudo.trim().charAt(0).toUpperCase() || "N";
+          if (error || !data.user) {
+            window.location.replace("connexion.html");
+            return;
+          }
 
-        logoutButton.addEventListener("click", async () => {
-          logoutButton.disabled = true;
-          logoutButton.textContent = "Déconnexion…";
+          const user = data.user;
+          const metadata = user.user_metadata || {};
 
-          const { error: logoutError } = await client.auth.signOut();
+          const pseudo =
+            metadata.username ||
+            metadata.pseudo ||
+            metadata.full_name ||
+            (user.email ? user.email.split("@")[0] : "Joueur NOVARA");
 
-          if (logoutError) {
+          document.getElementById("username").textContent = pseudo;
+          document.getElementById("userEmail").textContent =
+            user.email || "Adresse e-mail non disponible";
+
+          document.getElementById("pseudoValue").textContent = pseudo;
+          document.getElementById("emailValue").textContent =
+            user.email || "Non disponible";
+
+          document.getElementById("createdAt").textContent =
+            formatCreationDate(user.created_at);
+
+          document.getElementById("avatar").textContent =
+            pseudo.trim().charAt(0).toUpperCase() || "N";
+
+        } catch (error) {
+          console.error("Erreur de chargement du profil :", error);
+
+          showProfileMessage(
+            "Une erreur est survenue lors du chargement du profil."
+          );
+        }
+      }
+
+      logoutButton.addEventListener("click", async () => {
+        const client = window.novaraSupabase;
+
+        if (!client) {
+          showProfileMessage(
+            "La connexion à Supabase est indisponible. Recharge la page et réessaie."
+          );
+          return;
+        }
+
+        logoutButton.disabled = true;
+        logoutButton.textContent = "Déconnexion…";
+
+        try {
+          const { error } = await client.auth.signOut();
+
+          if (error) {
+            console.error("Erreur de déconnexion :", error);
+
             showProfileMessage(
               "La déconnexion a échoué. Réessaie dans quelques instants."
             );
+
             logoutButton.disabled = false;
             logoutButton.textContent = "Se déconnecter";
             return;
           }
 
-          window.location.href = "connexion.html";
-        });
-      } catch (error) {
-        console.error("Erreur de chargement du profil :", error);
-        showProfileMessage(
-          "Une erreur est survenue lors du chargement du profil."
-        );
-      }
-    }
+          window.location.replace("connexion.html");
 
-    initializeProfile();
+        } catch (error) {
+          console.error("Erreur de déconnexion :", error);
+
+          showProfileMessage(
+            "Une erreur est survenue pendant la déconnexion."
+          );
+
+          logoutButton.disabled = false;
+          logoutButton.textContent = "Se déconnecter";
+        }
+      });
+
+      initializeProfile();
+    })();
   </script>
 
 </body>
 </html>
+```

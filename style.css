@@ -1155,3 +1155,10 @@ body.page-profil {
     background-attachment: scroll;
   }
 }
+body.page-defis {
+  background-color: #080610;
+  background-image: url("images/fonds/defis.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}

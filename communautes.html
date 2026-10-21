@@ -4,87 +4,230 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#090914">
-  <meta name="description" content="Découvre les communautés gaming de NOVARA.">
-  <title>NOVARA — Communautés</title>
+  <meta name="theme-color" content="#080914">
+  <title>Communautés | NOVARA</title>
+
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="novara-refonte.css">
-  <script src="app.js" defer></script>
-  
-<style>
-  html.auth-checking body {
-    visibility: hidden;
-  }
-</style>
-<script>
-  document.documentElement.classList.add("auth-checking");
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="auth.js"></script>
-
 </head>
-<body>
-  <aside class="sidebar">
-    <a class="logo" href="index.html">NOVA<span class="gradient">RA</span></a>
-    <div class="nav-label">Menu principal</div>
-    <nav class="nav">
-      <a href="index.html"><span class="ico">⌂</span> Accueil</a>
-      <a href="explorer.html"><span class="ico">◈</span> Explorer</a>
-      <a class="active" href="communautes.html"><span class="ico">♧</span> Communautés</a>
-      <a href="defis.html"><span class="ico">⚡</span> Défis</a>
-      <a href="messages.html"><span class="ico">✉</span> Appels & Messages</a>
-      <a href="profil.html"><span class="ico">◎</span> Profil</a>
-    </nav>
-    <div class="sidebar-bottom">
-      <strong>NOVARA UNIVERSE</strong><br>
-      Explore. Joue. Connecte-toi.<br>
-      © <span data-year></span> NOVARA
-    </div>
-  </aside>
 
-  <main class="main">
-    <div class="mobile-top">
-      <a class="logo" href="index.html">NOVARA</a>
-      <button class="hamburger" data-menu-toggle aria-label="Ouvrir le menu">☰</button>
-    </div>
+<body class="page-communautes">
 
-    <header class="page-head">
-      <div class="eyebrow">✦ Ensemble, c'est mieux</div>
-      <h1>Les <span class="gradient">communautés.</span></h1>
-      <p>Un espace pour partager tes jeux préférés, rencontrer d'autres passionnés et imaginer tes prochaines aventures gaming.</p>
-    </header>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <a class="logo" href="index.html" aria-label="NOVARA - Accueil">
+        NOVARA<span>.</span>
+      </a>
 
-    <section class="grid">
-      <article class="card">
-        <div class="game-icon">⚔️</div>
-        <h3>Action & aventure</h3>
-        <p>Pour les joueurs qui aiment l'exploration, les combats et les grandes histoires.</p>
-        <div class="tags"><span class="tag">Aventure</span><span class="tag">Action</span></div>
-      </article>
+      <nav class="sidebar-nav" aria-label="Navigation principale">
+        <a href="index.html"><span>⌂</span> Accueil</a>
+        <a href="explorer.html"><span>◈</span> Explorer</a>
+        <a href="communautes.html" class="active" aria-current="page">
+          <span>♧</span> Communautés
+        </a>
+        <a href="defis.html"><span>⚡</span> Défis</a>
+        <a href="messages.html"><span>✉</span> Messages</a>
+        <a href="profil.html"><span>◎</span> Mon profil</a>
+      </nav>
 
-      <article class="card">
-        <div class="game-icon">🏆</div>
-        <h3>Compétition</h3>
-        <p>Discute stratégie, améliore ton jeu et prépare tes prochaines parties compétitives.</p>
-        <div class="tags"><span class="tag">Stratégie</span><span class="tag">Équipe</span></div>
-      </article>
-
-      <article class="card">
-        <div class="game-icon">🌱</div>
-        <h3>Chill & découverte</h3>
-        <p>Un coin tranquille pour parler de jeux créatifs, indépendants et relaxants.</p>
-        <div class="tags"><span class="tag">Détente</span><span class="tag">Créativité</span></div>
-      </article>
-    </section>
-
-    <section style="margin-top:28px">
-      <div class="notice">
-        <h3>La communauté NOVARA se construit.</h3>
-        Ces cartes présentent les catégories de communautés prévues. Les groupes, les inscriptions et les discussions en direct ne sont pas encore activés.
+      <div class="sidebar-bottom">
+        <p>Joue. Explore. Connecte-toi.</p>
+        <span>NOVARA © 2026</span>
       </div>
-    </section>
+    </aside>
 
-    <footer>© <span data-year></span> NOVARA · Une communauté en devenir.</footer>
-  </main>
+    <main class="main-content">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">JOUE ENSEMBLE</p>
+          <h1>Communautés</h1>
+          <p class="page-description">
+            Retrouve les joueurs qui partagent tes univers préférés.
+          </p>
+        </div>
+
+        <a href="explorer.html" class="btn btn-primary">
+          Découvrir les jeux
+        </a>
+      </header>
+
+      <section class="community-welcome card">
+        <div class="community-welcome-content">
+          <p class="eyebrow">TA PROCHAINE ÉQUIPE T’ATTEND</p>
+          <h2>Les meilleurs moments se jouent ensemble.</h2>
+          <p>
+            Explore les univers gaming, trouve des coéquipiers et fais
+            grandir ta communauté.
+          </p>
+          <a href="messages.html" class="btn btn-primary">
+            Accéder aux messages
+          </a>
+        </div>
+        <div class="community-symbol" aria-hidden="true">✦</div>
+      </section>
+
+      <section class="content-section">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">TES UNIVERS</p>
+            <h2>Communautés gaming</h2>
+          </div>
+          <span class="section-count">6 univers</span>
+        </div>
+
+        <div class="community-grid">
+
+          <article class="community-card card">
+            <div class="community-art community-art-purple">
+              <span class="community-game-symbol">V</span>
+              <span class="community-category">COMPÉTITIF</span>
+            </div>
+            <div class="community-card-content">
+              <h3>Valorant</h3>
+              <p>
+                Stratégie, précision et esprit d’équipe. Prépare ta prochaine
+                partie avec d’autres joueurs.
+              </p>
+              <div class="tags">
+                <span class="tag">FPS</span>
+                <span class="tag">Tactique</span>
+              </div>
+              <a href="messages.html" class="community-link">
+                Rejoindre la discussion <span>↗</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="community-card card">
+            <div class="community-art community-art-cyan">
+              <span class="community-game-symbol">F</span>
+              <span class="community-category">MULTIJOUEUR</span>
+            </div>
+            <div class="community-card-content">
+              <h3>Fortnite</h3>
+              <p>
+                Construis ta stratégie, forme ton équipe et partage tes
+                meilleurs moments.
+              </p>
+              <div class="tags">
+                <span class="tag">Battle Royale</span>
+                <span class="tag">Fun</span>
+              </div>
+              <a href="messages.html" class="community-link">
+                Rejoindre la discussion <span>↗</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="community-card card">
+            <div class="community-art community-art-blue">
+              <span class="community-game-symbol">M</span>
+              <span class="community-category">AVENTURE</span>
+            </div>
+            <div class="community-card-content">
+              <h3>Minecraft</h3>
+              <p>
+                Partage tes constructions, découvre de nouveaux mondes et
+                imagine tes prochains projets.
+              </p>
+              <div class="tags">
+                <span class="tag">Créatif</span>
+                <span class="tag">Survie</span>
+              </div>
+              <a href="messages.html" class="community-link">
+                Rejoindre la discussion <span>↗</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="community-card card">
+            <div class="community-art community-art-orange">
+              <span class="community-game-symbol">R</span>
+              <span class="community-category">SPORT</span>
+            </div>
+            <div class="community-card-content">
+              <h3>Rocket League</h3>
+              <p>
+                Des matchs intenses, des passes millimétrées et des buts
+                spectaculaires.
+              </p>
+              <div class="tags">
+                <span class="tag">Compétitif</span>
+                <span class="tag">Équipe</span>
+              </div>
+              <a href="messages.html" class="community-link">
+                Rejoindre la discussion <span>↗</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="community-card card">
+            <div class="community-art community-art-green">
+              <span class="community-game-symbol">A</span>
+              <span class="community-category">SURVIE</span>
+            </div>
+            <div class="community-card-content">
+              <h3>Apex Legends</h3>
+              <p>
+                Coordonne ton escouade, perfectionne tes tactiques et relève
+                de nouveaux défis.
+              </p>
+              <div class="tags">
+                <span class="tag">FPS</span>
+                <span class="tag">Escouade</span>
+              </div>
+              <a href="messages.html" class="community-link">
+                Rejoindre la discussion <span>↗</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="community-card card">
+            <div class="community-art community-art-pink">
+              <span class="community-game-symbol">G</span>
+              <span class="community-category">AVENTURE</span>
+            </div>
+            <div class="community-card-content">
+              <h3>Genshin Impact</h3>
+              <p>
+                Explore de nouveaux territoires et partage tes découvertes
+                avec d’autres aventuriers.
+              </p>
+              <div class="tags">
+                <span class="tag">RPG</span>
+                <span class="tag">Exploration</span>
+              </div>
+              <a href="messages.html" class="community-link">
+                Rejoindre la discussion <span>↗</span>
+              </a>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <section class="community-bottom card">
+        <div>
+          <p class="eyebrow">RESTE CONNECTÉ</p>
+          <h2>Prêt à retrouver tes coéquipiers ?</h2>
+          <p>Consulte tes conversations et continue à jouer ensemble.</p>
+        </div>
+        <a href="messages.html" class="btn btn-primary">
+          Ouvrir les messages
+        </a>
+      </section>
+
+    </main>
+  </div>
+
+  <nav class="mobile-nav" aria-label="Navigation mobile">
+    <a href="index.html">Accueil</a>
+    <a href="explorer.html">Explorer</a>
+    <a href="communautes.html" aria-current="page">Communautés</a>
+    <a href="defis.html">Défis</a>
+    <a href="messages.html">Messages</a>
+    <a href="profil.html">Profil</a>
+  </nav>
+
 </body>
 </html>

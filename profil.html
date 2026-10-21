@@ -189,10 +189,14 @@
         return;
       }
 
-      const client = window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
-      );
+      const client = window.novaraSupabase;
+
+if (!client) {
+  showProfileMessage(
+    "Le service de connexion n'est pas prêt. Recharge la page."
+  );
+  return;
+}
 
       try {
         const { data, error } = await client.auth.getUser();

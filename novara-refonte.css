@@ -1,0 +1,487 @@
+
+/* =========================================
+   NOVARA — REFONTE VISUELLE
+   Thème gaming : violet électrique + cyan
+   À charger après style.css
+   ========================================= */
+
+:root {
+  --nv-bg: #080812;
+  --nv-panel: rgba(15, 14, 31, 0.88);
+  --nv-border: rgba(167, 139, 250, 0.24);
+  --nv-purple: #8b5cf6;
+  --nv-violet: #a78bfa;
+  --nv-cyan: #67e8f9;
+  --nv-text: #f6f3ff;
+  --nv-muted: #b9b3d0;
+  --nv-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--nv-text);
+  background-color: var(--nv-bg);
+  background-attachment: fixed;
+}
+
+::selection {
+  color: white;
+  background: rgba(139, 92, 246, 0.55);
+}
+
+a,
+button {
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+:where(a, button, input, textarea, select):focus-visible {
+  outline: 2px solid var(--nv-cyan);
+  outline-offset: 3px;
+}
+
+/* Logo et texte dégradé */
+
+.logo {
+  font-weight: 900 !important;
+  letter-spacing: 0.04em;
+}
+
+.gradient {
+  background: linear-gradient(
+    100deg,
+    #c4b5fd 0%,
+    #a78bfa 45%,
+    #67e8f9 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Navigation */
+
+.sidebar {
+  background: rgba(8, 7, 20, 0.93) !important;
+  border-right: 1px solid rgba(167, 139, 250, 0.18);
+  box-shadow: 14px 0 40px rgba(0, 0, 0, 0.16);
+  backdrop-filter: blur(22px);
+}
+
+.nav a {
+  border: 1px solid transparent;
+  border-radius: 12px;
+}
+
+.nav a:hover {
+  background: rgba(139, 92, 246, 0.13);
+  border-color: rgba(167, 139, 250, 0.2);
+  transform: translateX(2px);
+}
+
+.nav a.active {
+  background: linear-gradient(
+    100deg,
+    rgba(139, 92, 246, 0.25),
+    rgba(103, 232, 249, 0.07)
+  );
+  border-color: rgba(167, 139, 250, 0.3);
+  box-shadow: inset 3px 0 0 #a78bfa;
+}
+
+.sidebar-bottom {
+  color: var(--nv-muted);
+  line-height: 1.8;
+}
+
+/* Contenu principal */
+
+.main {
+  min-width: 0;
+}
+
+.hero,
+.page-head {
+  position: relative;
+}
+
+.hero {
+  overflow: hidden;
+  border: 1px solid rgba(167, 139, 250, 0.26);
+  border-radius: 26px;
+  padding: clamp(28px, 5vw, 58px);
+  background:
+    radial-gradient(
+      ellipse at 88% 10%,
+      rgba(103, 232, 249, 0.12),
+      transparent 35%
+    ),
+    linear-gradient(
+      125deg,
+      rgba(22, 16, 47, 0.94),
+      rgba(9, 10, 27, 0.86)
+    );
+  box-shadow: var(--nv-shadow);
+}
+
+.hero h1,
+.page-head h1 {
+  letter-spacing: -0.045em;
+  line-height: 1.08;
+}
+
+.hero p,
+.page-head p {
+  max-width: 720px;
+  color: var(--nv-muted);
+  line-height: 1.8;
+}
+
+.eyebrow {
+  color: var(--nv-cyan);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+/* Boutons */
+
+.btn.primary,
+.profile-button.primary,
+.daily-complete {
+  background: linear-gradient(
+    105deg,
+    #7c3aed,
+    #8b5cf6 55%,
+    #4f9eea
+  ) !important;
+  border-color: rgba(196, 181, 253, 0.55) !important;
+  color: white !important;
+}
+
+.btn:hover,
+.profile-button:hover,
+.daily-complete:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(139, 92, 246, 0.2);
+}
+
+/* Cartes */
+
+.card,
+.notice,
+.profile-panel,
+.novara-panel,
+.chat-panel {
+  background: linear-gradient(
+    145deg,
+    rgba(21, 18, 43, 0.94),
+    rgba(11, 11, 27, 0.9)
+  ) !important;
+  border: 1px solid var(--nv-border) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(14px);
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 14%;
+  right: 14%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(103, 232, 249, 0.55),
+    transparent
+  );
+  pointer-events: none;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(103, 232, 249, 0.4) !important;
+  box-shadow:
+    0 20px 45px rgba(0, 0, 0, 0.28),
+    0 0 25px rgba(139, 92, 246, 0.08);
+}
+
+.card h3 {
+  letter-spacing: -0.015em;
+}
+
+.card p,
+.muted {
+  color: var(--nv-muted);
+  line-height: 1.75;
+}
+
+/* Icônes des cartes */
+
+.game-icon {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border: 1px solid rgba(167, 139, 250, 0.25);
+  border-radius: 17px;
+  background: linear-gradient(
+    145deg,
+    rgba(139, 92, 246, 0.2),
+    rgba(103, 232, 249, 0.08)
+  );
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Tags des jeux et défis */
+
+.tag {
+  border: 1px solid rgba(167, 139, 250, 0.26) !important;
+  border-radius: 999px !important;
+  background: rgba(139, 92, 246, 0.13) !important;
+  color: #ded5ff !important;
+}
+
+/* Champs de saisie */
+
+.search,
+input,
+textarea,
+select,
+.chat-search,
+.chat-input {
+  max-width: 100%;
+  border: 1px solid rgba(167, 139, 250, 0.3) !important;
+  border-radius: 12px !important;
+  background: rgba(7, 7, 20, 0.85) !important;
+  color: var(--nv-text) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #827b9d;
+}
+
+.search:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: rgba(103, 232, 249, 0.7) !important;
+  box-shadow: 0 0 0 3px rgba(103, 232, 249, 0.09);
+}
+
+/* Encadrés d'information */
+
+.notice {
+  padding: 22px 24px;
+  color: var(--nv-muted);
+  line-height: 1.75;
+}
+
+.notice h3 {
+  color: var(--nv-text);
+}
+
+.daily-progress {
+  padding: 12px 16px;
+  border: 1px solid rgba(103, 232, 249, 0.2);
+  border-radius: 12px;
+  background: rgba(103, 232, 249, 0.06);
+}
+
+.daily-complete {
+  border-radius: 12px !important;
+}
+
+.daily-complete:disabled {
+  background: rgba(34, 29, 54, 0.95) !important;
+}
+
+/* Messagerie */
+
+.page-messages .novara-messages {
+  width: min(1180px, calc(100% - 32px));
+  margin: 28px auto;
+  color: var(--nv-text);
+}
+
+.novara-header {
+  margin-bottom: 24px;
+  padding: clamp(22px, 4vw, 38px);
+  border: 1px solid var(--nv-border);
+  border-radius: 24px;
+  background: linear-gradient(
+    125deg,
+    rgba(28, 19, 58, 0.94),
+    rgba(9, 10, 27, 0.9)
+  );
+  box-shadow: var(--nv-shadow);
+}
+
+.novara-header h1 {
+  letter-spacing: -0.035em;
+}
+
+.novara-header p {
+  color: var(--nv-muted);
+}
+
+.novara-header a {
+  color: var(--nv-cyan);
+}
+
+.novara-panel {
+  padding: clamp(18px, 3vw, 28px);
+  margin: 18px 0;
+}
+
+.novara-panel h2 {
+  margin-top: 0;
+}
+
+.novara-panel p,
+.novara-panel label {
+  color: var(--nv-muted);
+}
+
+.novara-panel input,
+.novara-panel textarea {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px 14px;
+  margin-top: 8px;
+}
+
+.novara-panel button {
+  padding: 11px 16px;
+  border: 1px solid rgba(167, 139, 250, 0.32);
+  border-radius: 11px;
+  background: rgba(139, 92, 246, 0.16);
+  color: var(--nv-text);
+  cursor: pointer;
+}
+
+.novara-panel button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(139, 92, 246, 0.2);
+}
+
+.novara-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#player-results > *,
+#message-list > * {
+  overflow-wrap: anywhere;
+}
+
+#message-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 440px;
+  overflow: auto;
+  padding: 12px 0;
+}
+
+#call-media video {
+  width: min(100%, 520px);
+  border-radius: 16px;
+  background: #05050c;
+}
+
+/* Profil */
+
+.page-profil .profile-page {
+  width: min(980px, calc(100% - 32px));
+  margin: 28px auto;
+}
+
+.page-profil .profile-header {
+  padding: 28px 18px;
+  border: 1px solid var(--nv-border);
+  border-radius: 24px;
+  background: linear-gradient(
+    125deg,
+    rgba(28, 19, 58, 0.85),
+    rgba(9, 10, 27, 0.75)
+  );
+}
+
+.page-profil .profile-panel {
+  padding: clamp(22px, 4vw, 36px);
+}
+
+.page-profil .info-item {
+  border-color: rgba(167, 139, 250, 0.2);
+  border-radius: 14px;
+  background: rgba(7, 7, 20, 0.6);
+}
+
+.page-profil .profile-button {
+  border-radius: 12px;
+  border-color: rgba(167, 139, 250, 0.3);
+}
+
+/* Pied de page */
+
+footer {
+  color: #918aa9;
+  border-top: 1px solid rgba(167, 139, 250, 0.12);
+  padding-top: 20px;
+}
+
+/* Téléphones et tablettes */
+
+@media (max-width: 760px) {
+  .hero {
+    border-radius: 20px;
+  }
+
+  .page-messages .novara-messages {
+    width: calc(100% - 20px);
+    margin: 10px auto;
+  }
+
+  .novara-header {
+    border-radius: 18px;
+  }
+
+  .novara-actions > button {
+    flex: 1 1 150px;
+  }
+}
+
+/* Respecte les préférences d'accessibilité */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

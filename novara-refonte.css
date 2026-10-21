@@ -2692,3 +2692,89 @@ body.page-accueil .section-heading {
     padding: 22px;
   }
 }
+
+/* ===== NOVARA : PAGE DÉFIS CENTRÉE ET AGRANDIE ===== */
+
+body.page-defis .main {
+  width: calc(100% - 260px);
+  max-width: none;
+  margin-left: 260px;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+/* Le titre prend toute la largeur */
+body.page-defis .page-head {
+  width: 100%;
+  max-width: none;
+  margin: 0 auto 36px;
+  box-sizing: border-box;
+}
+
+/* Les grilles occupent tout l'espace disponible */
+body.page-defis .main > .grid,
+body.page-defis .daily-challenges > .grid {
+  display: grid;
+  width: 100%;
+  max-width: none;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  box-sizing: border-box;
+}
+
+/* Des cartes plus grandes */
+body.page-defis .card {
+  width: 100%;
+  min-width: 0;
+  min-height: 230px;
+  padding: 28px;
+  box-sizing: border-box;
+}
+
+/* Espacement de la mission du jour */
+body.page-defis .daily-challenges {
+  width: 100%;
+  max-width: none;
+  margin-top: 44px;
+  box-sizing: border-box;
+}
+
+body.page-defis .daily-challenges > h2,
+body.page-defis .daily-challenges > p,
+body.page-defis .daily-challenges > .eyebrow {
+  max-width: none;
+}
+
+/* Le bloc d'information utilise toute la largeur */
+body.page-defis .notice {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Tablettes */
+@media (max-width: 1100px) {
+  body.page-defis .main > .grid,
+  body.page-defis .daily-challenges > .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Mobiles */
+@media (max-width: 768px) {
+  body.page-defis .main {
+    width: 100%;
+    margin-left: 0;
+    padding: 18px;
+  }
+
+  body.page-defis .main > .grid,
+  body.page-defis .daily-challenges > .grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  body.page-defis .card {
+    min-height: 190px;
+    padding: 22px;
+  }
+}

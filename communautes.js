@@ -30,7 +30,10 @@
     if (!button) return;
 
     if (busy) {
-      button.dataset.originalText = button.textContent;
+      if (!button.disabled) {
+        button.dataset.originalText = button.textContent;
+      }
+
       button.textContent = busyText;
       button.disabled = true;
     } else {
@@ -59,11 +62,19 @@
       return "Tu es déjà membre de cette communauté.";
     }
 
+    if (error.code === "23503") {
+      return "Cette action est impossible à cause d'une relation entre les données.";
+    }
+
     return error.message || "Une erreur est survenue.";
   }
 
+  // CHARGER LES COMMUNAUTÉS
+
   async function loadCommunities() {
-    grid.replaceChildren(makeElement("p", "community-empty", "Chargement…"));
+    grid.replaceChildren(
+      makeElement("p", "community-empty", "Chargement des communautés…")
+    );
 
     const [communityResult, membershipResult] = await Promise.all([
       supabase
@@ -86,7 +97,8 @@
             getErrorMessage(communityResult.error)
         )
       );
-      showStatus("Erreur de chargement.", "error");
+
+      showStatus("Erreur lors du chargement.", "error");
       return;
     }
 
@@ -99,11 +111,13 @@
             getErrorMessage(membershipResult.error)
         )
       );
-      showStatus("Erreur de chargement.", "error");
+
+      showStatus("Erreur lors du chargement des inscriptions.", "error");
       return;
     }
 
     communities = communityResult.data || [];
+
     joinedIds = new Set(
       (membershipResult.data || []).map((membership) => membership.community_id)
     );
@@ -113,9 +127,11 @@
     showStatus(
       communities.length
         ? `${communities.length} communauté(s) disponible(s).`
-        : "Aucune communauté pour le moment. Tu peux créer la première !"
+        : "Aucune communauté pour le moment. Crée la première !"
     );
   }
+
+  // AFFICHER LES CARTES
 
   function renderCommunities() {
     grid.replaceChildren();
@@ -128,38 +144,48 @@
           "Aucune communauté pour le moment. Crée la première !"
         )
       );
+
       return;
     }
 
     communities.forEach((community) => {
       const card = makeElement("article", "community-card card");
+
       const art = makeElement("div", "community-art community-art-purple");
+
       const symbol = makeElement(
         "span",
         "community-game-symbol",
         (community.game || community.name || "N").charAt(0).toUpperCase()
       );
+
       const category = makeElement(
         "span",
         "community-category",
-        community.creator_id === currentUser.id ? "TON GROUPE" : "COMMUNAUTÉ"
+        community.creator_id === currentUser.id
+          ? "TON GROUPE"
+          : "COMMUNAUTÉ"
       );
 
       art.append(symbol, category);
 
       const content = makeElement("div", "community-card-content");
+
       const title = makeElement("h3", "", community.name);
       const description = makeElement("p", "", community.description);
+
       const game = makeElement(
         "span",
         "community-game-label",
         community.game || "Autre"
       );
 
-      content.append(title, description, game);
-
       const actions = makeElement("div", "community-actions");
+
       const isMember = joinedIds.has(community.id);
+      const isCreator = community.creator_id === currentUser.id;
+
+      content.append(title, description, game);
 
       if (isMember) {
         const openChat = makeElement(
@@ -169,13 +195,24 @@
         );
 
         openChat.type = "button";
-        openChat.addEventListener("click", () => openCommunityChat(community));
+        openChat.addEventListener("click", () => {
+          openCommunityChat(community);
+        });
+
         actions.append(openChat);
 
-        if (community.creator_id !== currentUser.id) {
-          const leave = makeElement("button", "community-action", "Quitter");
+        if (!isCreator) {
+          const leave = makeElement(
+            "button",
+            "community-action",
+            "Quitter"
+          );
+
           leave.type = "button";
-          leave.addEventListener("click", () => leaveCommunity(community, leave));
+          leave.addEventListener("click", () => {
+            leaveCommunity(community, leave);
+          });
+
           actions.append(leave);
         } else {
           actions.append(
@@ -190,8 +227,33 @@
         );
 
         join.type = "button";
-        join.addEventListener("click", () => joinCommunity(community, join));
+        join.addEventListener("click", () => {
+          joinCommunity(community, join);
+        });
+
         actions.append(join);
+      }
+
+      // SEUL LE CRÉATEUR VOIT LE BOUTON DE SUPPRESSION
+
+      if (isCreator) {
+        const deleteButton = makeElement(
+          "button",
+          "community-action community-delete",
+          "🗑️ Supprimer"
+        );
+
+        deleteButton.type = "button";
+        deleteButton.setAttribute(
+          "aria-label",
+          `Supprimer la communauté ${community.name}`
+        );
+
+        deleteButton.addEventListener("click", () => {
+          deleteCommunity(community, deleteButton);
+        });
+
+        actions.append(deleteButton);
       }
 
       content.append(actions);
@@ -200,21 +262,30 @@
     });
   }
 
+  // CRÉER UNE COMMUNAUTÉ
+
   async function createCommunity(event) {
     event.preventDefault();
 
     const submitButton = createForm.querySelector('[type="submit"]');
+
     const name = $("#community-name").value.trim();
     const game = $("#community-game").value;
     const description = $("#community-description").value.trim();
 
     if (name.length < 3 || name.length > 50) {
-      showStatus("Le nom doit contenir entre 3 et 50 caractères.", "error");
+      showStatus(
+        "Le nom doit contenir entre 3 et 50 caractères.",
+        "error"
+      );
       return;
     }
 
     if (!description || description.length > 500) {
-      showStatus("La description doit contenir entre 1 et 500 caractères.", "error");
+      showStatus(
+        "La description doit contenir entre 1 et 500 caractères.",
+        "error"
+      );
       return;
     }
 
@@ -241,30 +312,35 @@
           user_id: currentUser.id
         });
 
-      if (membershipError) {
-        showStatus(
-          "Communauté créée, mais l'inscription automatique a échoué : " +
-            getErrorMessage(membershipError),
-          "error"
-        );
-      } else {
-        showStatus("Communauté créée ! Tu en es maintenant membre.", "success");
-      }
-
       createForm.reset();
       createForm.hidden = true;
 
-      await loadCommunities();
+      if (membershipError) {
+        showStatus(
+          "Communauté créée, mais ton inscription a échoué : " +
+            getErrorMessage(membershipError),
+          "error"
+        );
 
-      if (!membershipError) {
-        await openCommunityChat(community);
+        await loadCommunities();
+        return;
       }
+
+      showStatus("Communauté créée avec succès !", "success");
+
+      await loadCommunities();
+      await openCommunityChat(community);
     } catch (error) {
-      showStatus("Création impossible : " + getErrorMessage(error), "error");
+      showStatus(
+        "Création impossible : " + getErrorMessage(error),
+        "error"
+      );
     } finally {
       setButtonBusy(submitButton, false);
     }
   }
+
+  // REJOINDRE UNE COMMUNAUTÉ
 
   async function joinCommunity(community, button) {
     setButtonBusy(button, true, "Inscription…");
@@ -279,18 +355,31 @@
 
       if (error) throw error;
 
-      showStatus(`Tu as rejoint « ${community.name} » !`, "success");
+      showStatus(
+        `Tu as rejoint « ${community.name} » !`,
+        "success"
+      );
+
       await loadCommunities();
       await openCommunityChat(community);
     } catch (error) {
-      showStatus("Impossible de rejoindre : " + getErrorMessage(error), "error");
+      showStatus(
+        "Impossible de rejoindre : " + getErrorMessage(error),
+        "error"
+      );
     } finally {
       setButtonBusy(button, false);
     }
   }
 
+  // QUITTER UNE COMMUNAUTÉ
+
   async function leaveCommunity(community, button) {
-    if (!confirm(`Veux-tu vraiment quitter « ${community.name} » ?`)) return;
+    const confirmation = confirm(
+      `Veux-tu vraiment quitter « ${community.name} » ?`
+    );
+
+    if (!confirmation) return;
 
     setButtonBusy(button, true, "Départ…");
 
@@ -308,17 +397,76 @@
       }
 
       showStatus(`Tu as quitté « ${community.name} ».`, "success");
+
       await loadCommunities();
     } catch (error) {
-      showStatus("Impossible de quitter : " + getErrorMessage(error), "error");
+      showStatus(
+        "Impossible de quitter : " + getErrorMessage(error),
+        "error"
+      );
     } finally {
       setButtonBusy(button, false);
     }
   }
 
+  // SUPPRIMER UNE COMMUNAUTÉ
+
+  async function deleteCommunity(community, button) {
+    if (community.creator_id !== currentUser.id) {
+      showStatus(
+        "Seul le créateur peut supprimer cette communauté.",
+        "error"
+      );
+      return;
+    }
+
+    const confirmation = confirm(
+      `Supprimer définitivement « ${community.name} » ?\n\n` +
+      "Cette action supprimera aussi les inscriptions et les messages associés. " +
+      "Elle est irréversible."
+    );
+
+    if (!confirmation) return;
+
+    setButtonBusy(button, true, "Suppression…");
+
+    try {
+      const { error } = await supabase
+        .from("communities")
+        .delete()
+        .eq("id", community.id)
+        .eq("creator_id", currentUser.id);
+
+      if (error) throw error;
+
+      if (activeCommunity?.id === community.id) {
+        closeCommunityChat();
+      }
+
+      showStatus(
+        `La communauté « ${community.name} » a été supprimée.`,
+        "success"
+      );
+
+      await loadCommunities();
+    } catch (error) {
+      showStatus(
+        "Impossible de supprimer : " + getErrorMessage(error),
+        "error"
+      );
+    } finally {
+      setButtonBusy(button, false);
+    }
+  }
+
+  // OUVRIR UNE DISCUSSION
+
   async function openCommunityChat(community) {
     if (!joinedIds.has(community.id)) {
-      showStatus("Rejoins cette communauté pour accéder à la discussion.", "error");
+      showStatus(
+        "Rejoins cette communauté pour accéder à la discussion.",
+        "error"
+      );
       return;
     }
 
@@ -326,15 +474,20 @@
     lastMessageIds = "";
 
     $("#community-chat-title").textContent = community.name;
+
     $("#community-chat-description").textContent =
       `${community.game || "Autre"} · Discussion réservée aux membres`;
 
     chatPanel.hidden = false;
+
     chatMessages.replaceChildren(
       makeElement("p", "community-empty", "Chargement des messages…")
     );
 
-    chatPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    chatPanel.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
 
     await loadMessages();
   }
@@ -344,17 +497,15 @@
     lastMessageIds = "";
     chatPanel.hidden = true;
     chatMessages.replaceChildren();
-
-    if (refreshTimer) {
-      clearInterval(refreshTimer);
-      refreshTimer = null;
-    }
   }
+
+  // CHARGER LES MESSAGES
 
   async function loadMessages() {
     if (!activeCommunity || loadingMessages) return;
 
     loadingMessages = true;
+
     const communityId = activeCommunity.id;
 
     try {
@@ -366,6 +517,7 @@
         .limit(100);
 
       if (error) throw error;
+
       if (!activeCommunity || activeCommunity.id !== communityId) return;
 
       const messages = data || [];
@@ -381,7 +533,8 @@
           makeElement(
             "p",
             "community-empty",
-            "Impossible de charger les messages : " + getErrorMessage(error)
+            "Impossible de charger les messages : " +
+              getErrorMessage(error)
           )
         );
       }
@@ -389,6 +542,8 @@
       loadingMessages = false;
     }
   }
+
+  // AFFICHER LES MESSAGES
 
   function renderMessages(messages) {
     chatMessages.replaceChildren();
@@ -406,17 +561,20 @@
 
     messages.forEach((message) => {
       const own = message.author_id === currentUser.id;
+
       const item = makeElement(
         "article",
         "community-message" + (own ? " own" : "")
       );
 
       const meta = makeElement("div", "community-message-meta");
+
       const author = own
         ? "Toi"
         : "Joueur " + message.author_id.slice(0, 6);
 
       const date = new Date(message.created_at);
+
       const timeText = Number.isNaN(date.getTime())
         ? ""
         : date.toLocaleString("fr-FR", {
@@ -430,6 +588,7 @@
       );
 
       const text = makeElement("p", "", message.content);
+
       item.append(meta, text);
       chatMessages.append(item);
     });
@@ -437,13 +596,21 @@
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
+  // ENVOYER UN MESSAGE
+
   async function sendMessage(event) {
     event.preventDefault();
 
     if (!activeCommunity) return;
 
     const content = messageInput.value.trim();
+
     if (!content) return;
+
+    if (content.length > 2000) {
+      showStatus("Le message est limité à 2000 caractères.", "error");
+      return;
+    }
 
     const submitButton = chatForm.querySelector('[type="submit"]');
     const communityId = activeCommunity.id;
@@ -462,14 +629,22 @@
       if (error) throw error;
 
       messageInput.value = "";
+
+      // Force un nouveau rendu après l'envoi.
+      lastMessageIds = "";
       await loadMessages();
     } catch (error) {
-      showStatus("Envoi impossible : " + getErrorMessage(error), "error");
+      showStatus(
+        "Envoi impossible : " + getErrorMessage(error),
+        "error"
+      );
     } finally {
       setButtonBusy(submitButton, false);
       messageInput.focus();
     }
   }
+
+  // INITIALISATION
 
   async function init() {
     if (!window.novaraSupabase) {
@@ -477,9 +652,15 @@
         "Client Supabase introuvable. Vérifie la configuration de auth.js.",
         "error"
       );
+
       grid.replaceChildren(
-        makeElement("p", "community-empty", "Connexion à Supabase impossible.")
+        makeElement(
+          "p",
+          "community-empty",
+          "Connexion à Supabase impossible."
+        )
       );
+
       return;
     }
 
@@ -489,14 +670,16 @@
 
     if (error || !data?.user) {
       showStatus("Connecte-toi pour accéder aux communautés.", "error");
+
       grid.replaceChildren(
-        makeElement("p", "community-empty", "Redirection vers la connexion…")
+        makeElement(
+          "p",
+          "community-empty",
+          "Redirection vers la connexion…"
+        )
       );
 
-      setTimeout(() => {
-        window.location.href = "connexion.html";
-      }, 900);
-
+      window.location.href = "connexion.html";
       return;
     }
 
@@ -507,7 +690,11 @@
 
       if (!createForm.hidden) {
         $("#community-name").focus();
-        createForm.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        createForm.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
       }
     });
 
@@ -517,14 +704,22 @@
     });
 
     $("#refresh-communities").addEventListener("click", loadCommunities);
-    $("#close-community-chat").addEventListener("click", closeCommunityChat);
+
+    $("#close-community-chat").addEventListener(
+      "click",
+      closeCommunityChat
+    );
+
     createForm.addEventListener("submit", createCommunity);
     chatForm.addEventListener("submit", sendMessage);
 
     await loadCommunities();
 
+    // Actualisation des messages toutes les cinq secondes.
     refreshTimer = setInterval(() => {
-      if (activeCommunity) loadMessages();
+      if (activeCommunity) {
+        loadMessages();
+      }
     }, 5000);
   }
 

@@ -1162,3 +1162,73 @@ body.page-defis {
   background-position: center;
   background-size: cover;
 }
+
+/* =====================================
+   NOVARA — FONDS GAMING
+   ===================================== */
+
+body.page-accueil,
+body.page-explorer,
+body.page-communautes,
+body.page-defis,
+body.page-messages,
+body.page-profil {
+  background-color: #080610;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+/* Accueil */
+body.page-accueil {
+  background-image:
+    linear-gradient(rgba(5, 4, 13, 0.20), rgba(5, 4, 13, 0.40)),
+    url("./images/fonds/3d-plexus-background.jpg");
+}
+
+/* Explorer */
+body.page-explorer {
+  background-image:
+    linear-gradient(rgba(5, 4, 13, 0.20), rgba(5, 4, 13, 0.40)),
+    url("./images/fonds/3d-render-modern-background-with-flowing-cyber-particles.jpg");
+}
+
+/* Communautés */
+body.page-communautes {
+  background-image:
+    linear-gradient(rgba(5, 4, 13, 0.20), rgba(5, 4, 13, 0.40)),
+    url("./images/fonds/3d-plexus-background.jpg");
+}
+
+/* Défis */
+body.page-defis {
+  background-image:
+    linear-gradient(rgba(5, 4, 13, 0.20), rgba(5, 4, 13, 0.40)),
+    url("./images/fonds/3d-render-modern-background-with-flowing-cyber-particles.jpg");
+}
+
+/* Messages */
+body.page-messages {
+  background-image:
+    linear-gradient(rgba(5, 4, 13, 0.20), rgba(5, 4, 13, 0.40)),
+    url("./images/fonds/3d-plexus-background.jpg");
+}
+
+/* Profil */
+body.page-profil {
+  background-image:
+    linear-gradient(rgba(5, 4, 13, 0.20), rgba(5, 4, 13, 0.40)),
+    url("./images/fonds/3d-render-modern-background-with-flowing-cyber-particles.jpg");
+}
+
+@media (max-width: 700px) {
+  body.page-accueil,
+  body.page-explorer,
+  body.page-communautes,
+  body.page-defis,
+  body.page-messages,
+  body.page-profil {
+    background-attachment: scroll;
+  }
+}

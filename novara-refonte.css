@@ -1691,3 +1691,107 @@ body {
     display: none;
   }
 }
+/* NOVARA — CORRECTION EXPLORER : DÉBORDEMENT HORIZONTAL */
+
+html,
+body {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+body.page-explorer {
+  overflow-x: hidden;
+}
+
+body.page-explorer .app-layout {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+body.page-explorer .sidebar {
+  position: sticky;
+  top: 0;
+  flex: 0 0 250px;
+  width: 250px;
+  height: 100vh;
+  min-height: 100vh;
+}
+
+body.page-explorer .main-content {
+  flex: 1 1 0;
+  width: 0;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 30px clamp(16px, 3vw, 42px);
+}
+
+body.page-explorer .main-content > *,
+body.page-explorer .content-section,
+body.page-explorer .explorer-hero,
+body.page-explorer .explorer-controls,
+body.page-explorer .explorer-bottom {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+body.page-explorer .games-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  width: 100%;
+  min-width: 0;
+}
+
+body.page-explorer .games-grid > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+body.page-explorer .explorer-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(180px, 1fr);
+  gap: 18px;
+}
+
+body.page-explorer input,
+body.page-explorer select {
+  max-width: 100%;
+  min-width: 0;
+}
+
+@media (max-width: 1000px) {
+  body.page-explorer .sidebar {
+    flex-basis: 210px;
+    width: 210px;
+  }
+
+  body.page-explorer .games-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  body.page-explorer .app-layout {
+    display: block;
+  }
+
+  body.page-explorer .sidebar {
+    display: none;
+  }
+
+  body.page-explorer .main-content {
+    width: 100%;
+    padding: 22px 14px 100px;
+  }
+
+  body.page-explorer .games-grid,
+  body.page-explorer .explorer-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

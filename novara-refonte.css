@@ -1353,3 +1353,266 @@ footer {
     transform: none;
   }
 }
+
+/* =========================================
+   NOVARA — CORRECTIONS STRUCTURE ET AFFICHAGE
+   À placer à la fin de novara-refonte.css
+   ========================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  color: var(--nv-text);
+}
+
+.app-layout {
+  display: flex;
+  align-items: stretch;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.sidebar {
+  flex: 0 0 250px;
+  width: 250px;
+  min-width: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 18px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 36px;
+}
+
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 13px 14px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: var(--nv-muted);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.sidebar-nav a span {
+  flex: 0 0 22px;
+  text-align: center;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav a.active,
+.sidebar-nav a[aria-current="page"] {
+  color: var(--nv-text);
+  background: rgba(139, 92, 246, 0.16);
+  border-color: var(--nv-border);
+}
+
+.sidebar-bottom {
+  margin-top: auto;
+  padding-top: 28px;
+  font-size: 0.82rem;
+}
+
+.main-content {
+  flex: 1 1 0;
+  min-width: 0;
+  width: 0;
+  padding: clamp(20px, 3.5vw, 48px);
+}
+
+.page-header {
+  margin-bottom: 28px;
+}
+
+.page-header h1 {
+  margin: 0 0 12px;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.12;
+  overflow-wrap: anywhere;
+}
+
+.page-description {
+  max-width: 720px;
+  color: var(--nv-muted);
+  line-height: 1.75;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+}
+
+.card {
+  min-width: 0;
+}
+
+.grid,
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  width: 100%;
+}
+
+.games-grid > *,
+.community-grid > * {
+  min-width: 0;
+}
+
+.explorer-hero {
+  width: 100%;
+  min-width: 0;
+}
+
+.explorer-hero-content {
+  min-width: 0;
+}
+
+.explorer-hero h2,
+.explorer-bottom h2 {
+  overflow-wrap: anywhere;
+}
+
+.explorer-controls {
+  width: 100%;
+}
+
+.explorer-search {
+  min-width: 0;
+}
+
+.explorer-search input {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.mobile-nav {
+  display: none;
+}
+
+@media (max-width: 1050px) {
+  .sidebar {
+    flex-basis: 215px;
+    width: 215px;
+    padding-inline: 14px;
+  }
+
+  .main-content {
+    padding: 24px;
+  }
+
+  .grid,
+  .games-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .app-layout {
+    display: block;
+    min-height: 100vh;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .main-content {
+    width: 100%;
+    padding: 22px 16px 100px;
+  }
+
+  .mobile-nav {
+    position: fixed;
+    z-index: 1000;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: stretch;
+    gap: 4px;
+    padding: 10px 8px calc(10px + env(safe-area-inset-bottom));
+    overflow-x: auto;
+    background: rgba(8, 7, 20, 0.97);
+    border-top: 1px solid var(--nv-border);
+    backdrop-filter: blur(18px);
+  }
+
+  .mobile-nav a {
+    flex: 1 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 65px;
+    padding: 10px 8px;
+    border-radius: 9px;
+    color: var(--nv-muted);
+    font-size: 0.78rem;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .mobile-nav a[aria-current="page"] {
+    color: var(--nv-text);
+    background: rgba(139, 92, 246, 0.2);
+  }
+
+  .grid,
+  .games-grid,
+  .community-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .explorer-hero,
+  .explorer-bottom,
+  .community-welcome,
+  .community-bottom {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 520px) {
+  .main-content {
+    padding: 18px 12px 96px;
+  }
+
+  .page-header {
+    margin-bottom: 22px;
+  }
+
+  .grid,
+  .games-grid,
+  .community-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .explorer-hero,
+  .explorer-bottom {
+    padding: 22px 18px;
+  }
+
+  .explorer-controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mobile-nav {
+    justify-content: flex-start;
+  }
+}

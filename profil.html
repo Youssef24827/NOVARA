@@ -145,7 +145,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    const SUPABASE_URL = "https://smxjkgcxjzomkqwaaxlr.supabase.co/rest/v1/";
+    const SUPABASE_URL = "https://smxjkgcxjzomkqwaaxlr.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX";
 
     const profileMessage = document.getElementById("profileMessage");
@@ -173,8 +173,8 @@
 
     async function initializeProfile() {
       if (
-        SUPABASE_URL === "REMPLACE_PAR_TON_URL_SUPABASE" ||
-        SUPABASE_ANON_KEY === "REMPLACE_PAR_TA_CLE_PUBLIQUE_SUPABASE"
+        SUPABASE_URL === "https://smxjkgcxjzomkqwaaxlr.supabase.co" ||
+        SUPABASE_ANON_KEY === "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX"
       ) {
         showProfileMessage(
           "Configure les identifiants Supabase avec ceux de ton projet pour afficher ton profil."

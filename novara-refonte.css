@@ -485,3 +485,215 @@ footer {
     animation-iteration-count: 1 !important;
   }
 }
+
+/* ===== NOVARA — Communautés ===== */
+
+.community-welcome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: clamp(24px, 5vw, 44px);
+  margin-bottom: 36px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 90% 20%, rgba(0, 225, 255, .13), transparent 38%),
+    radial-gradient(ellipse at 15% 100%, rgba(139, 92, 246, .22), transparent 45%),
+    var(--nv-panel);
+}
+
+.community-welcome-content {
+  max-width: 650px;
+}
+
+.community-welcome h2,
+.community-bottom h2 {
+  margin: 8px 0 12px;
+  font-size: clamp(1.5rem, 3vw, 2.3rem);
+}
+
+.community-welcome p:not(.eyebrow),
+.community-bottom p:not(.eyebrow) {
+  color: var(--nv-muted);
+  line-height: 1.7;
+}
+
+.community-symbol {
+  color: var(--nv-violet);
+  font-size: clamp(5rem, 12vw, 9rem);
+  text-shadow: 0 0 45px rgba(139, 92, 246, .5);
+}
+
+.community-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.community-card {
+  min-width: 0;
+  overflow: hidden;
+  padding: 0;
+  transition: transform .2s ease, border-color .2s ease;
+}
+
+.community-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(139, 92, 246, .65);
+}
+
+.community-art {
+  min-height: 155px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.community-art::before,
+.community-art::after {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 50%;
+}
+
+.community-art::after {
+  width: 125px;
+  height: 125px;
+}
+
+.community-art-purple {
+  background: linear-gradient(135deg, #261447, #7541c8);
+}
+
+.community-art-cyan {
+  background: linear-gradient(135deg, #073c54, #087eab);
+}
+
+.community-art-blue {
+  background: linear-gradient(135deg, #101f56, #3868cf);
+}
+
+.community-art-orange {
+  background: linear-gradient(135deg, #542714, #c76c28);
+}
+
+.community-art-green {
+  background: linear-gradient(135deg, #103d36, #239c7b);
+}
+
+.community-art-pink {
+  background: linear-gradient(135deg, #4b194f, #b94f9f);
+}
+
+.community-game-symbol {
+  position: relative;
+  z-index: 1;
+  font-size: 4rem;
+  font-weight: 900;
+  color: white;
+  text-shadow: 0 4px 25px rgba(0, 0, 0, .35);
+}
+
+.community-category {
+  position: absolute;
+  z-index: 2;
+  left: 14px;
+  top: 14px;
+  padding: 6px 9px;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 7px;
+  background: rgba(5, 7, 18, .48);
+  color: white;
+  font-size: .65rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+
+.community-card-content {
+  padding: 20px;
+}
+
+.community-card-content h3 {
+  margin: 0 0 10px;
+}
+
+.community-card-content p {
+  min-height: 70px;
+  color: var(--nv-muted);
+  font-size: .92rem;
+  line-height: 1.65;
+}
+
+.community-card-content .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.community-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--nv-border);
+  color: var(--nv-cyan);
+  font-weight: 700;
+  font-size: .9rem;
+  text-decoration: none;
+}
+
+.community-link:hover {
+  color: white;
+}
+
+.community-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 36px;
+  padding: 28px;
+}
+
+@media (max-width: 1000px) {
+  .community-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .community-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .community-welcome,
+  .community-bottom {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .community-symbol {
+    display: none;
+  }
+
+  .community-card-content p {
+    min-height: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .community-card {
+    transition: none;
+  }
+
+  .community-card:hover {
+    transform: none;
+  }
+}

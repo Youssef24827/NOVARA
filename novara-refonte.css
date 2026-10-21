@@ -1223,3 +1223,133 @@ footer {
     transition: none;
   }
 }
+
+/* ===== NOVARA — Accueil ===== */
+
+.page-accueil .main-content {
+  min-width: 0;
+}
+
+.page-accueil .hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(26px, 5vw, 52px);
+  border: 1px solid var(--nv-border);
+  border-radius: 22px;
+  background:
+    linear-gradient(100deg, rgba(8, 9, 20, .97), rgba(8, 9, 20, .65)),
+    url("images/fonds/3d-plexus-background.jpg") center / cover no-repeat;
+}
+
+.page-accueil .hero h1 {
+  max-width: 760px;
+  font-size: clamp(2rem, 5vw, 3.7rem);
+  line-height: 1.08;
+  letter-spacing: -.04em;
+}
+
+.page-accueil .hero p {
+  max-width: 620px;
+  color: var(--nv-muted);
+  line-height: 1.75;
+}
+
+.page-accueil .hero .btn,
+.page-accueil .hero button {
+  margin-top: 12px;
+}
+
+.page-accueil .section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 30px 0 18px;
+}
+
+.page-accueil .section-heading h2 {
+  margin: 4px 0;
+  font-size: clamp(1.25rem, 2.5vw, 1.8rem);
+}
+
+.page-accueil .grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.page-accueil .grid > *,
+.page-accueil .card {
+  min-width: 0;
+}
+
+.page-accueil .card {
+  overflow: hidden;
+  border: 1px solid var(--nv-border);
+  border-radius: 17px;
+  background: var(--nv-panel);
+  transition: transform .2s ease, border-color .2s ease;
+}
+
+.page-accueil .card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(139, 92, 246, .65);
+}
+
+.page-accueil .game-icon {
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.page-accueil .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.page-accueil .tag {
+  border: 1px solid var(--nv-border);
+  border-radius: 7px;
+  padding: 5px 9px;
+  color: var(--nv-cyan);
+  background: rgba(0, 225, 255, .06);
+  font-size: .78rem;
+}
+
+.page-accueil a:focus-visible,
+.page-accueil button:focus-visible {
+  outline: 2px solid var(--nv-cyan);
+  outline-offset: 4px;
+}
+
+@media (max-width: 900px) {
+  .page-accueil .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .page-accueil .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-accueil .hero {
+    padding: 24px;
+  }
+
+  .page-accueil .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-accueil .card {
+    transition: none;
+  }
+
+  .page-accueil .card:hover {
+    transform: none;
+  }
+}

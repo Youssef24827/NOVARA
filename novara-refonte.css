@@ -3004,3 +3004,271 @@ body.page-messages .message-list {
     height: 220px;
   }
 }
+
+/* ========================================
+   NOVARA — PAGE EXPLORER
+   ======================================== */
+
+.page-explorer .explorer-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 240px;
+  margin-bottom: 28px;
+  padding: 36px;
+  overflow: hidden;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse at 85% 20%, rgba(124, 58, 237, 0.28), transparent 45%),
+    linear-gradient(135deg, #17152d, #0c0d1c 75%);
+}
+
+.page-explorer .explorer-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 650px;
+}
+
+.page-explorer .explorer-hero h2 {
+  margin: 10px 0;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  line-height: 1.15;
+}
+
+.page-explorer .explorer-hero-content > p:not(.eyebrow) {
+  color: #b9b8ce;
+  line-height: 1.7;
+}
+
+.page-explorer .explorer-hero-symbol {
+  color: #a78bfa;
+  font-size: clamp(5rem, 12vw, 9rem);
+  opacity: 0.75;
+  text-shadow: 0 0 55px rgba(139, 92, 246, 0.5);
+}
+
+.page-explorer .explorer-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 18px;
+  margin: 24px 0;
+}
+
+.page-explorer .explorer-search-wrap,
+.page-explorer .explorer-status-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.page-explorer .explorer-controls label {
+  color: #d8d6eb;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.page-explorer .explorer-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 16px;
+  border: 1px solid rgba(167, 139, 250, 0.22);
+  border-radius: 14px;
+  background: rgba(20, 19, 39, 0.8);
+}
+
+.page-explorer .explorer-search > span {
+  color: #a78bfa;
+  font-size: 1.5rem;
+}
+
+.page-explorer .explorer-search input,
+.page-explorer .explorer-status-wrap select {
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+  border: 1px solid rgba(167, 139, 250, 0.22);
+  border-radius: 14px;
+  outline: none;
+  background: #141327;
+  color: #f4f2ff;
+  font: inherit;
+}
+
+.page-explorer .explorer-search input {
+  min-height: 48px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.page-explorer .explorer-search input::placeholder {
+  color: #85839f;
+}
+
+.page-explorer .explorer-search:focus-within,
+.page-explorer .explorer-status-wrap select:focus {
+  border-color: #a78bfa;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.13);
+}
+
+.page-explorer .explorer-status-wrap select {
+  padding: 0 14px;
+  cursor: pointer;
+}
+
+.page-explorer .explorer-status {
+  margin: 12px 0 24px;
+  color: #aaa8c3;
+  font-size: 0.9rem;
+}
+
+.page-explorer .games-grid {
+  align-items: stretch;
+  gap: 22px;
+}
+
+.page-explorer .game-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(167, 139, 250, 0.16);
+  border-radius: 18px;
+  background: linear-gradient(145deg, #17162b, #10101e);
+  transition: transform 180ms ease, border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.page-explorer .game-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(167, 139, 250, 0.55);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.22);
+}
+
+.page-explorer .game-card img,
+.page-explorer .game-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: #1b1931;
+}
+
+.page-explorer .game-card-content {
+  padding: 18px;
+}
+
+.page-explorer .game-card h3 {
+  margin: 0 0 10px;
+  color: #f4f2ff;
+  font-size: 1.15rem;
+}
+
+.page-explorer .game-card p {
+  color: #aaa8c3;
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+.page-explorer .game-card a {
+  color: #c4b5fd;
+  text-decoration: none;
+}
+
+.page-explorer .game-card a:hover {
+  color: #ddd6fe;
+}
+
+.page-explorer .explorer-placeholder {
+  grid-column: 1 / -1;
+  padding: 38px 24px;
+  border: 1px dashed rgba(167, 139, 250, 0.3);
+  border-radius: 20px;
+  background: rgba(20, 19, 39, 0.55);
+  text-align: center;
+}
+
+.page-explorer .loading-symbol {
+  margin-bottom: 12px;
+  color: #a78bfa;
+  font-size: 2.5rem;
+}
+
+.page-explorer .explorer-placeholder h3 {
+  margin: 0 0 8px;
+}
+
+.page-explorer .explorer-placeholder p {
+  color: #aaa8c3;
+}
+
+.page-explorer .explorer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 42px;
+  padding: 28px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 20px;
+  background: linear-gradient(120deg, #17152b, #10101e);
+}
+
+.page-explorer .explorer-bottom h2 {
+  margin: 8px 0;
+}
+
+.page-explorer .explorer-bottom p:not(.eyebrow) {
+  color: #aaa8c3;
+  line-height: 1.6;
+}
+
+/* Responsive : tablettes et téléphones */
+
+@media (max-width: 760px) {
+  .page-explorer .explorer-hero {
+    min-height: auto;
+    padding: 26px 22px;
+  }
+
+  .page-explorer .explorer-hero-symbol {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    font-size: 5rem;
+    opacity: 0.22;
+  }
+
+  .page-explorer .explorer-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .page-explorer .explorer-bottom {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 22px;
+  }
+
+  .page-explorer .explorer-bottom .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-explorer .explorer-hero {
+    padding: 22px 18px;
+    border-radius: 18px;
+  }
+
+  .page-explorer .explorer-hero h2 {
+    font-size: 1.8rem;
+  }
+
+  .page-explorer .games-grid {
+    gap: 16px;
+  }
+}

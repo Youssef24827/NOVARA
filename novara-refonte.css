@@ -2260,3 +2260,285 @@ body.page-messages [hidden] {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+```css
+/* ==========================================
+   NOVARA — CORRECTION DE LA PAGE COMMUNAUTÉS
+   ========================================== */
+
+html,
+body.page-communautes {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+body.page-communautes .app-layout {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+body.page-communautes .sidebar {
+  position: sticky;
+  top: 0;
+  flex: 0 0 250px;
+  width: 250px;
+  height: 100vh;
+  min-height: 100vh;
+}
+
+body.page-communautes .main-content {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 30px clamp(18px, 3vw, 42px);
+  box-sizing: border-box;
+}
+
+/* En-tête */
+body.page-communautes .page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto 26px;
+  box-sizing: border-box;
+}
+
+body.page-communautes .page-header > div {
+  min-width: 0;
+}
+
+/* Bannière de bienvenue */
+body.page-communautes .community-welcome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  max-width: 1400px;
+  min-width: 0;
+  margin: 0 auto 38px;
+  padding: clamp(22px, 4vw, 42px);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+body.page-communautes .community-welcome-content {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+body.page-communautes .community-welcome h2,
+body.page-communautes .community-welcome p {
+  overflow-wrap: anywhere;
+}
+
+body.page-communautes .community-symbol {
+  flex: 0 0 auto;
+  font-size: clamp(48px, 7vw, 90px);
+  line-height: 1;
+}
+
+/* Section des communautés */
+body.page-communautes .content-section {
+  width: 100%;
+  max-width: 1400px;
+  min-width: 0;
+  margin: 0 auto 38px;
+  box-sizing: border-box;
+}
+
+body.page-communautes .section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+body.page-communautes .section-heading > div {
+  min-width: 0;
+}
+
+/* Grille des six cartes */
+body.page-communautes .community-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 22px;
+  width: 100%;
+  min-width: 0;
+}
+
+body.page-communautes .community-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+body.page-communautes .community-art {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  min-height: 145px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+body.page-communautes .community-game-symbol {
+  font-size: clamp(36px, 4vw, 58px);
+  font-weight: 800;
+  line-height: 1;
+}
+
+body.page-communautes .community-category {
+  max-width: 60%;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+body.page-communautes .community-card-content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  padding: 22px;
+  box-sizing: border-box;
+}
+
+body.page-communautes .community-card-content h3,
+body.page-communautes .community-card-content p {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+body.page-communautes .community-card-content .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 100%;
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+body.page-communautes .community-card-content .tag {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+body.page-communautes .community-link {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 100%;
+  margin-top: 18px;
+  overflow-wrap: anywhere;
+}
+
+/* Bannière du bas */
+body.page-communautes .community-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 100%;
+  max-width: 1400px;
+  min-width: 0;
+  margin: 0 auto;
+  padding: clamp(22px, 3vw, 32px);
+  box-sizing: border-box;
+}
+
+body.page-communautes .community-bottom > div {
+  flex: 1 1 280px;
+  min-width: 0;
+}
+
+body.page-communautes .community-bottom h2,
+body.page-communautes .community-bottom p {
+  overflow-wrap: anywhere;
+}
+
+/* Tablettes */
+@media (max-width: 1050px) {
+  body.page-communautes .sidebar {
+    flex-basis: 210px;
+    width: 210px;
+  }
+
+  body.page-communautes .community-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+}
+
+/* Mobiles */
+@media (max-width: 700px) {
+  body.page-communautes .app-layout {
+    display: block;
+  }
+
+  body.page-communautes .sidebar {
+    display: none;
+  }
+
+  body.page-communautes .main-content {
+    width: 100%;
+    padding: 22px 14px 100px;
+  }
+
+  body.page-communautes .page-header {
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  body.page-communautes .community-welcome {
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 28px;
+    padding: 22px 18px;
+  }
+
+  body.page-communautes .community-symbol {
+    font-size: 42px;
+  }
+
+  body.page-communautes .community-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  body.page-communautes .community-art {
+    min-height: 120px;
+  }
+
+  body.page-communautes .community-card-content {
+    padding: 18px;
+  }
+
+  body.page-communautes .community-bottom {
+    align-items: flex-start;
+    padding: 22px 18px;
+  }
+}

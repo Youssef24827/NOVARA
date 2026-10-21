@@ -1107,3 +1107,119 @@ footer {
     display: none;
   }
 }
+
+/* ===== NOVARA — Défis ===== */
+
+.page-defis .main-content {
+  min-width: 0;
+}
+
+.page-defis .page-header {
+  margin-bottom: 28px;
+}
+
+.page-defis .challenge-hero,
+.page-defis .defis-hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(24px, 5vw, 42px);
+  border: 1px solid var(--nv-border);
+  border-radius: 20px;
+  background:
+    radial-gradient(ellipse at 90% 20%, rgba(0, 225, 255, .14), transparent 38%),
+    radial-gradient(ellipse at 15% 100%, rgba(139, 92, 246, .25), transparent 48%),
+    var(--nv-panel);
+}
+
+.page-defis .challenge-hero h2,
+.page-defis .defis-hero h2 {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  margin: 8px 0 12px;
+}
+
+.page-defis .challenge-hero p,
+.page-defis .defis-hero p {
+  color: var(--nv-muted);
+  line-height: 1.7;
+}
+
+.page-defis .card {
+  transition: border-color .2s ease, transform .2s ease;
+}
+
+.page-defis .card:hover {
+  border-color: rgba(139, 92, 246, .55);
+}
+
+.page-defis button,
+.page-defis a.btn {
+  transition: transform .2s ease, filter .2s ease;
+}
+
+.page-defis button:hover,
+.page-defis a.btn:hover {
+  filter: brightness(1.12);
+}
+
+.page-defis button:active {
+  transform: scale(.98);
+}
+
+.page-defis progress {
+  width: 100%;
+  height: 9px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, .09);
+  accent-color: var(--nv-violet);
+}
+
+.page-defis progress::-webkit-progress-bar {
+  border-radius: 99px;
+  background: rgba(255, 255, 255, .09);
+}
+
+.page-defis progress::-webkit-progress-value {
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--nv-violet), var(--nv-cyan));
+}
+
+.page-defis progress::-moz-progress-bar {
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--nv-violet), var(--nv-cyan));
+}
+
+.page-defis .challenge-grid,
+.page-defis .missions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.page-defis .challenge-grid > *,
+.page-defis .missions-grid > * {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .page-defis .challenge-grid,
+  .page-defis .missions-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .page-defis .challenge-grid,
+  .page-defis .missions-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-defis .card,
+  .page-defis button,
+  .page-defis a.btn {
+    transition: none;
+  }
+}

@@ -4,284 +4,250 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#07050d">
+  <meta name="theme-color" content="#080914">
   <title>Mon profil | NOVARA</title>
 
-  <style>
-    html.auth-checking body {
-      visibility: hidden;
-    }
-  </style>
-
-  <script>
-    document.documentElement.classList.add("auth-checking");
-  </script>
-
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="novara-refonte.css">
+</head>
+
+<body class="page-profil">
+
+  <div class="app-layout">
+
+    <aside class="sidebar">
+      <a class="logo" href="index.html" aria-label="NOVARA - Accueil">
+        NOVARA<span>.</span>
+      </a>
+
+      <nav class="sidebar-nav" aria-label="Navigation principale">
+        <a href="index.html">
+          <span>⌂</span> Accueil
+        </a>
+        <a href="explorer.html">
+          <span>◈</span> Explorer
+        </a>
+        <a href="communautes.html">
+          <span>♧</span> Communautés
+        </a>
+        <a href="defis.html">
+          <span>⚡</span> Défis
+        </a>
+        <a href="messages.html">
+          <span>✉</span> Messages
+        </a>
+        <a href="profil.html" class="active" aria-current="page">
+          <span>◎</span> Mon profil
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <p>Joue. Explore. Connecte-toi.</p>
+        <span>NOVARA © 2026</span>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">ESPACE PERSONNEL</p>
+          <h1>Mon profil</h1>
+          <p class="page-description">
+            Retrouve tes informations et gère ton compte NOVARA.
+          </p>
+        </div>
+
+        <a class="btn btn-secondary" href="index.html">
+          Retour à l’accueil
+        </a>
+      </header>
+
+      <section class="profile-card card">
+        <div class="profile-cover"></div>
+
+        <div class="profile-content">
+          <div class="profile-avatar" id="avatar" aria-hidden="true">
+            N
+          </div>
+
+          <div class="profile-heading">
+            <p class="eyebrow">MON COMPTE NOVARA</p>
+            <h2 id="username">Chargement du profil…</h2>
+            <p id="userEmail">Chargement de l’adresse e-mail…</p>
+          </div>
+        </div>
+
+        <div class="profile-details">
+          <div class="profile-detail">
+            <span class="detail-label">Pseudo</span>
+            <strong id="pseudoValue">—</strong>
+          </div>
+
+          <div class="profile-detail">
+            <span class="detail-label">Adresse e-mail</span>
+            <strong id="emailValue">—</strong>
+          </div>
+
+          <div class="profile-detail">
+            <span class="detail-label">Compte créé le</span>
+            <strong id="createdAt">—</strong>
+          </div>
+        </div>
+
+        <p
+          id="profileMessage"
+          class="notice"
+          role="status"
+          aria-live="polite"
+        ></p>
+
+        <div class="profile-actions">
+          <button
+            id="logoutButton"
+            class="btn btn-primary"
+            type="button"
+          >
+            Se déconnecter
+          </button>
+        </div>
+      </section>
+
+      <section class="card profile-info-card">
+        <p class="eyebrow">BIENVENUE DANS LA COMMUNAUTÉ</p>
+        <h2>Prêt pour la prochaine partie ?</h2>
+        <p>
+          Explore les jeux, découvre les communautés et relève de nouveaux défis.
+        </p>
+
+        <div class="profile-links">
+          <a class="btn btn-secondary" href="explorer.html">
+            Explorer les jeux
+          </a>
+          <a class="btn btn-secondary" href="defis.html">
+            Voir les défis
+          </a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <nav class="mobile-nav" aria-label="Navigation mobile">
+    <a href="index.html">Accueil</a>
+    <a href="explorer.html">Explorer</a>
+    <a href="communautes.html">Communautés</a>
+    <a href="defis.html">Défis</a>
+    <a href="messages.html">Messages</a>
+    <a href="profil.html" aria-current="page">Profil</a>
+  </nav>
+
+  <!-- Supabase doit être chargé avant le script du profil. -->
+  <!-- Conserve ici la même version de Supabase que dans ton projet. -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="auth.js"></script>
-</head>
-
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#07050d">
-  <title>Mon profil | NOVARA</title>
-  <link rel="stylesheet" href="style.css">
-
-  <style>
-    .profile-page {
-      width: min(900px, calc(100% - 32px));
-      margin: 50px auto;
-    }
-
-    .profile-header {
-      text-align: center;
-      margin-bottom: 28px;
-    }
-
-    .profile-header h1 {
-      color: #d0a0ff;
-      text-shadow: 0 0 20px rgba(168, 85, 255, 0.35);
-    }
-
-    .profile-panel {
-      padding: 30px;
-      border: 1px solid rgba(168, 85, 255, 0.3);
-      border-radius: 20px;
-      background: rgba(17, 11, 32, 0.92);
-      box-shadow: 0 0 35px rgba(124, 58, 237, 0.12);
-    }
-
-    .profile-avatar {
-      display: flex;
-      width: 110px;
-      height: 110px;
-      margin: 0 auto 18px;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      border: 2px solid #a855ff;
-      border-radius: 50%;
-      background: #1b1030;
-      color: #d0a0ff;
-      font-size: 2.5rem;
-      font-weight: 800;
-      box-shadow: 0 0 24px rgba(168, 85, 255, 0.25);
-    }
-
-    .profile-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .profile-name {
-      margin: 0;
-      text-align: center;
-      font-size: 1.8rem;
-      overflow-wrap: anywhere;
-    }
-
-    .profile-email {
-      margin: 8px 0 26px;
-      color: #aaa0bb;
-      text-align: center;
-      overflow-wrap: anywhere;
-    }
-
-    .profile-info {
-      display: grid;
-      gap: 14px;
-      margin-top: 24px;
-    }
-
-    .info-item {
-      padding: 15px;
-      border: 1px solid #30203f;
-      border-radius: 12px;
-      background: rgba(7, 5, 13, 0.7);
-    }
-
-    .info-label {
-      display: block;
-      margin-bottom: 6px;
-      color: #a99ab9;
-      font-size: 0.9rem;
-    }
-
-    .info-value {
-      color: #f4edff;
-      overflow-wrap: anywhere;
-    }
-
-    .profile-actions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 25px;
-    }
-
-    .profile-button {
-      display: inline-block;
-      padding: 12px 18px;
-      border: 1px solid #7540a5;
-      border-radius: 10px;
-      background: #211332;
-      color: #eee0ff;
-      font: inherit;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .profile-button.primary {
-      border-color: transparent;
-      background: linear-gradient(100deg, #7c3aed, #a855ff);
-      color: white;
-    }
-
-    .profile-button:disabled {
-      opacity: 0.6;
-      cursor: wait;
-    }
-
-    .profile-message {
-      margin-top: 18px;
-      color: #d0a0ff;
-      text-align: center;
-      overflow-wrap: anywhere;
-    }
-
-    @media (max-width: 520px) {
-      .profile-panel {
-        padding: 22px 16px;
-      }
-
-      .profile-actions {
-        flex-direction: column;
-      }
-
-      .profile-button {
-        text-align: center;
-      }
-    }
-  </style>
-</head>
-
-<body>
-  <main class="profile-page">
-    <header class="profile-header">
-      <h1>Mon profil NOVARA</h1>
-      <p>Ton espace personnel dans l'univers gaming.</p>
-    </header>
-
-    <section class="profile-panel">
-      <div class="profile-avatar" id="avatar">N</div>
-
-      <h2 class="profile-name" id="username">Chargement...</h2>
-      <p class="profile-email" id="userEmail"></p>
-
-      <div class="profile-info">
-        <div class="info-item">
-          <span class="info-label">Pseudo</span>
-          <span class="info-value" id="pseudoValue">Chargement...</span>
-        </div>
-
-        <div class="info-item">
-          <span class="info-label">Adresse e-mail</span>
-          <span class="info-value" id="emailValue">Chargement...</span>
-        </div>
-
-        <div class="info-item">
-          <span class="info-label">Compte créé le</span>
-          <span class="info-value" id="createdAt">Chargement...</span>
-        </div>
-      </div>
-
-      <p class="profile-message" id="profileMessage" role="status" aria-live="polite"></p>
-
-      <div class="profile-actions">
-        <a class="profile-button primary" href="index.html">Accueil</a>
-        <a class="profile-button" href="explorer.html">Explorer les jeux</a>
-        <button class="profile-button" id="logoutButton" type="button">
-          Se déconnecter
-        </button>
-      </div>
-    </section>
-  </main>
 
   <script>
-    const SUPABASE_URL = "https://smxjkgcxjzomkqwaaxlr.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX";
+    const SUPABASE_URL = "https://smxjkgcxjzomkqwaaxlr.supabase.co/rest/v1/";
+    const SUPABASE_ANON_KEY = "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX";
 
-    const client = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
-
-    const message = document.getElementById("profileMessage");
+    const profileMessage = document.getElementById("profileMessage");
     const logoutButton = document.getElementById("logoutButton");
 
-    async function loadProfile() {
-      message.textContent = "Vérification de ta session...";
+    function showProfileMessage(message) {
+      profileMessage.textContent = message;
+    }
+
+    function formatCreationDate(dateString) {
+      if (!dateString) return "Non disponible";
+
+      const date = new Date(dateString);
+
+      if (Number.isNaN(date.getTime())) {
+        return "Non disponible";
+      }
+
+      return new Intl.DateTimeFormat("fr-FR", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      }).format(date);
+    }
+
+    async function initializeProfile() {
+      if (
+        SUPABASE_URL === "REMPLACE_PAR_TON_URL_SUPABASE" ||
+        SUPABASE_ANON_KEY === "REMPLACE_PAR_TA_CLE_PUBLIQUE_SUPABASE"
+      ) {
+        showProfileMessage(
+          "Configure les identifiants Supabase avec ceux de ton projet pour afficher ton profil."
+        );
+        return;
+      }
+
+      if (!window.supabase) {
+        showProfileMessage(
+          "Impossible de charger Supabase. Vérifie ta connexion et recharge la page."
+        );
+        return;
+      }
+
+      const client = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+      );
 
       try {
         const { data, error } = await client.auth.getUser();
 
         if (error || !data.user) {
-          window.location.replace("connexion.html");
+          window.location.href = "connexion.html";
           return;
         }
 
         const user = data.user;
-        const username =
-          user.user_metadata?.username ||
-          user.user_metadata?.pseudo ||
+        const metadata = user.user_metadata || {};
+        const pseudo =
+          metadata.username ||
+          metadata.pseudo ||
+          metadata.full_name ||
           (user.email ? user.email.split("@")[0] : "Joueur NOVARA");
 
-        document.getElementById("username").textContent = username;
-        document.getElementById("pseudoValue").textContent = username;
-        document.getElementById("userEmail").textContent = user.email || "";
-        document.getElementById("emailValue").textContent = user.email || "Non renseignée";
-
-        document.getElementById("avatar").textContent =
-          username.charAt(0).toUpperCase() || "N";
-
+        document.getElementById("username").textContent = pseudo;
+        document.getElementById("userEmail").textContent =
+          user.email || "Adresse e-mail non disponible";
+        document.getElementById("pseudoValue").textContent = pseudo;
+        document.getElementById("emailValue").textContent =
+          user.email || "Non disponible";
         document.getElementById("createdAt").textContent =
-          user.created_at
-            ? new Date(user.created_at).toLocaleDateString("fr-FR", {
-                day: "numeric",
-                month: "long",
-                year: "numeric"
-              })
-            : "Indisponible";
+          formatCreationDate(user.created_at);
+        document.getElementById("avatar").textContent =
+          pseudo.trim().charAt(0).toUpperCase() || "N";
 
-        message.textContent = "";
+        logoutButton.addEventListener("click", async () => {
+          logoutButton.disabled = true;
+          logoutButton.textContent = "Déconnexion…";
+
+          const { error: logoutError } = await client.auth.signOut();
+
+          if (logoutError) {
+            showProfileMessage(
+              "La déconnexion a échoué. Réessaie dans quelques instants."
+            );
+            logoutButton.disabled = false;
+            logoutButton.textContent = "Se déconnecter";
+            return;
+          }
+
+          window.location.href = "connexion.html";
+        });
       } catch (error) {
-        message.textContent = "Impossible de charger le profil. Réessaie.";
+        console.error("Erreur de chargement du profil :", error);
+        showProfileMessage(
+          "Une erreur est survenue lors du chargement du profil."
+        );
       }
     }
 
-    logoutButton.addEventListener("click", async function () {
-      logoutButton.disabled = true;
-      logoutButton.textContent = "Déconnexion...";
-
-      try {
-        const { error } = await client.auth.signOut();
-
-        if (error) {
-          throw error;
-        }
-
-        window.location.replace("connexion.html");
-      } catch (error) {
-        message.textContent = "La déconnexion a échoué. Réessaie.";
-        logoutButton.disabled = false;
-        logoutButton.textContent = "Se déconnecter";
-      }
-    });
-
-    loadProfile();
+    initializeProfile();
   </script>
+
 </body>
 </html>

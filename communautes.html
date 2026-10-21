@@ -9,10 +9,195 @@
 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="novara-refonte.css">
+
+  <style>
+    .community-tools {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+
+    .community-form {
+      display: grid;
+      gap: 14px;
+      padding: 22px;
+      margin-bottom: 24px;
+    }
+
+    .community-form[hidden],
+    .community-chat[hidden] {
+      display: none !important;
+    }
+
+    .community-form label {
+      display: grid;
+      gap: 7px;
+      font-weight: 600;
+    }
+
+    .community-form input,
+    .community-form select,
+    .community-form textarea,
+    .community-chat textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid rgba(160, 160, 210, .25);
+      border-radius: 10px;
+      background: #101122;
+      color: #fff;
+      font: inherit;
+    }
+
+    .community-form textarea,
+    .community-chat textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .community-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .community-action {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px 14px;
+      border: 1px solid rgba(160, 160, 210, .3);
+      border-radius: 9px;
+      background: #17182d;
+      color: #fff;
+      font: inherit;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .community-action.primary {
+      background: #7861ff;
+      border-color: #7861ff;
+    }
+
+    .community-action:disabled {
+      opacity: .55;
+      cursor: wait;
+    }
+
+    .community-status {
+      margin: 12px 0;
+      color: #c5c5dd;
+      overflow-wrap: anywhere;
+    }
+
+    .community-status.error {
+      color: #ff929c;
+    }
+
+    .community-status.success {
+      color: #8ce6b0;
+    }
+
+    .community-chat {
+      padding: 22px;
+      margin-top: 28px;
+    }
+
+    .community-chat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .community-chat-messages {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 380px;
+      overflow-y: auto;
+      padding: 12px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(160, 160, 210, .15);
+      border-radius: 12px;
+      background: rgba(5, 6, 18, .35);
+    }
+
+    .community-message {
+      padding: 12px;
+      border-radius: 10px;
+      background: rgba(120, 97, 255, .10);
+      overflow-wrap: anywhere;
+    }
+
+    .community-message.own {
+      background: rgba(120, 97, 255, .22);
+    }
+
+    .community-message-meta {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 6px;
+      color: #b8b7d4;
+      font-size: .8rem;
+    }
+
+    .community-message p {
+      margin: 0;
+      white-space: pre-wrap;
+    }
+
+    .community-chat-form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .community-empty {
+      padding: 22px;
+      text-align: center;
+      border: 1px dashed rgba(160, 160, 210, .3);
+      border-radius: 14px;
+      color: #c5c5dd;
+    }
+
+    .community-game-label {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 5px 9px;
+      border-radius: 20px;
+      background: rgba(120, 97, 255, .14);
+      color: #d6ceff;
+      font-size: .8rem;
+    }
+
+    @media (max-width: 600px) {
+      .community-form,
+      .community-chat {
+        padding: 16px;
+      }
+
+      .community-actions > * {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js" defer></script>
+  <script src="communautes.js" defer></script>
 </head>
 
 <body class="page-communautes">
-
   <div class="app-layout">
     <aside class="sidebar">
       <a class="logo" href="index.html" aria-label="NOVARA - Accueil">
@@ -42,7 +227,7 @@
           <p class="eyebrow">JOUE ENSEMBLE</p>
           <h1>Communautés</h1>
           <p class="page-description">
-            Retrouve les joueurs qui partagent tes univers préférés.
+            Crée ton groupe, retrouve d'autres joueurs et discute avec eux.
           </p>
         </div>
 
@@ -56,167 +241,142 @@
           <p class="eyebrow">TA PROCHAINE ÉQUIPE T’ATTEND</p>
           <h2>Les meilleurs moments se jouent ensemble.</h2>
           <p>
-            Explore les univers gaming, trouve des coéquipiers et fais
-            grandir ta communauté.
+            Crée une communauté autour de ton jeu préféré et rassemble tes
+            futurs coéquipiers.
           </p>
-          <a href="messages.html" class="btn btn-primary">
-            Accéder aux messages
-          </a>
+          <button class="btn btn-primary" id="show-create-community" type="button">
+            + Créer une communauté
+          </button>
         </div>
         <div class="community-symbol" aria-hidden="true">✦</div>
       </section>
 
       <section class="content-section">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">TES UNIVERS</p>
-            <h2>Communautés gaming</h2>
+        <div class="community-tools">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">TES UNIVERS</p>
+              <h2>Communautés gaming</h2>
+            </div>
           </div>
-          <span class="section-count">6 univers</span>
+
+          <button class="community-action" id="refresh-communities" type="button">
+            ↻ Actualiser
+          </button>
         </div>
 
-        <div class="community-grid">
+        <p id="community-status" class="community-status" role="status" aria-live="polite">
+          Chargement des communautés…
+        </p>
 
-          <article class="community-card card">
-            <div class="community-art community-art-purple">
-              <span class="community-game-symbol">V</span>
-              <span class="community-category">COMPÉTITIF</span>
-            </div>
-            <div class="community-card-content">
-              <h3>Valorant</h3>
-              <p>
-                Stratégie, précision et esprit d’équipe. Prépare ta prochaine
-                partie avec d’autres joueurs.
-              </p>
-              <div class="tags">
-                <span class="tag">FPS</span>
-                <span class="tag">Tactique</span>
-              </div>
-              <a href="messages.html" class="community-link">
-                Rejoindre la discussion <span>↗</span>
-              </a>
-            </div>
-          </article>
+        <form id="create-community-form" class="community-form card" hidden>
+          <div>
+            <p class="eyebrow">NOUVEAU GROUPE</p>
+            <h2>Créer une communauté</h2>
+            <p>Choisis un nom, un jeu et présente ton groupe.</p>
+          </div>
 
-          <article class="community-card card">
-            <div class="community-art community-art-cyan">
-              <span class="community-game-symbol">F</span>
-              <span class="community-category">MULTIJOUEUR</span>
-            </div>
-            <div class="community-card-content">
-              <h3>Fortnite</h3>
-              <p>
-                Construis ta stratégie, forme ton équipe et partage tes
-                meilleurs moments.
-              </p>
-              <div class="tags">
-                <span class="tag">Battle Royale</span>
-                <span class="tag">Fun</span>
-              </div>
-              <a href="messages.html" class="community-link">
-                Rejoindre la discussion <span>↗</span>
-              </a>
-            </div>
-          </article>
+          <label for="community-name">
+            Nom de la communauté
+            <input
+              id="community-name"
+              name="name"
+              type="text"
+              minlength="3"
+              maxlength="50"
+              placeholder="Ex. Les explorateurs"
+              required
+            >
+          </label>
 
-          <article class="community-card card">
-            <div class="community-art community-art-blue">
-              <span class="community-game-symbol">M</span>
-              <span class="community-category">AVENTURE</span>
-            </div>
-            <div class="community-card-content">
-              <h3>Minecraft</h3>
-              <p>
-                Partage tes constructions, découvre de nouveaux mondes et
-                imagine tes prochains projets.
-              </p>
-              <div class="tags">
-                <span class="tag">Créatif</span>
-                <span class="tag">Survie</span>
-              </div>
-              <a href="messages.html" class="community-link">
-                Rejoindre la discussion <span>↗</span>
-              </a>
-            </div>
-          </article>
+          <label for="community-game">
+            Jeu principal
+            <select id="community-game" name="game" required>
+              <option value="Valorant">Valorant</option>
+              <option value="Fortnite">Fortnite</option>
+              <option value="Minecraft">Minecraft</option>
+              <option value="Rocket League">Rocket League</option>
+              <option value="Apex Legends">Apex Legends</option>
+              <option value="Genshin Impact">Genshin Impact</option>
+              <option value="Autre" selected>Autre</option>
+            </select>
+          </label>
 
-          <article class="community-card card">
-            <div class="community-art community-art-orange">
-              <span class="community-game-symbol">R</span>
-              <span class="community-category">SPORT</span>
-            </div>
-            <div class="community-card-content">
-              <h3>Rocket League</h3>
-              <p>
-                Des matchs intenses, des passes millimétrées et des buts
-                spectaculaires.
-              </p>
-              <div class="tags">
-                <span class="tag">Compétitif</span>
-                <span class="tag">Équipe</span>
-              </div>
-              <a href="messages.html" class="community-link">
-                Rejoindre la discussion <span>↗</span>
-              </a>
-            </div>
-          </article>
+          <label for="community-description">
+            Description
+            <textarea
+              id="community-description"
+              name="description"
+              minlength="1"
+              maxlength="500"
+              placeholder="Présente ta communauté et ce que vous aimez faire…"
+              required
+            ></textarea>
+          </label>
 
-          <article class="community-card card">
-            <div class="community-art community-art-green">
-              <span class="community-game-symbol">A</span>
-              <span class="community-category">SURVIE</span>
-            </div>
-            <div class="community-card-content">
-              <h3>Apex Legends</h3>
-              <p>
-                Coordonne ton escouade, perfectionne tes tactiques et relève
-                de nouveaux défis.
-              </p>
-              <div class="tags">
-                <span class="tag">FPS</span>
-                <span class="tag">Escouade</span>
-              </div>
-              <a href="messages.html" class="community-link">
-                Rejoindre la discussion <span>↗</span>
-              </a>
-            </div>
-          </article>
+          <div class="community-actions">
+            <button class="community-action primary" type="submit">
+              Créer le groupe
+            </button>
+            <button class="community-action" id="cancel-create-community" type="button">
+              Annuler
+            </button>
+          </div>
+        </form>
 
-          <article class="community-card card">
-            <div class="community-art community-art-pink">
-              <span class="community-game-symbol">G</span>
-              <span class="community-category">AVENTURE</span>
-            </div>
-            <div class="community-card-content">
-              <h3>Genshin Impact</h3>
-              <p>
-                Explore de nouveaux territoires et partage tes découvertes
-                avec d’autres aventuriers.
-              </p>
-              <div class="tags">
-                <span class="tag">RPG</span>
-                <span class="tag">Exploration</span>
-              </div>
-              <a href="messages.html" class="community-link">
-                Rejoindre la discussion <span>↗</span>
-              </a>
-            </div>
-          </article>
-
+        <div id="community-grid" class="community-grid">
+          <p class="community-empty">Chargement des communautés…</p>
         </div>
+      </section>
+
+      <section id="community-chat" class="community-chat card" hidden>
+        <div class="community-chat-header">
+          <div>
+            <p class="eyebrow">ESPACE MEMBRES</p>
+            <h2 id="community-chat-title">Discussion</h2>
+            <p id="community-chat-description"></p>
+          </div>
+
+          <button id="close-community-chat" class="community-action" type="button">
+            Fermer
+          </button>
+        </div>
+
+        <div
+          id="community-chat-messages"
+          class="community-chat-messages"
+          role="log"
+          aria-live="polite"
+          aria-label="Messages de la communauté"
+        >
+          <p class="community-empty">Chargement des messages…</p>
+        </div>
+
+        <form id="community-chat-form" class="community-chat-form">
+          <label for="community-message-input">Ton message</label>
+          <textarea
+            id="community-message-input"
+            name="message"
+            maxlength="2000"
+            placeholder="Écris un message aux membres…"
+            required
+          ></textarea>
+          <button class="community-action primary" type="submit">
+            Envoyer le message
+          </button>
+        </form>
       </section>
 
       <section class="community-bottom card">
         <div>
           <p class="eyebrow">RESTE CONNECTÉ</p>
           <h2>Prêt à retrouver tes coéquipiers ?</h2>
-          <p>Consulte tes conversations et continue à jouer ensemble.</p>
+          <p>Rejoins un groupe et échange avec ses membres.</p>
         </div>
         <a href="messages.html" class="btn btn-primary">
-          Ouvrir les messages
+          Ouvrir les messages privés
         </a>
       </section>
-
     </main>
   </div>
 
@@ -228,6 +388,5 @@
     <a href="messages.html">Messages</a>
     <a href="profil.html">Profil</a>
   </nav>
-
 </body>
 </html>

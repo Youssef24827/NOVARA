@@ -7,25 +7,77 @@
   <meta name="theme-color" content="#090914">
   <meta name="description" content="Découvre les défis gaming de NOVARA.">
   <title>NOVARA — Défis</title>
+
   <link rel="stylesheet" href="style.css">
   <script src="app.js" defer></script>
-  
-<style>
-  html.auth-checking body {
-    visibility: hidden;
-  }
-</style>
-<script>
-  document.documentElement.classList.add("auth-checking");
-</script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="auth.js"></script>
 
+  <script>
+    document.documentElement.classList.add("auth-checking");
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
+
+  <style>
+    html.auth-checking body {
+      visibility: hidden;
+    }
+
+    .daily-challenges {
+      margin-top: 32px;
+    }
+
+    .daily-progress {
+      margin: 20px 0;
+      color: #d8c4ff;
+      font-weight: 700;
+    }
+
+    .daily-complete {
+      display: block;
+      width: 100%;
+      margin-top: 16px;
+      padding: 12px 16px;
+      border: 1px solid #9c68ff;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #7138cf, #5126a0);
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity .2s, transform .2s;
+    }
+
+    .daily-complete:hover:not(:disabled) {
+      transform: translateY(-2px);
+    }
+
+    .daily-complete:focus-visible {
+      outline: 2px solid #d8c4ff;
+      outline-offset: 3px;
+    }
+
+    .daily-complete:disabled {
+      background: #242039;
+      border-color: #514567;
+      color: #c9b9e9;
+      cursor: default;
+      opacity: .9;
+    }
+
+    .daily-note {
+      margin-top: 22px;
+      color: #c9b9e9;
+      line-height: 1.7;
+    }
+  </style>
 </head>
+
 <body>
   <aside class="sidebar">
     <a class="logo" href="index.html">NOVA<span class="gradient">RA</span></a>
+
     <div class="nav-label">Menu principal</div>
+
     <nav class="nav">
       <a href="index.html"><span class="ico">⌂</span> Accueil</a>
       <a href="explorer.html"><span class="ico">◈</span> Explorer</a>
@@ -34,6 +86,7 @@
       <a href="messages.html"><span class="ico">✉</span> Appels & Messages</a>
       <a href="profil.html"><span class="ico">◎</span> Profil</a>
     </nav>
+
     <div class="sidebar-bottom">
       <strong>NOVARA UNIVERSE</strong><br>
       Explore. Joue. Connecte-toi.<br>
@@ -44,13 +97,17 @@
   <main class="main">
     <div class="mobile-top">
       <a class="logo" href="index.html">NOVARA</a>
-      <button class="hamburger" data-menu-toggle aria-label="Ouvrir le menu">☰</button>
+      <button class="hamburger" data-menu-toggle
+        aria-label="Ouvrir le menu">☰</button>
     </div>
 
     <header class="page-head">
       <div class="eyebrow">✦ À toi de jouer</div>
       <h1>Relève les <span class="gradient">défis.</span></h1>
-      <p>Découvre les catégories de défis prévues pour NOVARA et prépare-toi à tester tes compétences gaming.</p>
+      <p>
+        Accomplis tes missions gaming et suis ta progression
+        quotidienne sur NOVARA.
+      </p>
     </header>
 
     <section class="grid">
@@ -85,120 +142,276 @@
       </article>
     </section>
 
-<section class="daily-challenges" id="daily-challenges">
-  <div class="eyebrow">⚡ MISSION DU JOUR</div>
-  <h2> tes défis quotidiens<span class="gradient">.</span></h2>
-  <p>Relève les missions d'aujourd'hui et progresse à ton rythme.</p>
+    <section class="daily-challenges" id="daily-challenges">
+      <div class="eyebrow">⚡ MISSION DU JOUR</div>
 
-  <div class="grid">
-    <article class="card">
-      <div class="game-icon">🎯</div>
-      <h3>Œil de précision</h3>
-      <p>Joue une partie en te concentrant sur la précision de tes actions.</p>
-      <div class="tags">
-        <span class="tag">Facile</span>
-        <span class="tag">+50 XP</span>
+      <h2>Tes défis quotidiens<span class="gradient">.</span></h2>
+
+      <p>Relève les missions du jour et suis ta progression.</p>
+
+      <div class="grid">
+        <article class="card">
+          <div class="game-icon">🎯</div>
+          <h3>Œil de précision</h3>
+          <p>Joue une partie en te concentrant sur la précision.</p>
+          <div class="tags">
+            <span class="tag">Facile</span>
+            <span class="tag">+50 XP</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="game-icon">🧠</div>
+          <h3>Esprit tactique</h3>
+          <p>Essaie une nouvelle stratégie pendant ta partie.</p>
+          <div class="tags">
+            <span class="tag">Moyen</span>
+            <span class="tag">+75 XP</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="game-icon">🤝</div>
+          <h3>Allié fidèle</h3>
+          <p>Privilégie la coopération avec ton équipe.</p>
+          <div class="tags">
+            <span class="tag">Moyen</span>
+            <span class="tag">+100 XP</span>
+          </div>
+        </article>
       </div>
-    </article>
 
-    <article class="card">
-      <div class="game-icon">🧠</div>
-      <h3>Esprit tactique</h3>
-      <p>Essaie une nouvelle stratégie lors de ta prochaine partie.</p>
-      <div class="tags">
-        <span class="tag">Moyen</span>
-        <span class="tag">+75 XP</span>
-      </div>
-    </article>
-
-    <article class="card">
-      <div class="game-icon">🤝</div>
-      <h3>Allié fidèle</h3>
-      <p>Participe à une partie en privilégiant la coopération avec ton équipe.</p>
-      <div class="tags">
-        <span class="tag">Moyen</span>
-        <span class="tag">+100 XP</span>
-      </div>
-    </article>
-  </div>
-
-  <p class="daily-note">
-    💜 Les missions sont proposées chaque jour. La validation et les récompenses automatiques seront ajoutées ensuite.
-  </p>
-</section>
+      <p class="daily-note" role="status" aria-live="polite">
+        Les défis du jour sont prêts !
+      </p>
+    </section>
 
     <section style="margin-top:28px">
       <div class="notice">
-        <h3>Les défis arrivent bientôt.</h3>
-        Cette page est actuellement une maquette. Les scores, les récompenses, les classements et la validation des défis ne sont pas encore activés.
+        <h3>La suite arrive bientôt !</h3>
+        La validation actuelle est enregistrée sur cet appareil.
+        Les XP ne sont pas encore crédités au compte et les défis
+        ne sont pas vérifiés automatiquement.
       </div>
     </section>
 
-    <footer>© <span data-year></span> NOVARA · Chaque partie est une nouvelle aventure.</footer>
+    <footer>
+      © <span data-year></span> NOVARA · Chaque partie est une nouvelle aventure.
+    </footer>
   </main>
-  
-<script>
-(() => {
-  const missions = [
-    [
-      { icon: "🎯", title: "Œil de précision", description: "Joue une partie en te concentrant sur la précision.", difficulty: "Facile", xp: 50 },
-      { icon: "🧠", title: "Esprit tactique", description: "Essaie une nouvelle stratégie lors de ta prochaine partie.", difficulty: "Moyen", xp: 75 },
-      { icon: "🤝", title: "Allié fidèle", description: "Privilégie la coopération avec ton équipe.", difficulty: "Moyen", xp: 100 }
-    ],
-    [
-      { icon: "⚡", title: "Réflexes éclair", description: "Reste attentif et réagis rapidement pendant une partie.", difficulty: "Facile", xp: 50 },
-      { icon: "🏆", title: "Objectif victoire", description: "Fais de ton mieux pour atteindre l'objectif de ta partie.", difficulty: "Moyen", xp: 75 },
-      { icon: "🛡️", title: "Coéquipier solide", description: "Aide un coéquipier pendant une partie.", difficulty: "Moyen", xp: 100 }
-    ],
-    [
-      { icon: "🧭", title: "Explorateur", description: "Découvre une zone ou une stratégie que tu connais peu.", difficulty: "Facile", xp: 50 },
-      { icon: "🔥", title: "Persévérance", description: "Termine une partie en gardant une attitude positive.", difficulty: "Moyen", xp: 75 },
-      { icon: "💎", title: "Défi personnel", description: "Essaie d'améliorer un de tes propres résultats.", difficulty: "Difficile", xp: 100 }
-    ]
-  ];
 
-  const zone = document.querySelector("#daily-challenges");
-  if (!zone) return;
+  <script>
+    (() => {
+      const missions = [
+        [
+          {
+            icon: "🎯",
+            title: "Œil de précision",
+            description: "Joue une partie en te concentrant sur la précision.",
+            difficulty: "Facile",
+            xp: 50
+          },
+          {
+            icon: "🧠",
+            title: "Esprit tactique",
+            description: "Essaie une nouvelle stratégie pendant ta partie.",
+            difficulty: "Moyen",
+            xp: 75
+          },
+          {
+            icon: "🤝",
+            title: "Allié fidèle",
+            description: "Privilégie la coopération avec ton équipe.",
+            difficulty: "Moyen",
+            xp: 100
+          }
+        ],
+        [
+          {
+            icon: "⚡",
+            title: "Réflexes éclair",
+            description: "Reste attentif pendant une partie.",
+            difficulty: "Facile",
+            xp: 50
+          },
+          {
+            icon: "🏆",
+            title: "Objectif victoire",
+            description: "Fais de ton mieux pour atteindre ton objectif.",
+            difficulty: "Moyen",
+            xp: 75
+          },
+          {
+            icon: "🛡️",
+            title: "Coéquipier solide",
+            description: "Aide un coéquipier pendant une partie.",
+            difficulty: "Moyen",
+            xp: 100
+          }
+        ],
+        [
+          {
+            icon: "🧭",
+            title: "Explorateur",
+            description: "Découvre une nouvelle zone ou stratégie.",
+            difficulty: "Facile",
+            xp: 50
+          },
+          {
+            icon: "🔥",
+            title: "Persévérance",
+            description: "Termine une partie avec une attitude positive.",
+            difficulty: "Moyen",
+            xp: 75
+          },
+          {
+            icon: "💎",
+            title: "Défi personnel",
+            description: "Essaie d'améliorer ton propre résultat.",
+            difficulty: "Difficile",
+            xp: 100
+          }
+        ]
+      ];
 
-  const titre = zone.querySelector("h2");
-  const paragraphe = zone.querySelector(":scope > p");
-  const cartes = zone.querySelectorAll(".grid .card");
+      const zone = document.getElementById("daily-challenges");
+      if (!zone) return;
 
-  // Même sélection pendant toute une journée, selon la date locale.
-  const maintenant = new Date();
-  const debut = new Date(maintenant.getFullYear(), 0, 0);
-  const jour = Math.floor((maintenant - debut) / 86400000);
-  const numeroSemaine = Math.floor((jour - 1) / 3);
-  const selection = missions[numeroSemaine % missions.length];
+      const titre = zone.querySelector("h2");
+      const intro = zone.querySelector(":scope > p");
+      const cartes = zone.querySelectorAll(".grid .card");
+      const note = zone.querySelector(".daily-note");
 
-  titre.innerHTML = 'Tes défis quotidiens<span class="gradient">.</span>';
-  paragraphe.textContent = "De nouvelles missions t'attendent aujourd'hui !";
+      // Crée une clé différente pour chaque journée locale.
+      const maintenant = new Date();
+      const dateKey = [
+        maintenant.getFullYear(),
+        String(maintenant.getMonth() + 1).padStart(2, "0"),
+        String(maintenant.getDate()).padStart(2, "0")
+      ].join("-");
 
-  cartes.forEach((carte, index) => {
-    const mission = selection[index];
-    if (!mission) return;
+      // Les missions changent chaque jour.
+      const debutAnnee = new Date(maintenant.getFullYear(), 0, 0);
+      const jourAnnee = Math.floor(
+        (maintenant - debutAnnee) / 86400000
+      );
+      const selection = missions[(jourAnnee - 1) % missions.length];
 
-    carte.querySelector(".game-icon").textContent = mission.icon;
-    carte.querySelector("h3").textContent = mission.title;
-    carte.querySelector("p").textContent = mission.description;
+      titre.innerHTML =
+        'Tes défis quotidiens<span class="gradient">.</span>';
 
-    const tags = carte.querySelector(".tags");
-    tags.replaceChildren();
+      intro.textContent =
+        "Relève les missions du jour et suis ta progression.";
 
-    [mission.difficulty, "+" + mission.xp + " XP"].forEach(texte => {
-      const tag = document.createElement("span");
-      tag.className = "tag";
-      tag.textContent = texte;
-      tags.appendChild(tag);
-    });
-  });
+      const storageKey = "novara-defis-" + dateKey;
+      let completed = [];
 
-  const note = zone.querySelector(".daily-note");
-  if (note) {
-    note.textContent = "💜 Les missions tournent automatiquement selon le jour. Les XP affichés sont indicatifs : ils ne sont pas encore attribués.";
-  }
-})();
-</script>
+      try {
+        const saved = JSON.parse(
+          localStorage.getItem(storageKey) || "[]"
+        );
 
+        if (Array.isArray(saved)) {
+          completed = [...new Set(
+            saved.filter(
+              index => Number.isInteger(index) &&
+                index >= 0 && index < 3
+            )
+          )];
+        }
+      } catch (error) {
+        completed = [];
+      }
+
+      function updateProgress() {
+        let progress = zone.querySelector(".daily-progress");
+
+        if (!progress) {
+          progress = document.createElement("p");
+          progress.className = "daily-progress";
+          progress.setAttribute("role", "status");
+
+          zone.insertBefore(
+            progress,
+            zone.querySelector(".grid")
+          );
+        }
+
+        progress.textContent =
+          `Progression : ${completed.length}/3 défis terminés`;
+
+        if (completed.length === 3) {
+          note.textContent =
+            "🎉 Bravo ! Tu as validé les trois défis du jour !";
+        } else {
+          note.textContent =
+            "💜 Tes validations sont sauvegardées sur cet appareil. " +
+            "Les XP affichés sont indicatifs.";
+        }
+      }
+
+      cartes.forEach((carte, index) => {
+        const mission = selection[index];
+        if (!mission) return;
+
+        carte.querySelector(".game-icon").textContent = mission.icon;
+        carte.querySelector("h3").textContent = mission.title;
+        carte.querySelector("p").textContent = mission.description;
+
+        const tags = carte.querySelector(".tags");
+        tags.replaceChildren();
+
+        [mission.difficulty, "+" + mission.xp + " XP"].forEach(texte => {
+          const tag = document.createElement("span");
+          tag.className = "tag";
+          tag.textContent = texte;
+          tags.appendChild(tag);
+        });
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "daily-complete";
+
+        function renderButton() {
+          const done = completed.includes(index);
+
+          button.textContent = done
+            ? "✓ Défi terminé"
+            : "Valider le défi";
+
+          button.disabled = done;
+          button.setAttribute("aria-pressed", String(done));
+        }
+
+        button.addEventListener("click", () => {
+          if (completed.includes(index)) return;
+
+          const previous = [...completed];
+          completed.push(index);
+
+          try {
+            localStorage.setItem(
+              storageKey,
+              JSON.stringify(completed)
+            );
+          } catch (error) {
+            completed = previous;
+            alert(
+              "La sauvegarde a échoué. Vérifie les paramètres de ton navigateur."
+            );
+            return;
+          }
+
+          renderButton();
+          updateProgress();
+        });
+
+        carte.appendChild(button);
+        renderButton();
+      });
+
+      updateProgress();
+    })();
+  </script>
 </body>
 </html>

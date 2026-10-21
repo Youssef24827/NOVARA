@@ -2542,3 +2542,11 @@ body.page-communautes .community-bottom p {
     padding: 22px 18px;
   }
 }
+.community-delete {
+  border-color: rgba(255, 95, 110, 0.45);
+  color: #ff929c;
+}
+
+.community-delete:hover {
+  background: rgba(255, 95, 110, 0.12);
+}

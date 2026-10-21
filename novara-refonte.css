@@ -2550,3 +2550,66 @@ body.page-communautes .community-bottom p {
 .community-delete:hover {
   background: rgba(255, 95, 110, 0.12);
 }
+```css
+/* =========================================
+   NOVARA — AGRANDISSEMENT DES PAGES
+   Accueil, Défis et Messages
+========================================= */
+
+/* Utiliser toute la largeur disponible */
+.page-accueil .main-content,
+.page-defis .main-content,
+.page-messages .main-content {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Éviter que le contenu reste bloqué à gauche */
+.page-accueil .main-content,
+.page-defis .main-content {
+  display: block;
+}
+
+/* Agrandir les sections principales */
+.page-accueil .content-section,
+.page-defis .content-section,
+.page-messages .content-section {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+}
+
+/* Donner plus de place à la messagerie */
+.page-messages .main-content {
+  padding: 32px;
+}
+
+.page-messages .messages-layout,
+.page-messages .messaging-layout,
+.page-messages .messages-container {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Agrandir les zones de conversation */
+.page-messages .conversation,
+.page-messages .conversation-panel,
+.page-messages .chat-panel {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Écrans plus petits */
+@media (max-width: 768px) {
+  .page-accueil .main-content,
+  .page-defis .main-content,
+  .page-messages .main-content {
+    padding: 18px;
+  }
+}

@@ -2,12 +2,16 @@
 const SUPABASE_URL = "https://smxjkgcxjzomkqwaaxlr.supabase.co";
 const SUPABASE_KEY = "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX";
 
-// Année automatique
+// ==========================================
+// ANNÉE AUTOMATIQUE
+// ==========================================
 document.querySelectorAll("[data-year]").forEach(element => {
   element.textContent = new Date().getFullYear();
 });
 
-// Menu mobile
+// ==========================================
+// MENU MOBILE
+// ==========================================
 const sidebar = document.querySelector(".sidebar");
 const menuButton = document.querySelector("[data-menu-toggle]");
 
@@ -28,7 +32,9 @@ if (menuButton && sidebar) {
   });
 }
 
-// Sécuriser le texte affiché dans le HTML
+// ==========================================
+// FONCTIONS DE SÉCURITÉ
+// ==========================================
 function escapeHTML(value) {
   return String(value ?? "").replace(/[&<>"']/g, character => ({
     "&": "&amp;",
@@ -39,7 +45,6 @@ function escapeHTML(value) {
   })[character]);
 }
 
-// Normaliser les plateformes
 function normalizePlatforms(value) {
   if (Array.isArray(value)) {
     return value.map(String);
@@ -52,22 +57,15 @@ function normalizePlatforms(value) {
   if (typeof value === "string") {
     try {
       const parsed = JSON.parse(value);
-
-      if (Array.isArray(parsed)) {
-        return parsed.map(String);
-      }
+      if (Array.isArray(parsed)) return parsed.map(String);
     } catch (_) {}
 
-    return value
-      .split(",")
-      .map(platform => platform.trim())
-      .filter(Boolean);
+    return value.split(",").map(item => item.trim()).filter(Boolean);
   }
 
   return [String(value)];
 }
 
-// Autoriser uniquement les liens HTTP et HTTPS
 function safeURL(value) {
   try {
     const url = new URL(String(value || ""));
@@ -83,7 +81,6 @@ function safeURL(value) {
 // ==========================================
 // PHOTO DE PROFIL ET AVATARS
 // ==========================================
-
 const AVATAR_STORAGE_KEY = "novara_profile_avatar";
 const DEFAULT_AVATAR = "🎮";
 
@@ -98,7 +95,7 @@ const avatarOptions = document.querySelectorAll("[data-avatar]");
 function showAvatar(avatar) {
   if (!avatarImage || !avatarEmoji) return;
 
-  if (avatar && avatar.type === "image" && avatar.value) {
+  if (avatar?.type === "image" && avatar.value?.startsWith("data:image/")) {
     avatarImage.src = avatar.value;
     avatarImage.hidden = false;
     avatarEmoji.hidden = true;
@@ -107,15 +104,12 @@ function showAvatar(avatar) {
     avatarImage.hidden = true;
     avatarEmoji.hidden = false;
     avatarEmoji.textContent =
-      avatar && avatar.type === "emoji"
-        ? avatar.value
-        : DEFAULT_AVATAR;
+      avatar?.type === "emoji" ? avatar.value : DEFAULT_AVATAR;
   }
 
   avatarOptions.forEach(button => {
     const selected =
-      avatar &&
-      avatar.type === "emoji" &&
+      avatar?.type === "emoji" &&
       button.dataset.avatar === avatar.value;
 
     button.classList.toggle("selected", Boolean(selected));
@@ -155,8 +149,7 @@ function loadAvatar() {
       const avatar = JSON.parse(stored);
 
       if (
-        avatar &&
-        avatar.type === "emoji" &&
+        avatar?.type === "emoji" &&
         typeof avatar.value === "string"
       ) {
         showAvatar(avatar);
@@ -164,8 +157,7 @@ function loadAvatar() {
       }
 
       if (
-        avatar &&
-        avatar.type === "image" &&
+        avatar?.type === "image" &&
         typeof avatar.value === "string" &&
         avatar.value.startsWith("data:image/")
       ) {
@@ -181,15 +173,12 @@ function loadAvatar() {
 }
 
 if (avatarFileInput && avatarImage && avatarEmoji) {
-  if (uploadAvatarButton) {
-    uploadAvatarButton.addEventListener("click", () => {
-      avatarFileInput.click();
-    });
-  }
+  uploadAvatarButton?.addEventListener("click", () => {
+    avatarFileInput.click();
+  });
 
   avatarFileInput.addEventListener("change", () => {
-    const file = avatarFileInput.files && avatarFileInput.files[0];
-
+    const file = avatarFileInput.files?.[0];
     if (!file) return;
 
     const allowedTypes = [
@@ -200,17 +189,21 @@ if (avatarFileInput && avatarImage && avatarEmoji) {
     ];
 
     if (!allowedTypes.includes(file.type)) {
-      avatarStatus.textContent =
-        "Format non accepté. Choisis une image JPG, PNG, WEBP ou GIF.";
-      avatarStatus.classList.add("error");
+      if (avatarStatus) {
+        avatarStatus.textContent =
+          "Format non accepté. Choisis une image JPG, PNG, WEBP ou GIF.";
+        avatarStatus.classList.add("error");
+      }
       avatarFileInput.value = "";
       return;
     }
 
     if (file.size > 2 * 1024 * 1024) {
-      avatarStatus.textContent =
-        "L'image dépasse 2 Mo. Choisis une image plus légère.";
-      avatarStatus.classList.add("error");
+      if (avatarStatus) {
+        avatarStatus.textContent =
+          "L'image dépasse 2 Mo. Choisis une image plus légère.";
+        avatarStatus.classList.add("error");
+      }
       avatarFileInput.value = "";
       return;
     }
@@ -218,28 +211,26 @@ if (avatarFileInput && avatarImage && avatarEmoji) {
     const reader = new FileReader();
 
     reader.onload = () => {
-      const result = reader.result;
-
       if (
-        typeof result !== "string" ||
-        !result.startsWith("data:image/")
+        typeof reader.result !== "string" ||
+        !reader.result.startsWith("data:image/")
       ) {
-        avatarStatus.textContent = "Impossible de lire cette image.";
-        avatarStatus.classList.add("error");
+        if (avatarStatus) {
+          avatarStatus.textContent = "Impossible de lire cette image.";
+          avatarStatus.classList.add("error");
+        }
         return;
       }
 
-      saveAvatar({
-        type: "image",
-        value: result
-      });
-
+      saveAvatar({ type: "image", value: reader.result });
       avatarFileInput.value = "";
     };
 
     reader.onerror = () => {
-      avatarStatus.textContent = "Erreur lors de la lecture de l'image.";
-      avatarStatus.classList.add("error");
+      if (avatarStatus) {
+        avatarStatus.textContent = "Erreur lors de la lecture de l'image.";
+        avatarStatus.classList.add("error");
+      }
       avatarFileInput.value = "";
     };
 
@@ -255,257 +246,238 @@ if (avatarFileInput && avatarImage && avatarEmoji) {
     });
   });
 
-  if (resetAvatarButton) {
-    resetAvatarButton.addEventListener("click", () => {
-      try {
-        localStorage.removeItem(AVATAR_STORAGE_KEY);
-        showAvatar({ type: "emoji", value: DEFAULT_AVATAR });
+  resetAvatarButton?.addEventListener("click", () => {
+    try {
+      localStorage.removeItem(AVATAR_STORAGE_KEY);
+      showAvatar({ type: "emoji", value: DEFAULT_AVATAR });
 
+      if (avatarStatus) {
         avatarStatus.textContent = "Avatar réinitialisé.";
         avatarStatus.classList.remove("error");
-      } catch (error) {
-        avatarStatus.textContent =
-          "Impossible de réinitialiser l'avatar.";
+      }
+    } catch (_) {
+      if (avatarStatus) {
+        avatarStatus.textContent = "Impossible de réinitialiser l'avatar.";
         avatarStatus.classList.add("error");
       }
-    });
-  }
+    }
+  });
 
   loadAvatar();
 }
 
 // ==========================================
-// CATALOGUE DE JEUX : SUPABASE
+// CATALOGUE NOVARA — JEUX STOCKÉS DANS SUPABASE
+// Aucun appel direct à RAWG ou à une API Steam.
 // ==========================================
-
-
-/* ==========================================
-   NOVARA — RECHERCHE DE JEUX RAWG
-   Remplace l'ancien bloc catalogue.
-========================================== */
-
-// Ajoute ta clé RAWG ici pour tester.
-// Attention : une clé dans le navigateur est visible publiquement.
-const RAWG_API_KEY = "COLLE_TA_CLE_RAWG_ICI";
-
 const gamesGrid = document.getElementById("gamesGrid");
 
 if (gamesGrid) {
-  const search = document.getElementById("gameSearch");
+  const searchInput = document.getElementById("gameSearch");
   const statusFilter = document.getElementById("gameStatus");
   const statusMessage = document.getElementById("gamesStatus");
 
+  let searchTimer = null;
   let requestNumber = 0;
-  let searchTimer;
 
-  function setStatus(message, isError = false) {
+  function setGamesStatus(message, isError = false) {
     if (!statusMessage) return;
     statusMessage.textContent = message;
     statusMessage.classList.toggle("error", isError);
   }
 
-  function safeImageURL(value) {
-    try {
-      const url = new URL(value);
-      return url.protocol === "https:" ? url.href : "";
-    } catch {
-      return "";
-    }
-  }
+  function getGameImage(game) {
+    const savedImage = safeURL(game.image_url || "");
 
-  function platformNames(game) {
-    return (game.platforms || [])
-      .map(item => item.platform?.name)
-      .filter(Boolean);
+    if (savedImage.startsWith("https://")) {
+      return savedImage;
+    }
+
+    // Repli sur la jaquette Steam, si l'identifiant est un App ID.
+    const id = Number(game.id);
+
+    if (Number.isSafeInteger(id) && id > 0) {
+      return `https://cdn.akamai.steamstatic.com/steam/apps/${id}/header.jpg`;
+    }
+
+    return "";
   }
 
   function renderGames(games) {
     if (!games.length) {
-      gamesGrid.innerHTML = "";
-      setStatus("Aucun jeu trouvé. Essaie un autre nom.");
+      gamesGrid.innerHTML = `
+        <div class="card explorer-placeholder">
+          <h3>Aucun jeu trouvé</h3>
+          <p>Essaie un autre titre ou importe plus de jeux dans Supabase.</p>
+        </div>
+      `;
+
+      setGamesStatus("Aucun résultat dans le catalogue NOVARA.");
       return;
     }
 
     gamesGrid.innerHTML = games.map(game => {
-      const image = safeImageURL(game.background_image);
-      const platforms = platformNames(game);
-      const genres = (game.genres || [])
-        .map(genre => genre.name)
-        .filter(Boolean);
-
-      const tags = [...genres, ...platforms]
-        .slice(0, 6)
-        .map(name => `<span class="tag">${escapeHTML(name)}</span>`)
-        .join("");
-
-      const releaseDate = game.released
-        ? `<p class="game-release">Sortie : ${escapeHTML(game.released)}</p>`
-        : "";
-
-      const rating = Number.isFinite(game.rating) && game.rating > 0
-        ? `<p class="game-rating">Note RAWG : ${escapeHTML(game.rating)} / 5</p>`
-        : "";
-
-      const officialPage = safeURL(game.website);
-      const rawgPage = safeURL(game.url);
-
-      const link = rawgPage
-        ? `<a class="btn primary game-link"
-             href="${escapeHTML(rawgPage)}"
-             target="_blank"
-             rel="noopener noreferrer">
-             Voir la fiche du jeu ↗
-           </a>`
-        : "";
+      const title = escapeHTML(game.title || "Jeu sans titre");
+      const genre = escapeHTML(game.genre || "Genre non renseigné");
+      const description = escapeHTML(game.description || "");
+      const image = getGameImage(game);
+      const officialUrl = safeURL(game.official_url || "");
+      const platforms = normalizePlatforms(game.platforms)
+        .map(escapeHTML)
+        .join(", ") || "PC";
 
       return `
         <article class="card game-result">
           ${
             image
-              ? `<img class="game-cover"
+              ? `<img
+                   class="game-cover"
                    src="${escapeHTML(image)}"
-                   alt="Jaquette de ${escapeHTML(game.name)}"
-                   loading="lazy">`
+                   alt="Jaquette de ${title}"
+                   loading="lazy"
+                 >`
               : `<div class="game-icon" aria-hidden="true">🎮</div>`
           }
 
-          <h3>${escapeHTML(game.name || "Jeu sans titre")}</h3>
-          ${releaseDate}
-          ${rating}
-          <div class="tags">${tags}</div>
-          ${link}
+          <h3>${title}</h3>
+          <p class="game-genre">${genre}</p>
+          <p class="game-platforms">${platforms}</p>
+
+          ${description ? `<p class="game-description">${description}</p>` : ""}
+
           ${
-            officialPage
-              ? `<a class="game-official-link"
-                   href="${escapeHTML(officialPage)}"
+            officialUrl && officialUrl.startsWith("https://")
+              ? `<a
+                   class="btn primary game-link"
+                   href="${escapeHTML(officialUrl)}"
                    target="_blank"
-                   rel="noopener noreferrer">
-                   Site officiel
-                 </a>`
+                   rel="noopener noreferrer"
+                 >Voir le jeu ↗</a>`
               : ""
           }
         </article>
       `;
     }).join("");
 
-    setStatus(`${games.length} résultat(s) affiché(s) · Données RAWG`);
+    // Si une image manque, on garde la carte visible.
+    gamesGrid.querySelectorAll(".game-cover").forEach(image => {
+      image.addEventListener("error", () => {
+        image.hidden = true;
+      }, { once: true });
+    });
+
+    setGamesStatus(
+      `${games.length} jeu(x) affiché(s). Le catalogue peut contenir d'autres résultats.`
+    );
   }
 
-  async function searchGames(query) {
+  async function searchGames() {
     const currentRequest = ++requestNumber;
+    const query = (searchInput?.value || "").trim();
+
+    const selectedStatus = statusFilter?.value || "all";
 
     if (!query) {
-      gamesGrid.innerHTML = `
-        <div class="explorer-placeholder card">
-          <div class="loading-symbol" aria-hidden="true">🎮</div>
-          <h3>Quel jeu cherches-tu ?</h3>
-          <p>Écris un titre dans la barre de recherche.</p>
-        </div>
-      `;
-      setStatus("Tape le nom d'un jeu pour commencer.");
-      return;
+      // Affiche les jeux publiés les plus récents alphabétiquement.
+      return fetchGames("", selectedStatus, currentRequest);
     }
 
-    if (
-      !RAWG_API_KEY ||
-      RAWG_API_KEY === "COLLE_TA_CLE_RAWG_ICI"
-    ) {
-      setStatus(
-        "Ajoute ta clé API RAWG dans app.js pour activer la recherche.",
-        true
-      );
-      return;
-    }
+    return fetchGames(query, selectedStatus, currentRequest);
+  }
+
+  async function fetchGames(query, selectedStatus, currentRequest) {
+    setGamesStatus(
+      query ? `Recherche de « ${query} »…` : "Chargement du catalogue…"
+    );
 
     gamesGrid.innerHTML = `
-      <div class="explorer-placeholder card">
-        <h3>Recherche en cours…</h3>
-        <p>On cherche les jeux correspondants.</p>
+      <div class="card explorer-placeholder">
+        <h3>Chargement des jeux…</h3>
       </div>
     `;
 
-    setStatus(`Recherche de « ${query} »…`);
-
     try {
-      const endpoint = new URL("https://api.rawg.io/api/games");
-      endpoint.searchParams.set("key", RAWG_API_KEY);
-      endpoint.searchParams.set("search", query);
-      endpoint.searchParams.set("page_size", "20");
-      endpoint.searchParams.set("search_precise", "false");
+      const params = new URLSearchParams();
 
-      const response = await fetch(endpoint);
+      params.set(
+        "select",
+        "id,title,description,genre,platforms,official_url,image_url"
+      );
+      params.set("is_published", "eq.true");
+      params.set("order", "title.asc");
+      params.set("limit", query ? "60" : "12");
 
-      if (!response.ok) {
-        if (response.status === 401 || response.status === 403) {
-          throw new Error("Clé API invalide ou accès refusé.");
+      if (query) {
+        // Recherche simple dans les titres.
+        // On évite les caractères de syntaxe PostgREST.
+        const safeQuery = query.replace(/[%_,.*()]/g, " ").trim();
+
+        if (!safeQuery) {
+          renderGames([]);
+          return;
         }
-        if (response.status === 429) {
-          throw new Error("Limite de recherche atteinte. Réessaie plus tard.");
-        }
-        throw new Error(`Erreur du catalogue (${response.status}).`);
+
+        params.set("title", `ilike.*${safeQuery}*`);
       }
 
-      const data = await response.json();
-
-      // Ignore les réponses d'une ancienne recherche.
-      if (currentRequest !== requestNumber) return;
-
-      let games = Array.isArray(data.results) ? data.results : [];
-
-      // Le filtre NOVARA ne s'applique pas au catalogue externe.
-      // Il sera remplacé par un vrai filtre de plateforme plus tard.
-      const selectedStatus = statusFilter?.value || "all";
-
+      // Les anciennes options de disponibilité ne sont pas prises
+      // en charge tant que la table ne possède pas de champ dédié.
       if (selectedStatus !== "all") {
-        setStatus(
-          "Le filtre de disponibilité NOVARA n'est pas applicable aux résultats RAWG.",
+        setGamesStatus(
+          "Le filtre de disponibilité sera activé quand les données existeront.",
           true
         );
       }
 
-      renderGames(games);
+      const endpoint =
+        `${SUPABASE_URL}/rest/v1/games?${params.toString()}`;
+
+      const response = await fetch(endpoint, {
+        method: "GET",
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur Supabase (${response.status})`);
+      }
+
+      const games = await response.json();
+
+      if (currentRequest !== requestNumber) return;
+
+      renderGames(Array.isArray(games) ? games : []);
     } catch (error) {
       if (currentRequest !== requestNumber) return;
 
-      console.error("NOVARA — recherche RAWG :", error);
+      console.error("NOVARA — catalogue Supabase :", error);
+
       gamesGrid.innerHTML = `
-        <div class="explorer-placeholder card">
-          <h3>Recherche indisponible</h3>
-          <p>${escapeHTML(error.message || "Une erreur est survenue.")}</p>
+        <div class="card explorer-placeholder">
+          <h3>Catalogue indisponible</h3>
+          <p>Vérifie la connexion et les permissions Supabase.</p>
         </div>
       `;
-      setStatus(
-        "Impossible de charger les jeux. Vérifie la clé API et ta connexion.",
+
+      setGamesStatus(
+        "Impossible de charger le catalogue. Vérifie la table games et ses autorisations.",
         true
       );
     }
   }
 
-  if (search) {
-    search.addEventListener("input", () => {
+  if (searchInput) {
+    searchInput.addEventListener("input", () => {
       clearTimeout(searchTimer);
-
-      const query = search.value.trim();
-
-      searchTimer = setTimeout(() => {
-        searchGames(query);
-      }, 350);
+      searchTimer = setTimeout(searchGames, 300);
     });
   }
 
   if (statusFilter) {
-    statusFilter.addEventListener("change", () => {
-      if (statusFilter.value !== "all") {
-        setStatus(
-          "Le filtre de disponibilité sera adapté au catalogue NOVARA.",
-          true
-        );
-      } else {
-        setStatus("Tu peux rechercher un jeu dans le catalogue.");
-      }
-    });
+    statusFilter.addEventListener("change", searchGames);
   }
 
-  // Ne lance pas des centaines de requêtes au chargement.
-  searchGames("");
+  searchGames();
 }

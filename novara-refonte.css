@@ -2915,3 +2915,29 @@ body.page-messages .call-media-panel {
     gap: 8px;
   }
 }
+
+/* ===== MESSAGES : PLUS DE HAUTEUR ===== */
+
+body.page-messages .messages-layout {
+  min-height: 780px;
+}
+
+body.page-messages .messages-layout > .novara-panel {
+  min-height: 780px;
+}
+
+body.page-messages .message-list {
+  min-height: 500px;
+}
+
+/* Garder un peu moins de hauteur sur mobile */
+@media (max-width: 650px) {
+  body.page-messages .messages-layout,
+  body.page-messages .messages-layout > .novara-panel {
+    min-height: 0;
+  }
+
+  body.page-messages .message-list {
+    min-height: 420px;
+  }
+}

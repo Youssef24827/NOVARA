@@ -5,7 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#080914">
+
   <title>Explorer les jeux | NOVARA</title>
+  <meta
+    name="description"
+    content="Explore le catalogue de jeux NOVARA, recherche tes jeux favoris et découvre de nouvelles aventures."
+  >
 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="novara-refonte.css">
@@ -14,6 +19,8 @@
 <body class="page-explorer">
 
   <div class="app-layout">
+
+    <!-- SIDEBAR -->
     <aside class="sidebar">
       <a class="logo" href="index.html" aria-label="NOVARA - Accueil">
         NOVARA<span>.</span>
@@ -21,9 +28,11 @@
 
       <nav class="sidebar-nav" aria-label="Navigation principale">
         <a href="index.html"><span>⌂</span> Accueil</a>
+
         <a href="explorer.html" class="active" aria-current="page">
           <span>◈</span> Explorer
         </a>
+
         <a href="communautes.html"><span>♧</span> Communautés</a>
         <a href="defis.html"><span>⚡</span> Défis</a>
         <a href="messages.html"><span>✉</span> Messages</a>
@@ -32,97 +41,129 @@
 
       <div class="sidebar-bottom">
         <p>Joue. Explore. Connecte-toi.</p>
-        <span>NOVARA © 2026</span>
+        <span>NOVARA © <span data-year>2026</span></span>
       </div>
     </aside>
 
+    <!-- CONTENU PRINCIPAL -->
     <main class="main-content">
+
       <header class="page-header">
         <div>
           <p class="eyebrow">TON PROCHAIN UNIVERS</p>
           <h1>Explorer les jeux</h1>
+
           <p class="page-description">
             Découvre des jeux, trouve ton prochain favori et rejoins la communauté.
           </p>
         </div>
       </header>
 
+      <!-- BANNIÈRE -->
       <section class="explorer-hero card">
         <div class="explorer-hero-content">
           <p class="eyebrow">BIENVENUE DANS NOVARA</p>
+
           <h2>Une nouvelle aventure commence ici.</h2>
+
           <p>
-            Recherche ton jeu préféré ou explore les possibilités.
+            Recherche un jeu dans le catalogue NOVARA et découvre où y jouer.
           </p>
-          <a href="#gamesGrid" class="btn btn-primary">
-            Découvrir les jeux <span aria-hidden="true">↘</span>
+
+          <a href="#gameSearch" class="btn btn-primary">
+            Rechercher un jeu <span aria-hidden="true">↘</span>
           </a>
         </div>
-        <div class="explorer-hero-symbol" aria-hidden="true">✦</div>
-        
-<p id="gamesStatus" class="explorer-status" role="status" aria-live="polite">
-  Tape le nom d'un jeu pour commencer la recherche.
-</p>
 
+        <div class="explorer-hero-symbol" aria-hidden="true">✦</div>
       </section>
 
+      <!-- RECHERCHE ET FILTRES -->
       <section class="explorer-controls" aria-label="Recherche de jeux">
+
         <div class="explorer-search-wrap">
           <label for="gameSearch">Trouver un jeu</label>
+
           <div class="explorer-search">
             <span aria-hidden="true">⌕</span>
+
             <input
               id="gameSearch"
               type="search"
-              placeholder="Rechercher un jeu…"
+              placeholder="Ex. : Counter-Strike 2, Dota 2…"
               autocomplete="off"
+              aria-describedby="gamesStatus"
             >
           </div>
         </div>
 
         <div class="explorer-status-wrap">
-          <label for="gameStatus">Disponibilité</label>
+          <label for="gameStatus">Plateforme</label>
+
           <select id="gameStatus">
-            <option value="all">Tous les jeux</option>
-            <option value="available">Disponibles</option>
-            <option value="unavailable">Indisponibles</option>
+            <option value="all">Toutes les plateformes</option>
+            <option value="PC">PC</option>
+            <option value="PlayStation">PlayStation</option>
+            <option value="Xbox">Xbox</option>
+            <option value="Nintendo">Nintendo</option>
+            <option value="Mobile">Mobile</option>
           </select>
         </div>
+
       </section>
 
-      <section class="content-section">
+      <!-- MESSAGE DE RECHERCHE -->
+      <p
+        id="gamesStatus"
+        class="explorer-status"
+        role="status"
+        aria-live="polite"
+      >
+        Chargement du catalogue NOVARA…
+      </p>
+
+      <!-- CATALOGUE -->
+      <section class="content-section" aria-labelledby="gamesHeading">
+
         <div class="section-heading">
           <div>
-            <p class="eyebrow">CATALOGUE</p>
-            <h2>Découvre ton prochain jeu</h2>
+            <p class="eyebrow">CATALOGUE NOVARA</p>
+            <h2 id="gamesHeading">Découvre ton prochain jeu</h2>
           </div>
         </div>
 
-        <!-- L'application peut remplir cette grille avec app.js. -->
         <div id="gamesGrid" class="grid games-grid">
+
           <div class="explorer-placeholder card">
             <div class="loading-symbol" aria-hidden="true">✦</div>
             <h3>Chargement des jeux…</h3>
             <p>Le catalogue NOVARA est en cours de préparation.</p>
           </div>
+
         </div>
       </section>
 
+      <!-- COMMUNAUTÉS -->
       <section class="explorer-bottom card">
         <div>
           <p class="eyebrow">VA PLUS LOIN</p>
+
           <h2>Le jeu est encore meilleur ensemble.</h2>
+
           <p>
             Retrouve des joueurs et découvre les communautés NOVARA.
           </p>
         </div>
+
         <a href="communautes.html" class="btn btn-primary">
           Voir les communautés
         </a>
       </section>
+
     </main>
   </div>
 
+  <!-- NAVIGATION MOBILE -->
   <nav class="mobile-nav" aria-label="Navigation mobile">
     <a href="index.html">Accueil</a>
     <a href="explorer.html" aria-current="page">Explorer</a>
@@ -132,6 +173,7 @@
     <a href="profil.html">Profil</a>
   </nav>
 
+  <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth.js"></script>
   <script src="app.js"></script>

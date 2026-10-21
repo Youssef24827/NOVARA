@@ -2778,3 +2778,140 @@ body.page-defis .notice {
     padding: 22px;
   }
 }
+
+/* ==========================================
+   NOVARA — MESSAGERIE PLUS GRANDE
+========================================== */
+
+body.page-messages .app-layout {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Agrandir la zone principale, à côté de la sidebar */
+body.page-messages .main-content.novara-messages {
+  flex: 1 1 auto;
+  width: auto;
+  max-width: none;
+  min-width: 0;
+  margin: 0;
+  padding: 36px;
+  box-sizing: border-box;
+}
+
+/* En-tête sur toute la largeur */
+body.page-messages .page-header {
+  width: 100%;
+  max-width: none;
+  margin-bottom: 28px;
+  box-sizing: border-box;
+}
+
+/* Agrandir les deux panneaux de messagerie */
+body.page-messages .messages-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+  align-items: stretch;
+  gap: 24px;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  min-height: 650px;
+  box-sizing: border-box;
+}
+
+/* Panneaux plus spacieux */
+body.page-messages .messages-layout > .novara-panel {
+  min-width: 0;
+  min-height: 650px;
+  padding: 28px;
+  box-sizing: border-box;
+}
+
+/* La conversation utilise toute la largeur restante */
+body.page-messages .messages-chat-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+body.page-messages .message-list {
+  flex: 1 1 auto;
+  min-height: 380px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Barre d'écriture plus confortable */
+body.page-messages .message-composer {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  margin-top: 18px;
+  box-sizing: border-box;
+}
+
+body.page-messages .message-composer input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Résultats des joueurs sur toute la largeur */
+body.page-messages #player-results {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Panneaux d'appel également élargis */
+body.page-messages .call-panel,
+body.page-messages .call-media-panel {
+  width: 100%;
+  max-width: none;
+  margin-top: 24px;
+  box-sizing: border-box;
+}
+
+/* Tablettes et petits écrans */
+@media (max-width: 900px) {
+  body.page-messages .main-content.novara-messages {
+    padding: 24px;
+  }
+
+  body.page-messages .messages-layout {
+    grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  body.page-messages .messages-layout > .novara-panel {
+    padding: 20px;
+  }
+}
+
+/* Mobiles */
+@media (max-width: 650px) {
+  body.page-messages .main-content.novara-messages {
+    width: 100%;
+    padding: 16px;
+  }
+
+  body.page-messages .messages-layout {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  body.page-messages .messages-layout > .novara-panel {
+    min-height: 0;
+    padding: 18px;
+  }
+
+  body.page-messages .message-list {
+    min-height: 350px;
+  }
+
+  body.page-messages .message-composer {
+    gap: 8px;
+  }
+}

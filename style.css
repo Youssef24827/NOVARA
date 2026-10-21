@@ -1066,3 +1066,92 @@ a:hover {
     transform: none;
   }
 }
+
+/* ==========================================
+   NOVARA — FONDS PERSONNALISÉS PAR PAGE
+   ========================================== */
+
+body.page-accueil,
+body.page-explorer,
+body.page-communautes,
+body.page-defis,
+body.page-messages,
+body.page-profil {
+  background-color: #080610;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+/* Accueil — lignes néon */
+body.page-accueil {
+  background-image:
+    linear-gradient(
+      rgba(5, 4, 13, 0.42),
+      rgba(5, 4, 13, 0.76)
+    ),
+    url("images/fonds/accueil.jpg");
+}
+
+/* Explorer — peinture liquide */
+body.page-explorer {
+  background-image:
+    linear-gradient(
+      rgba(5, 4, 13, 0.48),
+      rgba(5, 4, 13, 0.78)
+    ),
+    url("images/fonds/explorer.jpg");
+}
+
+/* Communautés — vagues */
+body.page-communautes {
+  background-image:
+    linear-gradient(
+      rgba(5, 4, 13, 0.50),
+      rgba(5, 4, 13, 0.80)
+    ),
+    url("images/fonds/communautes.jpg");
+}
+
+/* Défis — dégradé violet */
+body.page-defis {
+  background-image:
+    linear-gradient(
+      rgba(5, 4, 13, 0.48),
+      rgba(5, 4, 13, 0.78)
+    ),
+    url("images/fonds/defis.jpg");
+}
+
+/* Messages — particules cyber */
+body.page-messages {
+  background-image:
+    linear-gradient(
+      rgba(5, 4, 13, 0.55),
+      rgba(5, 4, 13, 0.82)
+    ),
+    url("images/fonds/messages.jpg");
+}
+
+/* Profil — particules 3D */
+body.page-profil {
+  background-image:
+    linear-gradient(
+      rgba(5, 4, 13, 0.48),
+      rgba(5, 4, 13, 0.78)
+    ),
+    url("images/fonds/profil.jpg");
+}
+
+/* Sur mobile */
+@media (max-width: 700px) {
+  body.page-accueil,
+  body.page-explorer,
+  body.page-communautes,
+  body.page-defis,
+  body.page-messages,
+  body.page-profil {
+    background-attachment: scroll;
+  }
+}

@@ -136,5 +136,69 @@
 
     <footer>© <span data-year></span> NOVARA · Chaque partie est une nouvelle aventure.</footer>
   </main>
+  
+<script>
+(() => {
+  const missions = [
+    [
+      { icon: "🎯", title: "Œil de précision", description: "Joue une partie en te concentrant sur la précision.", difficulty: "Facile", xp: 50 },
+      { icon: "🧠", title: "Esprit tactique", description: "Essaie une nouvelle stratégie lors de ta prochaine partie.", difficulty: "Moyen", xp: 75 },
+      { icon: "🤝", title: "Allié fidèle", description: "Privilégie la coopération avec ton équipe.", difficulty: "Moyen", xp: 100 }
+    ],
+    [
+      { icon: "⚡", title: "Réflexes éclair", description: "Reste attentif et réagis rapidement pendant une partie.", difficulty: "Facile", xp: 50 },
+      { icon: "🏆", title: "Objectif victoire", description: "Fais de ton mieux pour atteindre l'objectif de ta partie.", difficulty: "Moyen", xp: 75 },
+      { icon: "🛡️", title: "Coéquipier solide", description: "Aide un coéquipier pendant une partie.", difficulty: "Moyen", xp: 100 }
+    ],
+    [
+      { icon: "🧭", title: "Explorateur", description: "Découvre une zone ou une stratégie que tu connais peu.", difficulty: "Facile", xp: 50 },
+      { icon: "🔥", title: "Persévérance", description: "Termine une partie en gardant une attitude positive.", difficulty: "Moyen", xp: 75 },
+      { icon: "💎", title: "Défi personnel", description: "Essaie d'améliorer un de tes propres résultats.", difficulty: "Difficile", xp: 100 }
+    ]
+  ];
+
+  const zone = document.querySelector("#daily-challenges");
+  if (!zone) return;
+
+  const titre = zone.querySelector("h2");
+  const paragraphe = zone.querySelector(":scope > p");
+  const cartes = zone.querySelectorAll(".grid .card");
+
+  // Même sélection pendant toute une journée, selon la date locale.
+  const maintenant = new Date();
+  const debut = new Date(maintenant.getFullYear(), 0, 0);
+  const jour = Math.floor((maintenant - debut) / 86400000);
+  const numeroSemaine = Math.floor((jour - 1) / 3);
+  const selection = missions[numeroSemaine % missions.length];
+
+  titre.innerHTML = 'Tes défis quotidiens<span class="gradient">.</span>';
+  paragraphe.textContent = "De nouvelles missions t'attendent aujourd'hui !";
+
+  cartes.forEach((carte, index) => {
+    const mission = selection[index];
+    if (!mission) return;
+
+    carte.querySelector(".game-icon").textContent = mission.icon;
+    carte.querySelector("h3").textContent = mission.title;
+    carte.querySelector("p").textContent = mission.description;
+
+    const tags = carte.querySelector(".tags");
+    tags.replaceChildren();
+
+    [mission.difficulty, "+" + mission.xp + " XP"].forEach(texte => {
+      const tag = document.createElement("span");
+      tag.className = "tag";
+      tag.textContent = texte;
+      tags.appendChild(tag);
+    });
+  });
+
+  const note = zone.querySelector(".daily-note");
+  if (note) {
+    note.textContent = "💜 Les missions tournent automatiquement selon le jour. Les XP affichés sont indicatifs : ils ne sont pas encore attribués.";
+  }
+})();
+</script>
+
 </body>
 </html>

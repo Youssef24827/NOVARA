@@ -1938,3 +1938,79 @@ body.page-profil .profile-links {
     padding-inline: 16px;
   }
 }
+```css
+/* CORRECTION POSITIONNEMENT — PROFIL NOVARA */
+html,
+body.page-profil {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+body.page-profil .app-layout {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+body.page-profil .sidebar {
+  position: sticky;
+  top: 0;
+  flex: 0 0 250px;
+  width: 250px;
+  height: 100vh;
+  min-height: 100vh;
+}
+
+body.page-profil .main-content {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  max-width: none;
+  margin: 0;
+  padding: 32px clamp(20px, 4vw, 56px);
+  box-sizing: border-box;
+}
+
+body.page-profil .page-header,
+body.page-profil .profile-card,
+body.page-profil .profile-info-card {
+  width: 100%;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+body.page-profil .profile-details {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+body.page-profil .profile-detail,
+body.page-profil .profile-heading {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+  body.page-profil .app-layout {
+    display: block;
+  }
+
+  body.page-profil .sidebar {
+    display: none;
+  }
+
+  body.page-profil .main-content {
+    width: 100%;
+    padding: 22px 14px 100px;
+  }
+
+  body.page-profil .profile-details {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

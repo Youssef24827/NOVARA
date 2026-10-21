@@ -4,194 +4,197 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080914">
   <title>Messages | NOVARA</title>
+
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="novara-refonte.css">
-  <script>
-    document.documentElement.classList.add("auth-checking");
-  </script>
+</head>
+
+<body class="page-messages">
+
+  <div class="app-layout">
+    <aside class="sidebar">
+      <a class="logo" href="index.html" aria-label="NOVARA - Accueil">
+        NOVARA<span>.</span>
+      </a>
+
+      <nav class="sidebar-nav" aria-label="Navigation principale">
+        <a href="index.html"><span>⌂</span> Accueil</a>
+        <a href="explorer.html"><span>◈</span> Explorer</a>
+        <a href="communautes.html"><span>♧</span> Communautés</a>
+        <a href="defis.html"><span>⚡</span> Défis</a>
+        <a href="messages.html" class="active" aria-current="page">
+          <span>✉</span> Messages
+        </a>
+        <a href="profil.html"><span>◎</span> Mon profil</a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <p>Joue. Explore. Connecte-toi.</p>
+        <span>NOVARA © 2026</span>
+      </div>
+    </aside>
+
+    <main class="main-content novara-messages">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">RESTE EN CONTACT</p>
+          <h1>Messages</h1>
+          <p class="page-description">
+            Retrouve les joueurs et échange avec ta communauté.
+          </p>
+        </div>
+        <a href="communautes.html" class="btn btn-secondary">
+          Communautés
+        </a>
+      </header>
+
+      <div class="messages-layout">
+
+        <section class="novara-panel messages-people-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">COMMUNAUTÉ</p>
+              <h2>Joueurs</h2>
+            </div>
+            <span class="messages-heading-icon" aria-hidden="true">♧</span>
+          </div>
+
+          <label for="player-search">Rechercher un joueur</label>
+          <input
+            id="player-search"
+            type="search"
+            placeholder="Pseudo du joueur…"
+            autocomplete="off"
+          >
+
+          <div id="player-results" class="player-results">
+            <p class="empty-state">
+              Recherche des joueurs pour les retrouver ici.
+            </p>
+          </div>
+        </section>
+
+        <section class="novara-panel messages-chat-panel">
+          <div class="panel-heading chat-heading">
+            <div>
+              <p class="eyebrow">ESPACE DE DISCUSSION</p>
+              <h2>Conversation</h2>
+              <p class="chat-subtitle">
+                Sélectionne un joueur pour commencer.
+              </p>
+            </div>
+            <div class="call-actions">
+              <button
+                id="audio-call-button"
+                class="icon-button"
+                type="button"
+                aria-label="Appel audio"
+                title="Appel audio"
+              >☎</button>
+              <button
+                id="video-call-button"
+                class="icon-button"
+                type="button"
+                aria-label="Appel vidéo"
+                title="Appel vidéo"
+              >▣</button>
+            </div>
+          </div>
+
+          <div
+            id="message-list"
+            class="message-list"
+            aria-live="polite"
+            aria-label="Messages de la conversation"
+          >
+            <div class="empty-chat">
+              <span class="empty-chat-icon" aria-hidden="true">✉</span>
+              <h3>Prêt à discuter ?</h3>
+              <p>
+                Choisis un joueur pour afficher la conversation.
+              </p>
+            </div>
+          </div>
+
+          <form id="message-form" class="message-composer">
+            <input
+              id="message-input"
+              type="text"
+              placeholder="Écris ton message…"
+              autocomplete="off"
+              aria-label="Ton message"
+            >
+            <button class="btn btn-primary" type="submit">
+              Envoyer <span aria-hidden="true">➤</span>
+            </button>
+          </form>
+        </section>
+
+      </div>
+
+      <section id="incoming-call" class="novara-panel call-panel" hidden>
+        <div>
+          <p class="eyebrow">APPEL ENTRANT</p>
+          <h2>Un joueur t’appelle</h2>
+        </div>
+        <p>Réponds depuis les commandes d’appel de ton application.</p>
+      </section>
+
+      <section id="call-media" class="novara-panel call-media-panel" hidden>
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">COMMUNICATION</p>
+            <h2>Appel en cours</h2>
+          </div>
+        </div>
+
+        <div class="call-video-grid">
+          <div class="video-tile">
+            <video
+              id="remote-video"
+              autoplay
+              playsinline
+              aria-label="Vidéo du correspondant"
+            ></video>
+            <span>Correspondant</span>
+          </div>
+
+          <div class="video-tile local-video-tile">
+            <video
+              id="local-video"
+              autoplay
+              muted
+              playsinline
+              aria-label="Ta vidéo"
+            ></video>
+            <span>Toi</span>
+          </div>
+        </div>
+
+        <audio id="remote-audio" autoplay></audio>
+
+        <button id="hangup-button" class="btn btn-danger" type="button">
+          Terminer l’appel
+        </button>
+      </section>
+
+    </main>
+  </div>
+
+  <nav class="mobile-nav" aria-label="Navigation mobile">
+    <a href="index.html">Accueil</a>
+    <a href="explorer.html">Explorer</a>
+    <a href="communautes.html">Communautés</a>
+    <a href="defis.html">Défis</a>
+    <a href="messages.html" aria-current="page">Messages</a>
+    <a href="profil.html">Profil</a>
+  </nav>
+
+  <!-- Garde les scripts nécessaires à ta configuration existante. -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth.js"></script>
-</head>
-<body class="page-messages">
-  <main class="novara-messages">
-    <header class="novara-header">
-      <h1>💜 NOVARA Messages</h1>
-      <p>Discute et retrouve la communauté.</p>
-      <a href="index.html">← Retour à l’accueil</a>
-    </header>
 
-    <section class="novara-panel">
-      <h2>🔎 Trouver un joueur</h2>
-      <label for="player-search">Nom d’utilisateur</label>
-      <input
-        id="player-search"
-        type="search"
-        placeholder="Rechercher un joueur..."
-        autocomplete="off"
-      >
-      <p id="search-status" role="status">Chargement des profils...</p>
-      <div id="player-results"></div>
-    </section>
-
-    <section class="novara-panel">
-      <h2>💬 Ma messagerie</h2>
-      <p id="chat-status" role="status">Sélectionne un joueur pour commencer.</p>
-      <div id="message-list" aria-live="polite"></div>
-      <form id="message-form">
-        <label for="message-input">Ton message</label>
-        <textarea
-          id="message-input"
-          rows="3"
-          maxlength="2000"
-          placeholder="Écris ton message..."
-          required
-        ></textarea>
-        <button type="submit">Envoyer</button>
-      </form>
-    </section>
-
-    <section class="novara-panel" id="novara-call-panel">
-      <h2>🎧 Appels NOVARA</h2>
-      <p>Choisis un joueur dans la recherche avant de lancer un appel.</p>
-      <div class="novara-actions">
-        <button id="audio-call-button" type="button">🎧 Appel audio</button>
-        <button id="video-call-button" type="button">📹 Appel vidéo</button>
-      </div>
-      <p id="call-status" role="status">Aucun appel en cours.</p>
-
-      <div id="incoming-call" hidden>
-        <p id="incoming-call-text">Appel entrant</p>
-        <button id="accept-call-button" type="button">Accepter</button>
-        <button id="reject-call-button" type="button">Refuser</button>
-      </div>
-
-      <div id="call-media" hidden>
-        <video id="remote-video" autoplay playsinline></video>
-        <video id="local-video" autoplay muted playsinline></video>
-        <audio id="remote-audio" autoplay></audio>
-        <button id="hangup-button" type="button">Terminer l’appel</button>
-      </div>
-    </section>
-  </main>
-
-  <style>
-  html.auth-checking body { visibility: hidden; }
-
-    .chat-layout {
-      display: grid;
-      grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
-      gap: 20px;
-      min-height: 520px;
-      margin-top: 24px;
-    }
-
-    .chat-panel {
-      min-width: 0;
-      padding: 20px;
-      border: 1px solid rgba(160, 100, 255, .22);
-      border-radius: 16px;
-      background: rgba(18, 15, 35, .82);
-    }
-
-    .chat-search, .chat-input {
-      box-sizing: border-box;
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #40345e;
-      border-radius: 10px;
-      background: #100d20;
-      color: white;
-      font: inherit;
-    }
-
-    .chat-search { margin: 12px 0; }
-
-    .chat-button {
-      padding: 10px 14px;
-      border: 1px solid #8950ed;
-      border-radius: 10px;
-      background: #6735bd;
-      color: white;
-      font: inherit;
-      cursor: pointer;
-    }
-
-    .chat-button:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-    }
-
-    .chat-list {
-      display: grid;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .chat-person {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #35294e;
-      border-radius: 10px;
-      background: #171229;
-      color: white;
-      text-align: left;
-      cursor: pointer;
-      overflow-wrap: anywhere;
-    }
-
-    .chat-person:hover { border-color: #a16cff; }
-
-    .chat-messages {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      height: 340px;
-      overflow-y: auto;
-      padding: 12px 0;
-    }
-
-    .chat-message {
-      max-width: 82%;
-      padding: 10px 13px;
-      border: 1px solid #40345e;
-      border-radius: 12px;
-      background: #211a36;
-      overflow-wrap: anywhere;
-      white-space: pre-wrap;
-    }
-
-    .chat-message.mine {
-      align-self: flex-end;
-      background: #55309b;
-      border-color: #8153ce;
-    }
-
-    .chat-message small {
-      display: block;
-      margin-top: 5px;
-      opacity: .7;
-      font-size: 11px;
-    }
-
-    .chat-compose {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .chat-compose .chat-input { flex: 1; min-width: 0; }
-
-    .chat-status {
-      color: #c9b9e9;
-      font-size: 13px;
-      overflow-wrap: anywhere;
-    }
-
-    @media (max-width: 700px) {
-      .chat-layout { grid-template-columns: 1fr; }
-      .chat-messages { height: 300px; }
-    }
-  </style>
 </body>
 </html>

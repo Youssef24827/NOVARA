@@ -2613,3 +2613,82 @@ body.page-communautes .community-bottom p {
     padding: 18px;
   }
 }
+
+/* ===== NOVARA : ACCUEIL PLUS GRAND ET CENTRÉ ===== */
+
+body.page-accueil .main {
+  width: calc(100% - 260px);
+  max-width: none;
+  margin-left: 260px;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+/* Centrer le contenu et utiliser toute la largeur */
+body.page-accueil .main > section {
+  width: 100%;
+  max-width: none;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+/* Donner plus d'espace aux cartes */
+body.page-accueil .grid {
+  width: 100%;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+body.page-accueil .card {
+  width: 100%;
+  min-height: 220px;
+  box-sizing: border-box;
+  padding: 28px;
+}
+
+/* Agrandir et centrer la section d'accueil */
+body.page-accueil .hero {
+  width: 100%;
+  max-width: none;
+  min-height: 340px;
+  padding: 48px;
+  box-sizing: border-box;
+}
+
+body.page-accueil .hero h1 {
+  font-size: clamp(42px, 4vw, 64px);
+}
+
+body.page-accueil .section-heading {
+  width: 100%;
+}
+
+/* Tablettes */
+@media (max-width: 1100px) {
+  body.page-accueil .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  body.page-accueil .main {
+    width: 100%;
+    margin-left: 0;
+    padding: 18px;
+  }
+
+  body.page-accueil .hero {
+    padding: 28px 20px;
+  }
+
+  body.page-accueil .grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.page-accueil .card {
+    min-height: 180px;
+    padding: 22px;
+  }
+}

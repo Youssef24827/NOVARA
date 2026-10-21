@@ -192,552 +192,147 @@
       .chat-messages { height: 300px; }
     }
   </style>
+<script>
+(() => {
+  const missions = [
+    [
+      { icon: "🎯", title: "Œil de précision", description: "Joue une partie en te concentrant sur la précision.", difficulty: "Facile", xp: 50 },
+      { icon: "🧠", title: "Esprit tactique", description: "Essaie une nouvelle stratégie pendant ta partie.", difficulty: "Moyen", xp: 75 },
+      { icon: "🤝", title: "Allié fidèle", description: "Privilégie la coopération avec ton équipe.", difficulty: "Moyen", xp: 100 }
+    ],
+    [
+      { icon: "⚡", title: "Réflexes éclair", description: "Reste attentif pendant une partie.", difficulty: "Facile", xp: 50 },
+      { icon: "🏆", title: "Objectif victoire", description: "Fais de ton mieux pour atteindre ton objectif.", difficulty: "Moyen", xp: 75 },
+      { icon: "🛡️", title: "Coéquipier solide", description: "Aide un coéquipier pendant une partie.", difficulty: "Moyen", xp: 100 }
+    ],
+    [
+      { icon: "🧭", title: "Explorateur", description: "Découvre une zone ou une stratégie nouvelle.", difficulty: "Facile", xp: 50 },
+      { icon: "🔥", title: "Persévérance", description: "Termine une partie avec une attitude positive.", difficulty: "Moyen", xp: 75 },
+      { icon: "💎", title: "Défi personnel", description: "Essaie d'améliorer ton propre résultat.", difficulty: "Difficile", xp: 100 }
+    ]
+  ];
 
-  <script>
-    (() => {
-      "use strict";
+  const zone = document.querySelector("#daily-challenges");
+  if (!zone) return;
 
-      const SUPABASE_URL =
-        "https://smxjkgcxjzomkqwaaxlr.supabase.co";
+  const now = new Date();
+  const dateKey = [
+    now.getFullYear(),
+    String(now.getMonth() + 1).padStart(2, "0"),
+    String(now.getDate()).padStart(2, "0")
+  ].join("-");
 
-      // Utilise ici la même clé publishable que dans auth.js.
-      const SUPABASE_KEY =
-        "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX";
+  const start = new Date(now.getFullYear(), 0, 0);
+  const day = Math.floor((now - start) / 86400000);
+  const selection = missions[Math.floor((day - 1) / 3) % missions.length];
 
-      const client = window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-      );
+  const title = zone.querySelector("h2");
+  const intro = zone.querySelector(":scope > p");
+  const cards = zone.querySelectorAll(".grid .card");
+  const note = zone.querySelector(".daily-note");
 
-      const $ = (id) => document.getElementById(id);
+  title.innerHTML = 'Tes défis quotidiens<span class="gradient">.</span>';
+  intro.textContent = "Relève les missions du jour et suis ta progression.";
 
-      let currentUser = null;
-      let selectedProfile = null;
-      let activeConversation = null;
-      let messageChannel = null;
-      let callsChannel = null;
-      let activeCall = null;
-      let peer = null;
-      let localStream = null;
-      let remoteStream = null;
-      let pendingIce = [];
+  let completed = [];
 
-      const rtcConfig = {
-        iceServers: [
-          { urls: "stun:stun.l.google.com:19302" }
-        ]
-      };
+  try {
+    completed = JSON.parse(
+      localStorage.getItem("novara-defis-" + dateKey) || "[]"
+    );
+    if (!Array.isArray(completed)) completed = [];
+  } catch {
+    completed = [];
+  }
 
-      function status(id, message) {
-        $(id).textContent = message;
-      }
+  function updateProgress() {
+    const count = completed.length;
+    let progress = zone.querySelector(".daily-progress");
 
-      function escapeText(value) {
-        return String(value ?? "");
-      }
+    if (!progress) {
+      progress = document.createElement("p");
+      progress.className = "daily-progress";
+      zone.insertBefore(progress, zone.querySelector(".grid"));
+    }
 
-      async function getCurrentUser() {
-        const { data, error } = await client.auth.getUser();
+    progress.textContent =
+      `Progression : ${count}/3 défis terminés`;
+  }
 
-        if (error || !data.user) {
-          status("search-status", "Connecte-toi pour utiliser NOVARA.");
-          return null;
-        }
+  cards.forEach((card, index) => {
+    const mission = selection[index];
+    if (!mission) return;
 
-        return data.user;
-      }
+    card.querySelector(".game-icon").textContent = mission.icon;
+    card.querySelector("h3").textContent = mission.title;
+    card.querySelector("p").textContent = mission.description;
 
-      async function searchProfiles() {
-        if (!currentUser) return;
+    const tags = card.querySelector(".tags");
+    tags.replaceChildren();
 
-        const term = $("player-search").value.trim();
+    [mission.difficulty, "+" + mission.xp + " XP"].forEach(label => {
+      const tag = document.createElement("span");
+      tag.className = "tag";
+      tag.textContent = label;
+      tags.appendChild(tag);
+    });
 
-        let query = client
-          .from("profiles")
-          .select("id, username")
-          .neq("id", currentUser.id)
-          .order("username", { ascending: true })
-          .limit(20);
+    let button = card.querySelector(".daily-complete");
 
-        if (term) {
-          query = query.ilike("username", `%${term}%`);
-        }
+    if (!button) {
+      button = document.createElement("button");
+      button.type = "button";
+      button.className = "btn daily-complete";
+      card.appendChild(button);
+    }
 
-        status("search-status", "Recherche en cours...");
+    function renderButton() {
+      const done = completed.includes(index);
+      button.textContent = done ? "✓ Défi terminé" : "Valider le défi";
+      button.disabled = done;
+      button.setAttribute("aria-pressed", String(done));
+    }
 
-        const { data, error } = await query;
+    button.addEventListener("click", () => {
+      if (completed.includes(index)) return;
 
-        if (error) {
-          console.error("Erreur profils:", error);
-          status(
-            "search-status",
-            "Impossible de charger les joueurs. Vérifie les politiques RLS."
-          );
-          return;
-        }
+      completed.push(index);
 
-        const results = $("player-results");
-        results.replaceChildren();
-
-        if (!data || data.length === 0) {
-          status("search-status", "Aucun autre joueur trouvé.");
-          return;
-        }
-
-        status("search-status", `${data.length} joueur(s) trouvé(s).`);
-
-        for (const profile of data) {
-          const item = document.createElement("div");
-          item.className = "player-result";
-
-          const name = document.createElement("strong");
-          name.textContent = profile.username || "Joueur NOVARA";
-
-          const button = document.createElement("button");
-          button.type = "button";
-          button.textContent = "Ouvrir la conversation";
-
-          button.addEventListener("click", async () => {
-            selectedProfile = profile;
-            await openConversation(profile);
-          });
-
-          item.append(name, document.createElement("br"), button);
-          results.appendChild(item);
-        }
-      }
-
-      async function openConversation(profile) {
-        status("chat-status", "Ouverture de la conversation...");
-
-        const { data, error } = await client.rpc(
-          "create_novara_conversation",
-          { other_user_id: profile.id }
+      try {
+        localStorage.setItem(
+          "novara-defis-" + dateKey,
+          JSON.stringify(completed)
         );
-
-        if (error) {
-          console.error("Conversation:", error);
-          status(
-            "chat-status",
-            "Impossible d’ouvrir la conversation. Vérifie la fonction SQL."
-          );
-          return;
-        }
-
-        activeConversation = data;
-        await loadMessages();
-        subscribeMessages();
-        status(
-          "chat-status",
-          `Conversation avec ${profile.username || "ce joueur"}`
-        );
+      } catch {
+        completed.pop();
+        alert("Impossible de sauvegarder sur cet appareil.");
+        return;
       }
 
-      async function loadMessages() {
-        if (!activeConversation) return;
+      renderButton();
+      updateProgress();
 
-        const { data, error } = await client
-          .from("messages")
-          .select("*")
-          .eq("conversation_id", activeConversation)
-          .order("created_at", { ascending: true })
-          .limit(100);
-
-        if (error) {
-          console.error("Messages:", error);
-          status("chat-status", "Impossible de charger les messages.");
-          return;
-        }
-
-        const list = $("message-list");
-        list.replaceChildren();
-
-        for (const message of data || []) {
-          const item = document.createElement("div");
-          item.className = "message-item";
-
-          const author = document.createElement("strong");
-          author.textContent =
-            message.sender_id === currentUser.id ? "Moi : " : "Joueur : ";
-
-          const content = document.createElement("span");
-          content.textContent = escapeText(message.content);
-
-          item.append(author, content);
-          list.appendChild(item);
-        }
-
-        list.scrollTop = list.scrollHeight;
-      }
-
-      function subscribeMessages() {
-        if (messageChannel) {
-          client.removeChannel(messageChannel);
-        }
-
-        messageChannel = client
-          .channel("novara-messages-" + activeConversation)
-          .on(
-            "postgres_changes",
-            {
-              event: "INSERT",
-              schema: "public",
-              table: "messages",
-              filter: "conversation_id=eq." + activeConversation
-            },
-            () => loadMessages()
-          )
-          .subscribe();
-      }
-
-      $("message-form").addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        if (!currentUser || !activeConversation) {
-          status("chat-status", "Sélectionne d’abord un joueur.");
-          return;
-        }
-
-        const content = $("message-input").value.trim();
-        if (!content) return;
-
-        const { error } = await client
-          .from("messages")
-          .insert({
-            conversation_id: activeConversation,
-            sender_id: currentUser.id,
-            content
-          });
-
-        if (error) {
-          console.error("Envoi:", error);
-          status("chat-status", "Envoi impossible. Vérifie les politiques RLS.");
-          return;
-        }
-
-        $("message-input").value = "";
-        await loadMessages();
-      });
-
-      async function createPeer() {
-        peer = new RTCPeerConnection(rtcConfig);
-        remoteStream = new MediaStream();
-
-        $("remote-video").srcObject = remoteStream;
-        $("remote-audio").srcObject = remoteStream;
-
-        peer.ontrack = (event) => {
-          for (const track of event.streams[0]?.getTracks() || []) {
-            if (!remoteStream.getTracks().some(t => t.id === track.id)) {
-              remoteStream.addTrack(track);
-            }
-          }
-        };
-
-        peer.onicecandidate = async (event) => {
-          if (!event.candidate || !activeCall) return;
-
-          const { error } = await client
-            .from("novara_call_signals")
-            .insert({
-              call_id: activeCall.id,
-              sender_id: currentUser.id,
-              signal_type: "ice",
-              payload: event.candidate.toJSON()
-            });
-
-          if (error) console.error("ICE:", error);
-        };
-
-        peer.onconnectionstatechange = () => {
-          status("call-status", "Connexion : " + peer.connectionState);
-        };
-
-        for (const track of localStream.getTracks()) {
-          peer.addTrack(track, localStream);
-        }
-
-        return peer;
-      }
-
-      async function addPendingIce() {
-        if (!peer || !peer.remoteDescription) return;
-
-        const queue = pendingIce.splice(0);
-
-        for (const candidate of queue) {
-          try {
-            await peer.addIceCandidate(candidate);
-          } catch (error) {
-            console.error("ICE candidate:", error);
-          }
+      if (completed.length === 3) {
+        if (note) {
+          note.textContent =
+            "🎉 Bravo ! Tu as validé les trois défis du jour.";
         }
       }
+    });
 
-      async function handleSignal(signal) {
-        if (!activeCall || !peer) return;
-        if (signal.sender_id === currentUser.id) return;
-        if (signal.call_id !== activeCall.id) return;
+    renderButton();
+  });
 
-        try {
-          if (signal.signal_type === "offer") {
-            await peer.setRemoteDescription(signal.payload);
-            await addPendingIce();
+  updateProgress();
 
-            const answer = await peer.createAnswer();
-            await peer.setLocalDescription(answer);
+  if (note && completed.length < 3) {
+    note.textContent =
+      "💜 Validation enregistrée sur cet appareil. Les XP sont indicatifs et ne sont pas crédités à ton compte.";
+  } else if (note) {
+    note.textContent = "🎉 Bravo ! Tu as validé les trois défis du jour.";
+  }
+})();
+</script>
 
-            const { error } = await client
-              .from("novara_call_signals")
-              .insert({
-                call_id: activeCall.id,
-                sender_id: currentUser.id,
-                signal_type: "answer",
-                payload: answer
-              });
-
-            if (error) console.error("Réponse:", error);
-          }
-
-          if (signal.signal_type === "answer") {
-            await peer.setRemoteDescription(signal.payload);
-            await addPendingIce();
-          }
-
-          if (signal.signal_type === "ice") {
-            if (!peer.remoteDescription) {
-              pendingIce.push(signal.payload);
-            } else {
-              await peer.addIceCandidate(signal.payload);
-            }
-          }
-        } catch (error) {
-          console.error("Signal:", error);
-          status("call-status", "Erreur de connexion de l’appel.");
-        }
-      }
-
-      async function subscribeSignals(callId) {
-        if (callsChannel) client.removeChannel(callsChannel);
-
-        callsChannel = client
-          .channel("novara-signals-" + callId)
-          .on(
-            "postgres_changes",
-            {
-              event: "INSERT",
-              schema: "public",
-              table: "novara_call_signals",
-              filter: "call_id=eq." + callId
-            },
-            (event) => handleSignal(event.new)
-          )
-          .subscribe();
-
-        const { data, error } = await client
-          .from("novara_call_signals")
-          .select("*")
-          .eq("call_id", callId)
-          .order("created_at", { ascending: true });
-
-        if (error) {
-          console.error("Chargement signaux:", error);
-          return;
-        }
-
-        for (const signal of data || []) {
-          await handleSignal(signal);
-        }
-      }
-
-      async function startCall(type) {
-        if (!selectedProfile) {
-          status("call-status", "Recherche et sélectionne d’abord un joueur.");
-          return;
-        }
-
-        if (activeCall) {
-          status("call-status", "Un appel est déjà en cours.");
-          return;
-        }
-
-        try {
-          localStream = await navigator.mediaDevices.getUserMedia({
-            audio: true,
-            video: type === "video"
-          });
-
-          $("local-video").srcObject = localStream;
-          $("call-media").hidden = false;
-
-          const { data: call, error } = await client
-            .from("novara_calls")
-            .insert({
-              caller_id: currentUser.id,
-              receiver_id: selectedProfile.id,
-              call_type: type,
-              status: "ringing"
-            })
-            .select()
-            .single();
-
-          if (error) throw error;
-
-          activeCall = call;
-          pendingIce = [];
-
-          await createPeer();
-          await subscribeSignals(call.id);
-
-          const offer = await peer.createOffer();
-          await peer.setLocalDescription(offer);
-
-          const { error: signalError } = await client
-            .from("novara_call_signals")
-            .insert({
-              call_id: call.id,
-              sender_id: currentUser.id,
-              signal_type: "offer",
-              payload: offer
-            });
-
-          if (signalError) throw signalError;
-
-          $("hangup-button").hidden = false;
-          status("call-status", "Appel lancé. En attente du joueur...");
-        } catch (error) {
-          console.error("Appel:", error);
-          status(
-            "call-status",
-            "Appel impossible. Vérifie les permissions du navigateur et Supabase."
-          );
-          await cleanup(false);
-        }
-      }
-
-      async function checkIncomingCalls() {
-        if (!currentUser || activeCall) return;
-
-        const { data, error } = await client
-          .from("novara_calls")
-          .select("*")
-          .eq("receiver_id", currentUser.id)
-          .eq("status", "ringing")
-          .order("created_at", { ascending: false })
-          .limit(1);
-
-        if (error || !data?.length) return;
-
-        activeCall = data[0];
-        $("incoming-call").hidden = false;
-        $("incoming-call-text").textContent =
-          "Appel entrant : " + activeCall.call_type;
-        $("accept-call-button").hidden = false;
-        $("reject-call-button").hidden = false;
-        status("call-status", "Un joueur t’appelle.");
-      }
-
-      async function acceptCall() {
-        if (!activeCall) return;
-
-        try {
-          localStream = await navigator.mediaDevices.getUserMedia({
-            audio: true,
-            video: activeCall.call_type === "video"
-          });
-
-          $("local-video").srcObject = localStream;
-          $("call-media").hidden = false;
-
-          const { error } = await client
-            .from("novara_calls")
-            .update({ status: "accepted" })
-            .eq("id", activeCall.id);
-
-          if (error) throw error;
-
-          pendingIce = [];
-          await createPeer();
-          await subscribeSignals(activeCall.id);
-
-          $("incoming-call").hidden = true;
-          $("hangup-button").hidden = false;
-          status("call-status", "Appel accepté. Connexion en cours...");
-        } catch (error) {
-          console.error("Acceptation:", error);
-          status("call-status", "Impossible d’accepter cet appel.");
-          await cleanup(false);
-        }
-      }
-
-      async function rejectCall() {
-        if (!activeCall) return;
-
-        await client
-          .from("novara_calls")
-          .update({ status: "rejected", ended_at: new Date().toISOString() })
-          .eq("id", activeCall.id);
-
-        await cleanup(false);
-        status("call-status", "Appel refusé.");
-      }
-
-      async function cleanup(updateStatus = true) {
-        const callId = activeCall?.id;
-
-        if (updateStatus && callId) {
-          await client
-            .from("novara_calls")
-            .update({
-              status: "ended",
-              ended_at: new Date().toISOString()
-            })
-            .eq("id", callId);
-        }
-
-        if (peer) peer.close();
-        peer = null;
-
-        if (localStream) {
-          localStream.getTracks().forEach(track => track.stop());
-        }
-
-        localStream = null;
-        remoteStream = null;
-        pendingIce = [];
-
-        $("local-video").srcObject = null;
-        $("remote-video").srcObject = null;
-        $("remote-audio").srcObject = null;
-        $("call-media").hidden = true;
-        $("incoming-call").hidden = true;
-        $("hangup-button").hidden = true;
-
-        if (callsChannel) client.removeChannel(callsChannel);
-        callsChannel = null;
-        activeCall = null;
-      }
-
-      $("player-search").addEventListener("input", searchProfiles);
-      $("audio-call-button").addEventListener("click", () => startCall("audio"));
-      $("video-call-button").addEventListener("click", () => startCall("video"));
-      $("accept-call-button").addEventListener("click", acceptCall);
-      $("reject-call-button").addEventListener("click", rejectCall);
-      $("hangup-button").addEventListener("click", () => cleanup(true));
-
-      async function init() {
-        currentUser = await getCurrentUser();
-
-        if (!currentUser) return;
-
-        await searchProfiles();
-        await checkIncomingCalls();
-
-        setInterval(checkIncomingCalls, 4000);
-      }
-
-      init();
-    })();
-  </script>
 </body>
 </html>

@@ -405,7 +405,10 @@ if (gamesGrid) {
       );
       params.set("is_published", "eq.true");
       params.set("order", "title.asc");
-      params.set("limit", query ? "60" : "12");
+     params.set(
+  "limit",
+  query ? "60" : selectedStatus !== "all" ? "1000" : "12"
+);
 
       if (query) {
         // Recherche simple dans les titres.
@@ -420,15 +423,7 @@ if (gamesGrid) {
         params.set("title", `ilike.*${safeQuery}*`);
       }
 
-      // Les anciennes options de disponibilité ne sont pas prises
-      // en charge tant que la table ne possède pas de champ dédié.
-      if (selectedStatus !== "all") {
-        setGamesStatus(
-          "Le filtre de disponibilité sera activé quand les données existeront.",
-          true
-        );
-      }
-
+    
       const endpoint =
         `${SUPABASE_URL}/rest/v1/games?${params.toString()}`;
 
@@ -444,11 +439,45 @@ if (gamesGrid) {
         throw new Error(`Erreur Supabase (${response.status})`);
       }
 
-      const games = await response.json();
+     
+const games = await response.json();
 
-      if (currentRequest !== requestNumber) return;
+if (currentRequest !== requestNumber) return;
 
-      renderGames(Array.isArray(games) ? games : []);
+const allGames = Array.isArray(games) ? games : [];
+
+const platformKeywords = {
+  pc: ["pc", "windows", "ordinateur"],
+  playstation: ["playstation", "ps4", "ps5", "ps3", "ps2", "ps vita", "psp"],
+  xbox: ["xbox"],
+  nintendo: ["nintendo", "switch", "wii", "3ds", "ds"],
+  mobile: ["mobile", "android", "ios", "iphone", "ipad"]
+};
+
+const filteredGames = selectedStatus === "all"
+  ? allGames
+  : allGames.filter(game => {
+      const platforms = normalizePlatforms(game.platforms).map(platform =>
+        platform
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase()
+          .trim()
+      );
+
+      const keywords = platformKeywords[
+        selectedStatus.toLowerCase()
+      ];
+
+      if (!keywords) return true;
+
+      return platforms.some(platform =>
+        keywords.some(keyword => platform.includes(keyword))
+      );
+    });
+
+renderGames(filteredGames);
+
     } catch (error) {
       if (currentRequest !== requestNumber) return;
 

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Connexion — NOVARA</title>
+  <title>Créer un compte — NOVARA</title>
 
   <link rel="stylesheet" href="style.css">
 
@@ -21,6 +21,7 @@
     }
 
     .login-card {
+      box-sizing: border-box;
       width: 100%;
       max-width: 420px;
       padding: 32px;
@@ -37,9 +38,34 @@
     }
 
     .subtitle {
-      margin-bottom: 28px;
+      margin-bottom: 24px;
       text-align: center;
       color: #b8afc5;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .tabs button {
+      flex: 1;
+      margin: 0;
+      padding: 11px 8px;
+      border: 1px solid #49335e;
+      border-radius: 9px;
+      background: #09070e;
+      color: #c9bfd5;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .tabs button.active {
+      background: #9b4dff;
+      border-color: #9b4dff;
+      color: #fff;
+      font-weight: bold;
     }
 
     .login-card label {
@@ -58,7 +84,7 @@
       font-size: 16px;
     }
 
-    .login-card button {
+    .submit-button {
       width: 100%;
       margin-top: 22px;
       padding: 14px;
@@ -71,7 +97,7 @@
       cursor: pointer;
     }
 
-    .login-card button:disabled {
+    .submit-button:disabled {
       opacity: 0.6;
       cursor: wait;
     }
@@ -82,14 +108,8 @@
       overflow-wrap: anywhere;
     }
 
-    .signup-link {
-      margin-top: 22px;
-      text-align: center;
-      color: #c9bfd5;
-    }
-
-    .signup-link a {
-      color: #c28aff;
+    .hidden {
+      display: none;
     }
   </style>
 
@@ -99,118 +119,117 @@
 <body>
   <main class="login-card">
     <h1>NOVARA</h1>
-    <p class="subtitle">Connecte-toi à ton univers gaming.</p>
+    <p class="subtitle">Rejoins ton univers gaming.</p>
 
-    <form id="loginForm">
-      <label for="email">Adresse e-mail</label>
-      <input
-        id="email"
-        type="email"
-        autocomplete="email"
-        required
-        placeholder="ton@email.com"
-      >
+    <div class="tabs" role="group" aria-label="Choisir une option">
+      <button id="signupTab" class="active" type="button" aria-pressed="true">
+        Créer un compte
+      </button>
+      <button id="loginTab" type="button" aria-pressed="false">
+        Se connecter
+      </button>
+    </div>
+
+    <form id="authForm">
+      <div id="pseudoGroup">
+        <label for="pseudo">Pseudo</label>
+        <input
+          id="pseudo"
+          name="pseudo"
+          type="text"
+          autocomplete="username"
+          minlength="3"
+          maxlength="20"
+          required
+          placeholder="Ton pseudo"
+        >
+      </div>
+
+      <div id="emailGroup" class="hidden">
+        <label for="email">Adresse e-mail</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          placeholder="ton@email.com"
+          disabled
+        >
+      </div>
 
       <label for="password">Mot de passe</label>
       <input
         id="password"
+        name="password"
         type="password"
-        autocomplete="current-password"
+        autocomplete="new-password"
+        minlength="8"
         required
-        placeholder="Ton mot de passe"
+        placeholder="8 caractères minimum"
       >
 
-      <button id="loginButton" type="submit">
-        Se connecter
+      <button id="submitButton" class="submit-button" type="submit">
+        Créer mon compte
       </button>
 
       <p id="message" role="status" aria-live="polite"></p>
     </form>
-
-    <p class="signup-link">
-      Pas encore de compte ?
-      <a href="inscription.html">Créer un compte</a>
-    </p>
   </main>
 
   <script>
-    const SUPABASE_URL =
-      "https://smxjkgcxjzomkqwaaxlr.supabase.co";
-
-    const SUPABASE_KEY =
-      "sb_publishable_SaIzHbrr-jTPPnFhztD36w_N6o6vuBX";
-
-    const client = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
-
-    const form = document.getElementById("loginForm");
-    const button = document.getElementById("loginButton");
+    const signupTab = document.getElementById("signupTab");
+    const loginTab = document.getElementById("loginTab");
+    const form = document.getElementById("authForm");
+    const pseudo = document.getElementById("pseudo");
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const emailGroup = document.getElementById("emailGroup");
+    const submitButton = document.getElementById("submitButton");
     const message = document.getElementById("message");
 
-    form.addEventListener("submit", async function (event) {
+    let mode = "signup";
+
+    function setMode(nextMode) {
+      mode = nextMode;
+
+      const isSignup = mode === "signup";
+
+      signupTab.classList.toggle("active", isSignup);
+      loginTab.classList.toggle("active", !isSignup);
+
+      signupTab.setAttribute("aria-pressed", String(isSignup));
+      loginTab.setAttribute("aria-pressed", String(!isSignup));
+
+      emailGroup.classList.toggle("hidden", isSignup);
+      email.disabled = isSignup;
+      email.required = !isSignup;
+
+      pseudo.autocomplete = isSignup ? "username" : "off";
+      password.autocomplete = isSignup ? "new-password" : "current-password";
+
+      submitButton.textContent = isSignup
+        ? "Créer mon compte"
+        : "Se connecter";
+
+      document.title = isSignup
+        ? "Créer un compte — NOVARA"
+        : "Connexion — NOVARA";
+
+      message.textContent = "";
+    }
+
+    signupTab.addEventListener("click", () => setMode("signup"));
+    loginTab.addEventListener("click", () => setMode("login"));
+
+    form.addEventListener("submit", function (event) {
       event.preventDefault();
 
-      button.disabled = true;
-      message.textContent = "Connexion en cours…";
-
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-
-      try {
-        const { data, error } =
-          await client.auth.signInWithPassword({
-            email,
-            password
-          });
-
-        if (error) {
-          message.textContent =
-            "Connexion impossible. Vérifie ton e-mail et ton mot de passe.";
-          console.error(error);
-          return;
-        }
-
-        if (!data.session) {
-          message.textContent =
-            "Aucune session active. Vérifie ton compte e-mail si nécessaire.";
-          return;
-        }
-
-        const params = new URLSearchParams(window.location.search);
-        const destination = params.get("redirect");
-
-        const pagesAutorisees = [
-          "index.html",
-          "explorer.html",
-          "communautes.html",
-          "defis.html",
-          "messages.html",
-          "profil.html"
-        ];
-
-        const pageDemandee = destination
-          ? destination.split("?")[0].split("#")[0].split("/").pop()
-          : "";
-
-        const destinationSure =
-          destination &&
-          !destination.startsWith("//") &&
-          pagesAutorisees.includes(pageDemandee)
-            ? destination
-            : "index.html";
-
-        window.location.replace(destinationSure);
-
-      } catch (error) {
-        console.error(error);
-        message.textContent =
-          "Erreur inattendue. Réessaie dans un instant.";
-      } finally {
-        button.disabled = false;
-      }
+      message.textContent = mode === "signup"
+        ? "Le formulaire est prêt. L'inscription doit maintenant être reliée à l'authentification sécurisée."
+        : "La connexion doit maintenant être reliée à l'authentification sécurisée.";
     });
+
+    setMode("signup");
   </script>
 </body>
 </html>
